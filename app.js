@@ -50,6 +50,10 @@ function artCard(item, index) {
 }
 
 function renderHome() {
+  const focusNodes = data.focusNodes
+    .map((node) => `<a class="signal-node" href="${node.href}" style="--x:${node.x}%;--y:${node.y}%">${safe(node.label)}</a>`)
+    .join("");
+
   root.innerHTML = `
     ${hero("Studio portfolio", data.person.headline, data.person.intro, button("Explore work", "work.html"))}
     <section class="stat-strip">${data.stats.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</section>
@@ -58,10 +62,8 @@ function renderHome() {
         <p class="kicker">Now</p>
         <h2>${data.person.now}</h2>
         <div class="signal-map">
-          <button style="--x:12%;--y:16%">AI</button>
-          <button style="--x:64%;--y:18%">Schoolar</button>
-          <button style="--x:74%;--y:66%">Art</button>
-          <button style="--x:18%;--y:72%">Writing</button>
+          <span class="signal-ring" aria-hidden="true"></span>
+          ${focusNodes}
         </div>
       </div>
       <div class="jump-card">
