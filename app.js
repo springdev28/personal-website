@@ -20,8 +20,8 @@ function renderShell() {
     <button id="openSearch" class="search-btn" type="button" aria-label="Search portfolio">Search</button>`;
 }
 
-function hero(kicker, title, body, action = "") {
-  return `<header class="hero"><div><p class="kicker">${kicker}</p><h1>${title}</h1><p>${body}</p></div>${action}</header>`;
+function hero(kicker, title, body = "", action = "") {
+  return `<header class="hero"><div><p class="kicker">${kicker}</p><h1>${title}</h1>${body ? `<p>${body}</p>` : ""}</div>${action}</header>`;
 }
 
 function button(label, href) {
@@ -55,7 +55,7 @@ function renderHome() {
     <section class="stat-strip">${data.stats.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</section>
     <section class="home-stage">
       <div class="focus-card">
-        <p class="kicker">Current focus</p>
+        <p class="kicker">Now</p>
         <h2>${data.person.now}</h2>
         <div class="signal-map">
           <button style="--x:12%;--y:16%">AI</button>
@@ -77,27 +77,27 @@ function renderHome() {
 
 function renderWork() {
   const cats = ["All", ...new Set(data.projects.map((p) => p.category))];
-  root.innerHTML = `${hero("Selected work", "Projects with structure, story, and links.", "A curated view of software, prototypes, decks, games, and learning systems.")}
+  root.innerHTML = `${hero("Selected work", "Projects, prototypes, systems.", "")}
     <div class="filters">${cats.map((cat, index) => `<button class="filter ${index === 0 ? "active" : ""}" data-filter="${cat}">${cat}</button>`).join("")}</div>
     <div class="project-grid wide">${data.projects.map(projectCard).join("")}</div>`;
 }
 
 function renderArt() {
-  root.innerHTML = `${hero("Art portfolio", "Visual experiments, digital posters, and interface studies.", "A dedicated gallery for the creative side of the work. Click any piece to open it larger.")}
+  root.innerHTML = `${hero("Art portfolio", "Visual experiments and interface studies.", "")}
     <div class="art-grid">${data.art.map(artCard).join("")}</div>
     <section class="section-block mixer"><div class="section-head"><div><p class="kicker">Interactive study</p><h2>Color field mixer</h2></div><span>Drag</span></div><input id="colorRange" type="range" min="0" max="100" value="46"><div id="colorField"></div></section>`;
 }
 
 function renderWriting() {
-  root.innerHTML = `${hero("Writing", "Notes on building, learning, AI, and design.", "Short essays and field notes that explain the taste behind the projects.")}
+  root.innerHTML = `${hero("Writing", "Notes on building, learning, AI, and design.", "")}
     <section class="writing-layout">
-      <div class="post-grid">${data.posts.map((post) => `<article class="post-card"><small>${post.category} / ${post.read}</small><h2>${post.title}</h2><p>${post.excerpt}</p><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time></article>`).join("")}</div>
-      <aside class="idea-card"><p class="kicker">Prompt toy</p><h2>Generate a writing angle</h2><button id="ideaBtn" class="button" type="button">Generate<span>→</span></button><output id="ideaOut"></output></aside>
+      <div class="post-grid">${data.posts.map((post) => `<article class="post-card"><small>${post.category} / ${post.read}</small><h2>${post.title}</h2><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time></article>`).join("")}</div>
+      <aside class="idea-card writing-note"><p class="kicker">Themes</p><div>${tags(["AI", "Education", "Design", "Building"])}</div></aside>
     </section>`;
 }
 
 function renderAbout() {
-  root.innerHTML = `${hero("About", "A builder profile with a visual pulse.", data.person.about)}
+  root.innerHTML = `${hero("About", "Builder profile.", data.person.about)}
     <section class="about-grid">
       <article><p class="kicker">Skills</p><div class="skill-cloud">${tags(data.skills)}</div></article>
       <article><p class="kicker">Principles</p><ul><li>Make the work understandable quickly.</li><li>Keep visuals expressive but useful.</li><li>Turn experiments into artifacts with a story.</li></ul></article>
@@ -106,7 +106,7 @@ function renderAbout() {
 }
 
 function renderContact() {
-  root.innerHTML = `${hero("Contact", "Send the signal.", "Tell me what you are building, what you need, and what would make the conversation useful.")}
+  root.innerHTML = `${hero("Contact", "Send the signal.", "")}
     <section class="contact-grid">
       <article class="link-panel"><p class="kicker">Links</p>${data.links.map((link) => `<a href="${link.href}"><span>${link.note}</span><strong>${link.label}</strong></a>`).join("")}</article>
       <form class="contact-form" id="contactForm"><label><span>Your email</span><input type="email" placeholder="name@example.com"></label><label><span>Message</span><textarea rows="7" placeholder="What should I know?"></textarea></label><button class="button" type="submit">Prepare email<span>→</span></button></form>
@@ -138,12 +138,6 @@ function bindPage() {
   $$("[data-open-project]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openProject(Number(buttonEl.dataset.openProject))));
   $$("[data-open-art]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openArt(Number(buttonEl.dataset.openArt))));
   $("#colorRange")?.addEventListener("input", (event) => $("#colorField").style.setProperty("--mix", `${event.target.value}%`));
-  $("#ideaBtn")?.addEventListener("click", () => {
-    const a = ["What I learned from", "Why useful AI needs", "Design notes for", "A practical guide to"];
-    const b = ["student tools", "interactive portfolios", "education dashboards", "creative coding"];
-    const c = ["with more clarity", "without losing personality", "as a student builder", "through visual rhythm"];
-    $("#ideaOut").textContent = `${pick(a)} ${pick(b)} ${pick(c)}.`;
-  });
   $("#contactForm")?.addEventListener("submit", (event) => {
     event.preventDefault();
     const [email, message] = Array.from(event.currentTarget.elements);
