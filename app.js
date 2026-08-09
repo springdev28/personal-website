@@ -41,6 +41,16 @@ function projectCard(project, index) {
   </article>`;
 }
 
+function researchCard(item) {
+  return `<article class="research-card interactive-card" style="--accent:${item.color}">
+    <small>${item.area} / ${item.year}</small>
+    <h2>${item.title}</h2>
+    <p>${item.question}</p>
+    <div>${tags(item.notes)}</div>
+    <footer>${item.status}</footer>
+  </article>`;
+}
+
 function artCard(item, index) {
   return `<button class="art-card interactive-card" data-open-art="${index}" style="--a:${item.palette[0]};--b:${item.palette[1]};--c:${item.palette[2]}">
     <div class="canvas-art"><i></i><b></b><span></span></div>
@@ -84,6 +94,11 @@ function renderWork() {
     <div class="project-grid wide">${data.projects.map(projectCard).join("")}</div>`;
 }
 
+function renderResearch() {
+  root.innerHTML = `${hero("Research", "Questions, notes, directions.", "")}
+    <section class="research-grid">${data.research.map(researchCard).join("")}</section>`;
+}
+
 function renderArt() {
   root.innerHTML = `${hero("Art portfolio", "Visual experiments and interface studies.", "")}
     <div class="art-grid">${data.art.map(artCard).join("")}</div>
@@ -116,7 +131,7 @@ function renderContact() {
 }
 
 function renderPage() {
-  ({ home: renderHome, work: renderWork, art: renderArt, writing: renderWriting, about: renderAbout, contact: renderContact }[page] || renderHome)();
+  ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
 }
 
@@ -167,6 +182,7 @@ function searchable() {
   return [
     ...data.pages.map(([id, label, href]) => ({ title: label, meta: "Page", text: id, href })),
     ...data.projects.map((p) => ({ title: p.title, meta: p.type, text: p.summary, href: "work.html" })),
+    ...data.research.map((r) => ({ title: r.title, meta: r.area, text: r.question, href: "research.html" })),
     ...data.art.map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: "art.html" })),
     ...data.posts.map((p) => ({ title: p.title, meta: p.category, text: p.excerpt, href: "writing.html" })),
   ];

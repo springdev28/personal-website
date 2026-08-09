@@ -14,6 +14,7 @@ window.portfolio = {
   pages: [
     ["home", "Home", "index.html"],
     ["work", "Work", "work.html"],
+    ["research", "Research", "research.html"],
     ["art", "Art", "art.html"],
     ["writing", "Writing", "writing.html"],
     ["about", "About", "about.html"],
@@ -37,6 +38,35 @@ window.portfolio = {
     { label: "Schoolar", href: "work.html", x: 70, y: 30 },
     { label: "Writing", href: "writing.html", x: 31, y: 72 },
     { label: "Art", href: "art.html", x: 70, y: 72 },
+  ],
+  research: [
+    {
+      title: "AI support for learning paths",
+      area: "AI + Education",
+      status: "Exploring",
+      year: "2026",
+      question: "How can AI help students plan without making the process feel automatic or shallow?",
+      notes: ["route planning", "feedback loops", "student agency"],
+      color: "#4de2d0",
+    },
+    {
+      title: "Evidence-centered portfolios",
+      area: "Product + UX",
+      status: "Building",
+      year: "2026",
+      question: "What makes a project page feel credible quickly?",
+      notes: ["case studies", "proof", "process"],
+      color: "#64a8ff",
+    },
+    {
+      title: "Visual interfaces for abstract ideas",
+      area: "Design",
+      status: "Collecting",
+      year: "2026",
+      question: "When do visuals make technical concepts easier to remember?",
+      notes: ["diagramming", "motion", "storytelling"],
+      color: "#966dff",
+    },
   ],
   projects: [
     {

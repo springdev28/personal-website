@@ -317,7 +317,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-weight: 900;
 }
 
-.project-grid, .post-grid, .art-grid, .about-grid {
+.project-grid, .post-grid, .art-grid, .about-grid, .research-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
@@ -407,6 +407,54 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   cursor: pointer;
   font-weight: 900;
   padding: 0;
+}
+
+.research-card {
+  position: relative;
+  min-height: 250px;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--accent);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 13rem),
+    var(--panel);
+}
+.research-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--accent) 26%, transparent), transparent 15rem);
+  transition: opacity .18s ease;
+}
+.research-card:hover::before { opacity: 1; }
+.research-card > * { position: relative; z-index: 1; }
+.research-card small {
+  color: var(--subtle);
+  font-family: "DM Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.research-card h2 {
+  margin: 18px 0 0;
+  color: #e8ebff;
+  font-size: 1.14rem;
+  line-height: 1.25;
+}
+.research-card p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.62;
+}
+.research-card footer {
+  margin-top: 16px;
+  color: var(--green);
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
 }
 
 .filters {
@@ -624,7 +672,7 @@ dialog form button {
   .topbar { grid-template-columns: 1fr auto; }
   .nav { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
   .hero, .home-stage, .writing-layout, .contact-grid { grid-template-columns: 1fr; }
-  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 700px) {
@@ -633,7 +681,7 @@ dialog form button {
   .brand b { display: none; }
   .page { padding: 20px 12px; }
   .hero h1 { font-size: clamp(2.4rem, 15vw, 4.4rem); overflow-wrap: anywhere; }
-  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid { grid-template-columns: 1fr; }
+  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid { grid-template-columns: 1fr; }
   .project-card { grid-template-columns: 1fr; }
   .project-art { min-height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
   .signal-map { min-height: 300px; }

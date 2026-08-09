@@ -22,6 +22,7 @@ Most content lives in `content.js`.
 - Edit `stats` for the four small homepage stat cards.
 - Edit `focusNodes` for the homepage orbit visual.
 - Edit `projects` for the Work page and featured cards.
+- Edit `research` for the Research page.
 - Edit `art` for the Art page.
 - Edit `posts` for the Writing page.
 - Edit `links` for the Contact page.
@@ -67,6 +68,7 @@ Use `featured: true` only for projects that should appear on the homepage.
 ## Files
 
 - `index.html`, `work.html`, `art.html`, `writing.html`, `about.html`, `contact.html`: pages
+- `research.html`: research page
 - `content.js`: editable content
 - `app.js`: rendering and interactions
 - `styles.css`: visual design
