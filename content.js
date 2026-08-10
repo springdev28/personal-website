@@ -34,11 +34,15 @@ window.portfolio = {
     ["Base", "Istanbul"],
   ],
   focusNodes: [
-    { label: "AI", href: "work.html", x: 26, y: 30 },
-    { label: "Schoolar", href: "work.html", x: 70, y: 30 },
-    { label: "Writing", href: "writing.html", x: 31, y: 72 },
-    { label: "Art", href: "art.html", x: 70, y: 72 },
+    { label: "AI", href: "work.html", angle: 225 },
+    { label: "Schoolar", href: "work.html", angle: 315 },
+    { label: "Art", href: "art.html", angle: 45 },
+    { label: "Writing", href: "writing.html", angle: 135 },
   ],
+  focusPhoto: {
+    src: "",
+    alt: "Bahar Yuksel",
+  },
   research: [
     {
       title: "AI support for learning paths",

@@ -21,6 +21,7 @@ Most content lives in `content.js`.
 - Edit `person` for the homepage headline, intro, email, location, and about text.
 - Edit `stats` for the four small homepage stat cards.
 - Edit `focusNodes` for the homepage orbit visual.
+- Edit `focusPhoto` for the middle photo/initials circle.
 - Edit `projects` for the Work page and featured cards.
 - Edit `research` for the Research page.
 - Edit `art` for the Art page.
@@ -34,14 +35,48 @@ In `content.js`, update this section:
 
 ```js
 focusNodes: [
-  { label: "AI", href: "work.html", x: 26, y: 30 },
-  { label: "Schoolar", href: "work.html", x: 70, y: 30 },
-  { label: "Writing", href: "writing.html", x: 31, y: 72 },
-  { label: "Art", href: "art.html", x: 70, y: 72 },
+  { label: "AI", href: "work.html", angle: 225 },
+  { label: "Schoolar", href: "work.html", angle: 315 },
+  { label: "Art", href: "art.html", angle: 45 },
+  { label: "Writing", href: "writing.html", angle: 135 },
 ],
+focusPhoto: {
+  src: "",
+  alt: "Bahar Yuksel",
+},
 ```
 
-`x` and `y` are percentages inside the visual box. Keep them roughly between `18` and `82` so the circles stay inside the frame.
+Each orbit item has:
+
+- `label`: the text inside the circle
+- `href`: the page or URL to open when clicked
+- `angle`: where it starts on the orbit, in degrees
+
+Angle guide:
+
+- `0`: right
+- `90`: bottom
+- `180`: left
+- `270`: top
+
+To add a circle, add a new line inside `focusNodes`.
+
+To delete a circle, remove its line from `focusNodes`.
+
+To rename a circle, change `label`.
+
+To change where a circle starts, change `angle`.
+
+To add your photo, put an image file in the site folder, for example `portrait.jpg`, then set:
+
+```js
+focusPhoto: {
+  src: "portrait.jpg",
+  alt: "Bahar Yuksel",
+},
+```
+
+Leave `src: ""` to show your initials instead of a photo.
 
 ## Add a project
 

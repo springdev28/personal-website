@@ -61,8 +61,11 @@ function artCard(item, index) {
 
 function renderHome() {
   const focusNodes = data.focusNodes
-    .map((node) => `<a class="signal-node" href="${node.href}" style="--x:${node.x}%;--y:${node.y}%">${safe(node.label)}</a>`)
+    .map((node) => `<a class="signal-node" href="${node.href}" style="--angle:${node.angle}deg"><span>${safe(node.label)}</span></a>`)
     .join("");
+  const focusPhoto = data.focusPhoto?.src
+    ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
+    : `<span>${data.person.initials}</span>`;
 
   root.innerHTML = `
     ${hero("Studio portfolio", data.person.headline, data.person.intro, button("Explore work", "work.html"))}
@@ -73,7 +76,8 @@ function renderHome() {
         <h2>${data.person.now}</h2>
         <div class="signal-map">
           <span class="signal-ring" aria-hidden="true"></span>
-          ${focusNodes}
+          <div class="signal-orbit">${focusNodes}</div>
+          <div class="signal-photo">${focusPhoto}</div>
         </div>
       </div>
       <div class="jump-card">
