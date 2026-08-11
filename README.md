@@ -55,11 +55,11 @@ Here's what each part controls:
 person: {
   name: "Bahar Yuksel",
   initials: "BY",                       // shown in the logo circle
-  role: "AI & product builder — education systems",
-  location: "Istanbul / remote",
+  role: "High school builder — code, design & art",  // shown as the homepage tagline, About subtitle, and footer
+  location: "Istanbul, Türkiye",
   email: "hello@baharyuksel.com",       // used by the contact form + footer
-  headline: "Building AI tools that make learning work.",  // the big homepage title
-  intro: "Product engineer and designer working across AI...",
+  headline: "I build where code, design, and art meet.",  // the big homepage title
+  intro: "I'm a high school student in Istanbul...",  // the sentence under the headline
   now: "Building Schoolar, exploring AI for learning...", // the "Now" block
   available: "Open to opportunities & collaboration",     // the green status pill (see below)
   story: [                                 // your About-page narrative, one string per paragraph
@@ -77,6 +77,7 @@ person: {
 
 - **`headline`** is the giant text on the homepage. Keep it short and confident.
 - **`intro`** is the sentence under the headline.
+- **`role`** is your one-line tagline — it appears as the homepage kicker, the About-page subtitle, and in the footer.
 - **`story`** is your personal narrative on the About page — a list of paragraphs. Add or remove paragraphs by adding/removing quoted lines (keep the commas).
 - **`lookingFor`** is the list under "What I'm looking for" — great for admissions officers and recruiters. Each quoted line is one bullet.
 - **`email`** is used by the contact form and the footer — update it in one place here.
@@ -92,10 +93,10 @@ The small green pulsing pill on the homepage comes from `person.available`.
 
 ```js
 stats: [
-  ["Focus", "AI · Education"],
-  ["Building", "Schoolar"],
-  ["Shipped", "6+ projects"],
-  ["Based in", "Istanbul"],
+  ["Based in", "Istanbul, TR"],
+  ["Stage", "High school"],
+  ["Disciplines", "Code · Design · Art"],
+  ["Focus", "AI + Education"],
 ],
 ```
 
@@ -117,10 +118,10 @@ These three cards on the homepage explain what you do. Each has a `key` (the tit
 
 ```js
 focusNodes: [
-  { label: "AI", href: "work.html", angle: 225 },
-  { label: "Schoolar", href: "work.html", angle: 315 },
+  { label: "Code", href: "work.html", angle: 225 },
+  { label: "Design", href: "about.html", angle: 315 },
   { label: "Art", href: "art.html", angle: 45 },
-  { label: "Writing", href: "writing.html", angle: 135 },
+  { label: "Learning", href: "research.html", angle: 135 },
 ],
 ```
 
@@ -226,6 +227,18 @@ links: [
 ```
 
 > **Tip:** to change where a link points, edit its `href`. To add a new link (e.g. Twitter/X, a resume PDF), copy one line and change `label`, `href`, and `note`.
+
+### The footer (automatic)
+
+Every page has a footer at the bottom. You don't edit it directly — it's built
+automatically from content you've already set:
+
+- Your **name** and **role** come from `person.name` and `person.role`.
+- The **email** comes from `person.email`.
+- The **navigation links** are your pages (from `pages`), minus the page you're on.
+
+So to change anything in the footer, edit those `person` fields — the footer
+updates itself everywhere.
 
 ---
 
