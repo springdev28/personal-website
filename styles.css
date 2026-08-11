@@ -183,6 +183,35 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .button:hover { border-color: var(--blue); transform: translateY(-1px); }
 
+.hero-actions {
+  display: grid;
+  justify-items: end;
+  gap: 12px;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border: 1px solid rgba(77, 226, 208, 0.4);
+  border-radius: 999px;
+  background: rgba(77, 226, 208, 0.08);
+  color: var(--green);
+  font-family: "DM Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.status-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 0 rgba(77, 226, 208, 0.5);
+  animation: pulse-dot 2.2s ease-out infinite;
+}
+
 .stat-strip {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -612,6 +641,30 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 .skill-cloud { margin-top: 10px; }
 
+.approach-block { margin-top: 12px; }
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.approach-item {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--green);
+  border-radius: 14px;
+  background: rgba(5, 7, 22, 0.36);
+}
+.approach-item strong {
+  display: block;
+  font-size: 0.98rem;
+}
+.approach-item p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.62;
+}
+
 .link-panel {
   display: grid;
   gap: 8px;
@@ -702,6 +755,55 @@ dialog form button {
 .modal-card dd { margin: 4px 0 0; }
 .modal-card .button { margin-top: 16px; }
 
+.sitefoot {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 18px;
+  padding: 22px clamp(24px, 5vw, 56px);
+  border-top: 1px solid var(--line);
+  background: rgba(5, 7, 20, 0.5);
+}
+.sitefoot-brand { display: grid; gap: 4px; }
+.sitefoot-brand strong { font-size: 0.92rem; }
+.sitefoot-brand span {
+  color: var(--subtle);
+  font-family: "DM Mono", monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+}
+.sitefoot-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 14px;
+}
+.sitefoot-nav a {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+.sitefoot-nav a:hover { color: var(--green); }
+.sitefoot-meta {
+  display: grid;
+  justify-items: end;
+  gap: 4px;
+  text-align: right;
+}
+.sitefoot-meta a { color: var(--blue); font-size: 0.74rem; font-weight: 700; }
+.sitefoot-meta a:hover { color: var(--text); }
+.sitefoot-meta small {
+  color: var(--subtle);
+  font-family: "DM Mono", monospace;
+  font-size: 0.56rem;
+  letter-spacing: 0.05em;
+}
+
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(77, 226, 208, 0.5); }
+  70% { box-shadow: 0 0 0 7px rgba(77, 226, 208, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(77, 226, 208, 0); }
+}
 @keyframes enter { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes orbit-spin {
@@ -718,7 +820,11 @@ dialog form button {
   .topbar { grid-template-columns: 1fr auto; }
   .nav { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
   .hero, .home-stage, .writing-layout, .contact-grid { grid-template-columns: 1fr; }
-  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid, .approach-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hero-actions { justify-items: start; }
+  .sitefoot { grid-template-columns: 1fr; justify-items: start; gap: 14px; text-align: left; }
+  .sitefoot-nav { justify-content: flex-start; }
+  .sitefoot-meta { justify-items: start; text-align: left; }
 }
 
 @media (max-width: 700px) {
@@ -727,7 +833,7 @@ dialog form button {
   .brand b { display: none; }
   .page { padding: 20px 12px; }
   .hero h1 { font-size: clamp(2.4rem, 15vw, 4.4rem); overflow-wrap: anywhere; }
-  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid { grid-template-columns: 1fr; }
+  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid, .approach-grid { grid-template-columns: 1fr; }
   .project-card { grid-template-columns: 1fr; }
   .project-art { min-height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
   .signal-map { min-height: 300px; }

@@ -67,8 +67,13 @@ function renderHome() {
     ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
     : `<span>${data.person.initials}</span>`;
 
+  const heroAction = `<div class="hero-actions">
+      ${data.person.available ? `<span class="status-pill"><i></i>${safe(data.person.available)}</span>` : ""}
+      ${button("Explore work", "work.html")}
+    </div>`;
+
   root.innerHTML = `
-    ${hero("Studio portfolio", data.person.headline, data.person.intro, button("Explore work", "work.html"))}
+    ${hero("Studio portfolio", data.person.headline, data.person.intro, heroAction)}
     <section class="stat-strip">${data.stats.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</section>
     <section class="home-stage">
       <div class="focus-card">
@@ -118,12 +123,16 @@ function renderWriting() {
 }
 
 function renderAbout() {
-  root.innerHTML = `${hero("About", "Builder profile.", data.person.about)}
+  const approach = (data.approach || [])
+    .map((item) => `<div class="approach-item"><strong>${safe(item.title)}</strong><p>${safe(item.text)}</p></div>`)
+    .join("");
+  root.innerHTML = `${hero("About", data.person.role, data.person.about)}
     <section class="about-grid">
       <article><p class="kicker">Skills</p><div class="skill-cloud">${tags(data.skills)}</div></article>
       <article><p class="kicker">Principles</p><ul><li>Make the work understandable quickly.</li><li>Keep visuals expressive but useful.</li><li>Turn experiments into artifacts with a story.</li></ul></article>
       <article><p class="kicker">Now</p><p>${data.person.now}</p></article>
-    </section>`;
+    </section>
+    ${approach ? `<section class="section-block approach-block"><div class="section-head"><div><p class="kicker">How I work</p><h2>Principles in practice</h2></div></div><div class="approach-grid">${approach}</div></section>` : ""}`;
 }
 
 function renderContact() {
@@ -137,6 +146,29 @@ function renderContact() {
 function renderPage() {
   ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
+}
+
+function renderFooter() {
+  const shell = document.querySelector(".shell");
+  if (!shell || shell.querySelector(".sitefoot")) return;
+  const year = new Date().getFullYear();
+  const nav = data.pages
+    .filter(([id]) => id !== page)
+    .map(([, label, href]) => `<a href="${href}">${label}</a>`)
+    .join("");
+  const footer = document.createElement("footer");
+  footer.className = "sitefoot";
+  footer.innerHTML = `
+    <div class="sitefoot-brand">
+      <strong>${safe(data.person.name)}</strong>
+      <span>${safe(data.person.role)}</span>
+    </div>
+    <nav class="sitefoot-nav" aria-label="Footer navigation">${nav}</nav>
+    <div class="sitefoot-meta">
+      <a href="mailto:${data.person.email}">${data.person.email}</a>
+      <small>© ${year} · Designed &amp; built by ${safe(data.person.name)}</small>
+    </div>`;
+  shell.appendChild(footer);
 }
 
 function bindPage() {
@@ -268,5 +300,6 @@ function startMotion() {
 
 renderShell();
 renderPage();
+renderFooter();
 bindSearch();
 startMotion();
