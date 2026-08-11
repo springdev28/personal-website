@@ -23,8 +23,8 @@ window.portfolio = {
   ],
   links: [
     { label: "Email", href: "mailto:hello@baharyuksel.com", note: "Direct contact" },
-    { label: "GitHub", href: "https://github.com/", note: "Code and experiments" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/", note: "Professional profile" },
+    { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/bahar-y%C3%BCksel-15030930b/", note: "Professional profile" },
     { label: "Iter Agent", href: "../iter-agent/public/index.html", note: "Interactive project" },
     { label: "Schoolar", href: "../schoolar/", note: "Flagship project" },
   ],

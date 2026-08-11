@@ -162,12 +162,12 @@ approach: [
 ```js
 links: [
   { label: "Email", href: "mailto:hello@baharyuksel.com", note: "Direct contact" },
-  { label: "GitHub", href: "https://github.com/", note: "Code and experiments" },
+  { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
   ...
 ],
 ```
 
-> **Tip:** the GitHub and LinkedIn links currently point to placeholder URLs. Replace `https://github.com/` and `https://www.linkedin.com/` with your real profile links.
+> **Tip:** to change where a link points, edit its `href`. To add a new link (e.g. Twitter/X, a resume PDF), copy one line and change `label`, `href`, and `note`.
 
 ---
 
