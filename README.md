@@ -1,37 +1,96 @@
 # Personal Website
 
-Interactive studio portfolio for Bahar Yuksel.
+Interactive studio portfolio for Bahar Yuksel — software, AI, research, art, and writing.
 
-## View locally
+This is a plain HTML/CSS/JavaScript site with **no build step**. You edit text files and open them in a browser. Almost everything you'll want to change lives in one file: `content.js`.
 
-Open `index.html` in a browser.
+---
 
-You can also run a local server:
+## Quick start
+
+### View the site locally
+
+The simplest way: double-click `index.html` to open it in your browser.
+
+For a more accurate preview (some features work better over a real server), run a local server from this folder:
 
 ```bash
 python3 -m http.server 8080
 ```
 
-Then open `http://localhost:8080`.
+Then open `http://localhost:8080` in your browser.
 
-## Edit the site
+### The edit → preview → publish loop
 
-Most content lives in `content.js`.
+1. **Edit** `content.js` (or another file) in any text editor.
+2. **Preview** by refreshing the page in your browser. If you don't see your change, see [Not seeing your changes?](#not-seeing-your-changes) below.
+3. **Publish** with the three git commands in [Publish your changes](#publish-your-changes).
 
-- Edit `person` for the homepage headline, intro, email, location, and about text.
-- Edit `stats` for the four small homepage stat cards.
-- Edit `focusNodes` for the homepage orbit visual.
-- Edit `focusPhoto` for the middle photo/initials circle.
-- Edit `projects` for the Work page and featured cards.
-- Edit `research` for the Research page.
-- Edit `art` for the Art page.
-- Edit `posts` for the Writing page.
-- Edit `links` for the Contact page.
-- Edit `skills` for the About page.
+---
 
-## Edit the homepage orbit
+## What each file does
 
-In `content.js`, update this section:
+| File | What it's for | Edit it? |
+| --- | --- | --- |
+| `content.js` | **All the words and content** on the site | ✅ Edit this most |
+| `styles.css` | Colors, spacing, fonts — the visual design | ⚠️ Only for design tweaks |
+| `app.js` | How the site is built and behaves | ⛔ Rarely — advanced |
+| `index.html` + the other `.html` files | The page files (one per section) | ⛔ Rarely — see cache note |
+
+The `.html` files (`index`, `work`, `research`, `art`, `writing`, `about`, `contact`) are nearly identical shells. You almost never need to touch them — the content is injected from `content.js`.
+
+---
+
+## Editing content (`content.js`)
+
+Open `content.js`. It's one big list of settings. Change the text **inside the quotes** and keep the punctuation (commas, brackets, quotes) exactly as it is. That punctuation is what keeps the file valid — a missing comma or quote will break the page.
+
+> **Golden rule:** only change the text between `"quotes"`. Leave the structure alone.
+
+Here's what each part controls:
+
+### `person` — your name, headline, and intro
+
+```js
+person: {
+  name: "Bahar Yuksel",
+  initials: "BY",                       // shown in the logo circle
+  role: "AI & product builder — education systems",
+  location: "Istanbul / remote",
+  email: "hello@baharyuksel.com",       // used by the contact form + footer
+  headline: "Building AI tools that make learning work.",  // the big homepage title
+  intro: "Product engineer and designer working across AI...",
+  now: "Building Schoolar, designing AI learning flows...", // the "Now" block
+  about: "I build across education, software, AI, and design...",
+  available: "Available for new projects",  // the green status pill (see below)
+},
+```
+
+- **`headline`** is the giant text on the homepage. Keep it short and confident.
+- **`about`** is the intro paragraph on the About page.
+- **`email`** is used by the contact form and the footer — update it in one place here.
+
+### `available` — the "Available for new projects" pill
+
+The small green pulsing pill on the homepage comes from `person.available`.
+
+- To change the text: edit the words, e.g. `available: "Open to internships"`.
+- To hide the pill entirely: set it to empty — `available: ""`.
+
+### `stats` — the four homepage cards
+
+```js
+stats: [
+  ["Focus", "AI · Education"],
+  ["Building", "Schoolar"],
+  ["Shipped", "6+ projects"],
+  ["Based in", "Istanbul"],
+],
+```
+
+Each line is `["Label", "Value"]`. Keep it to four for the layout to stay even.
+
+### `focusNodes` — the homepage orbit circles
 
 ```js
 focusNodes: [
@@ -40,34 +99,31 @@ focusNodes: [
   { label: "Art", href: "art.html", angle: 45 },
   { label: "Writing", href: "writing.html", angle: 135 },
 ],
+```
+
+Each orbit circle has:
+
+- `label` — the text inside the circle
+- `href` — the page or link it opens when clicked
+- `angle` — where it sits on the orbit, in degrees
+
+Angle guide: `0` = right, `90` = bottom, `180` = left, `270` = top.
+
+- **Add a circle:** copy one line and change its values.
+- **Remove a circle:** delete its line.
+- **Rename:** change `label`.
+- **Move it:** change `angle`.
+
+### `focusPhoto` — the center photo (or your initials)
+
+```js
 focusPhoto: {
-  src: "",
+  src: "",                    // leave empty to show your initials
   alt: "Bahar Yuksel",
 },
 ```
 
-Each orbit item has:
-
-- `label`: the text inside the circle
-- `href`: the page or URL to open when clicked
-- `angle`: where it starts on the orbit, in degrees
-
-Angle guide:
-
-- `0`: right
-- `90`: bottom
-- `180`: left
-- `270`: top
-
-To add a circle, add a new line inside `focusNodes`.
-
-To delete a circle, remove its line from `focusNodes`.
-
-To rename a circle, change `label`.
-
-To change where a circle starts, change `angle`.
-
-To add your photo, put an image file in the site folder, for example `portrait.jpg`, then set:
+To use a photo instead of your initials, put an image file in this folder (for example `portrait.jpg`) and set:
 
 ```js
 focusPhoto: {
@@ -76,44 +132,148 @@ focusPhoto: {
 },
 ```
 
-Leave `src: ""` to show your initials instead of a photo.
+### `projects` — the Work page and homepage featured cards
+
+See [Add a project](#add-a-project) below for the full field guide. Set `featured: true` on a project to also show it on the homepage.
+
+### `research`, `art`, `posts` — the other content pages
+
+Each is a list of items following the same copy-a-block pattern. Change the text inside the quotes:
+
+- `research` → the Research page (each has a `question` and `notes`)
+- `art` → the Art page (each has a 3-color `palette`)
+- `posts` → the Writing page (each has a `date` in `YYYY-MM-DD` form)
+
+### `skills` and `approach` — the About page
+
+```js
+skills: ["Product thinking", "AI workflows", "Flutter", ...],
+approach: [
+  { title: "Start from the question", text: "Every project begins with a real problem..." },
+  ...
+],
+```
+
+- **`skills`** is a simple list of tags. Add or remove words in quotes.
+- **`approach`** is the "How I work" section — three cards, each with a `title` and `text`.
+
+### `links` — the Contact page and footer links
+
+```js
+links: [
+  { label: "Email", href: "mailto:hello@baharyuksel.com", note: "Direct contact" },
+  { label: "GitHub", href: "https://github.com/", note: "Code and experiments" },
+  ...
+],
+```
+
+> **Tip:** the GitHub and LinkedIn links currently point to placeholder URLs. Replace `https://github.com/` and `https://www.linkedin.com/` with your real profile links.
+
+---
 
 ## Add a project
 
-Copy one object inside `projects` in `content.js` and change the fields:
+Copy one block inside `projects` in `content.js` and change the fields:
 
 ```js
 {
   title: "Project Name",
-  type: "Short type",
-  category: "Category",
+  type: "Short type",          // e.g. "Education platform"
+  category: "Category",        // used by the Work page filters
   year: "2026",
-  href: "https://example.com",
-  color: "#64a8ff",
-  summary: "One short sentence.",
+  href: "https://example.com", // where "Open" goes
+  color: "#64a8ff",            // accent color (hex)
+  summary: "One short sentence describing it.",
   role: "What you did.",
-  result: "What changed or what it shows.",
+  result: "What changed or what it proves.",  // keep this outcome-focused
   tags: ["Tag", "Tag"],
-  featured: true,
+  featured: true,              // true = also show on the homepage
+},
+```
+
+- **`result`** is the most important line for looking professional — say what the project *achieved* or *demonstrates*, not that it was practice.
+- **`featured: true`** promotes it to the homepage. Only your strongest 3 should be featured. Remove the line (or set `false`) to keep a project on the Work page only.
+- **`category`** feeds the filter buttons on the Work page automatically.
+
+---
+
+## Design and colors (`styles.css`)
+
+You usually don't need this file, but if you want to adjust the look, the main colors are defined at the very top:
+
+```css
+:root {
+  --blue: #64a8ff;
+  --green: #4de2d0;
+  --purple: #966dff;
+  --pink: #ff75d8;
+  ...
 }
 ```
 
-Use `featured: true` only for projects that should appear on the homepage.
+Change a hex value there and it updates everywhere that color is used. Make small changes and preview often.
 
-## Files
+---
 
-- `index.html`, `work.html`, `art.html`, `writing.html`, `about.html`, `contact.html`: pages
-- `research.html`: research page
-- `content.js`: editable content
-- `app.js`: rendering and interactions
-- `styles.css`: visual design
+## Publish your changes
 
-## Publish changes
-
-After editing:
+After editing, publish from this folder:
 
 ```bash
 git add .
-git commit -m "Update personal website"
+git commit -m "Update portfolio content"
 git push
 ```
+
+Your changes go live wherever the site is hosted.
+
+### Not seeing your changes?
+
+Browsers cache the old files. There are two things to try:
+
+1. **Hard refresh** the page: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac).
+2. **If you edited `styles.css` or `app.js`** and other people still see the old version, bump the **version stamp** in the `.html` files. Each page links the files like this:
+
+   ```html
+   <link rel="stylesheet" href="styles.css?v=20260811" />
+   <script src="content.js?v=20260811"></script>
+   <script src="app.js?v=20260811"></script>
+   ```
+
+   Change every `?v=20260811` to a new value (today's date works well, e.g. `?v=20260812`) in **all** the `.html` files. This forces browsers to load the fresh files. Editing only `content.js`? A hard refresh is usually enough.
+
+> **Note:** if you only change text in `content.js`, most visitors will see it after a normal refresh. Bumping the version is mainly for CSS/JS changes.
+
+---
+
+## Common tasks at a glance
+
+| I want to… | Edit this in `content.js` |
+| --- | --- |
+| Change the big homepage title | `person.headline` |
+| Change my intro paragraph | `person.intro` / `person.about` |
+| Change or hide the green "Available" pill | `person.available` (set `""` to hide) |
+| Update my email | `person.email` |
+| Add or edit a project | the `projects` list — [see above](#add-a-project) |
+| Feature a project on the homepage | add `featured: true` to it |
+| Change the homepage orbit circles | `focusNodes` |
+| Add my photo | `focusPhoto.src` |
+| Edit the About "How I work" cards | `approach` |
+| Add a skill tag | `skills` |
+| Update social/contact links | `links` |
+
+---
+
+## If something breaks
+
+If the page goes blank after an edit, you almost certainly removed a comma, quote, or bracket by accident.
+
+- Open your browser's developer console (`F12` → **Console**) to see the error.
+- Compare your change to the original structure — the safest fix is to undo your last edit and redo it, changing **only** the text inside the quotes.
+- Still stuck? Revert to the last working version:
+
+  ```bash
+  git checkout content.js
+  ```
+
+  (This discards unsaved changes to that file.)
