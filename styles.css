@@ -583,6 +583,68 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .art-card strong { margin-top: 16px; font-size: 1.08rem; }
 .art-card p { color: var(--muted); font-size: 0.75rem; }
 
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.album-card {
+  position: relative;
+  display: block;
+  min-height: 300px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--panel);
+  cursor: pointer;
+  text-align: left;
+}
+.album-card:hover { border-color: var(--line-strong); transform: translateY(-2px); }
+.album-cover {
+  position: relative;
+  min-height: 210px;
+}
+.album-cover em {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  padding: 5px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: rgba(5, 7, 20, 0.72);
+  color: var(--text);
+  font-family: "DM Mono", monospace;
+  font-size: 0.56rem;
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+.album-card strong,
+.album-card p {
+  display: block;
+  padding: 0 16px;
+}
+.album-card strong { margin-top: 16px; font-size: 1.12rem; }
+.album-card p { margin: 6px 0 16px; color: var(--muted); font-size: 0.75rem; line-height: 1.5; }
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+  padding: 7px 13px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: var(--muted);
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+}
+.back-link:hover { border-color: var(--blue); color: var(--text); }
+
 .mixer { margin-top: 12px; }
 .mixer input { width: 100%; accent-color: var(--green); }
 #colorField {
@@ -935,7 +997,7 @@ dialog form button {
   .topbar { grid-template-columns: 1fr auto; }
   .nav { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
   .hero, .home-stage, .writing-layout, .contact-grid, .story-layout { grid-template-columns: 1fr; }
-  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .album-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-actions { justify-items: start; }
   .sitefoot { grid-template-columns: 1fr; justify-items: start; gap: 14px; text-align: left; }
   .sitefoot-nav { justify-content: flex-start; }
@@ -948,7 +1010,7 @@ dialog form button {
   .brand b { display: none; }
   .page { padding: 20px 12px; }
   .hero h1 { font-size: clamp(2.4rem, 15vw, 4.4rem); overflow-wrap: anywhere; }
-  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: 1fr; }
+  .stat-strip, .project-grid, .project-grid.wide, .art-grid, .album-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: 1fr; }
   .project-card { grid-template-columns: 1fr; }
   .project-art { min-height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
   .signal-map { min-height: 300px; }

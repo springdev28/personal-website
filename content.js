@@ -182,38 +182,58 @@ window.portfolio = {
       tags: ["Game", "JavaScript", "Prototype"],
     },
   ],
-  art: [
+  // Art is organized into named albums. Each album has a name, a short
+  // description, and a list of pieces. Add an album by copying one block.
+  artAlbums: [
     {
-      title: "Learning Signal",
-      medium: "Interface study",
-      year: "2026",
-      palette: ["#64a8ff", "#4de2d0", "#966dff"],
-      text: "A visual system for routes, progress, and learning momentum.",
-      tags: ["Interface", "Education"],
+      name: "Learning Systems",
+      description: "Interface studies about progress, routes, and momentum.",
+      pieces: [
+        {
+          title: "Learning Signal",
+          medium: "Interface study",
+          year: "2026",
+          palette: ["#64a8ff", "#4de2d0", "#966dff"],
+          text: "A visual system for routes, progress, and learning momentum.",
+          tags: ["Interface", "Education"],
+        },
+        {
+          title: "Orbit Field",
+          medium: "Visual experiment",
+          year: "2026",
+          palette: ["#050611", "#64a8ff", "#ff75d8"],
+          text: "A study in circular composition, interface depth, and luminous contrast.",
+          tags: ["System", "Visual"],
+        },
+      ],
     },
     {
-      title: "Night Index",
-      medium: "Digital poster",
-      year: "2026",
-      palette: ["#966dff", "#050611", "#4de2d0"],
-      text: "A poster study for a personal archive: dark surface, bright signal.",
-      tags: ["Poster", "Typography"],
+      name: "Posters",
+      description: "Type and poster studies for personal projects.",
+      pieces: [
+        {
+          title: "Night Index",
+          medium: "Digital poster",
+          year: "2026",
+          palette: ["#966dff", "#050611", "#4de2d0"],
+          text: "A poster study for a personal archive: dark surface, bright signal.",
+          tags: ["Poster", "Typography"],
+        },
+      ],
     },
     {
-      title: "Signal Garden",
-      medium: "Creative coding sketch",
-      year: "2026",
-      palette: ["#4de2d0", "#17204a", "#966dff"],
-      text: "Abstract forms that react like connected ideas.",
-      tags: ["Creative code", "Motion"],
-    },
-    {
-      title: "Orbit Field",
-      medium: "Visual experiment",
-      year: "2026",
-      palette: ["#050611", "#64a8ff", "#ff75d8"],
-      text: "A study in circular composition, interface depth, and luminous contrast.",
-      tags: ["System", "Visual"],
+      name: "Creative Coding",
+      description: "Generative sketches and motion experiments.",
+      pieces: [
+        {
+          title: "Signal Garden",
+          medium: "Creative coding sketch",
+          year: "2026",
+          palette: ["#4de2d0", "#17204a", "#966dff"],
+          text: "Abstract forms that react like connected ideas.",
+          tags: ["Creative code", "Motion"],
+        },
+      ],
     },
   ],
   posts: [

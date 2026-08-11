@@ -164,8 +164,39 @@ See [Add a project](#add-a-project) below for the full field guide. Set `feature
 Each is a list of items following the same copy-a-block pattern. Change the text inside the quotes:
 
 - `research` → the Research page (each has a `question` and `notes`)
-- `art` → the Art page (each has a 3-color `palette`)
+- `artAlbums` → the Art page, organized into named albums (see below)
 - `posts` → the Writing page (each has a `date` in `YYYY-MM-DD` form)
+
+### `artAlbums` — the Art page (like albums/galleries)
+
+The Art page works like an album gallery: visitors see your **named albums**, click one, and browse the pieces inside it. You create and name albums here:
+
+```js
+artAlbums: [
+  {
+    name: "Learning Systems",                     // the album name shown on the cover
+    description: "Interface studies about progress...",  // one short line
+    pieces: [
+      {
+        title: "Learning Signal",
+        medium: "Interface study",
+        year: "2026",
+        palette: ["#64a8ff", "#4de2d0", "#966dff"], // 3 colors — makes the artwork visual
+        text: "A visual system for routes, progress, and learning momentum.",
+        tags: ["Interface", "Education"],
+      },
+      // ...more pieces in this album...
+    ],
+  },
+  // ...more albums...
+],
+```
+
+- **Create a new album:** copy one whole album block (`{ name, description, pieces: [...] }`) and change the `name`, `description`, and pieces.
+- **Name an album:** change its `name`.
+- **Add a piece to an album:** copy one piece block inside that album's `pieces` list.
+- The album **cover** and the piece visuals are generated from each piece's 3-color `palette` — no image files needed. The first piece's palette becomes the album cover.
+- Each album shows a **piece count** automatically, and every album gets its own shareable link (e.g. `art.html#a=0` opens the first album).
 
 ### `skillGroups` and `approach` — the About page
 

@@ -51,12 +51,28 @@ function researchCard(item) {
   </article>`;
 }
 
-function artCard(item, index) {
-  return `<button class="art-card interactive-card" data-open-art="${index}" style="--a:${item.palette[0]};--b:${item.palette[1]};--c:${item.palette[2]}">
+function getAlbums() {
+  if (Array.isArray(data.artAlbums) && data.artAlbums.length) return data.artAlbums;
+  if (Array.isArray(data.art) && data.art.length) return [{ name: "Art", description: "", pieces: data.art }];
+  return [];
+}
+
+function artCard(item, pieceIndex, albumIndex) {
+  return `<button class="art-card interactive-card" data-album="${albumIndex}" data-piece="${pieceIndex}" style="--a:${item.palette[0]};--b:${item.palette[1]};--c:${item.palette[2]}">
     <div class="canvas-art"><i></i><b></b><span></span></div>
-    <strong>${item.title}</strong>
-    <p>${item.medium} / ${item.year}</p>
+    <strong>${safe(item.title)}</strong>
+    <p>${safe(item.medium)} / ${safe(item.year)}</p>
   </button>`;
+}
+
+function albumCard(album, index) {
+  const cover = album.pieces[0]?.palette || ["#4de2d0", "#17204a", "#966dff"];
+  const count = album.pieces.length;
+  return `<a class="album-card interactive-card" href="#a=${index}" style="--a:${cover[0]};--b:${cover[1]};--c:${cover[2]}">
+    <div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>
+    <strong>${safe(album.name)}</strong>
+    <p>${album.description ? safe(album.description) : "&nbsp;"}</p>
+  </a>`;
 }
 
 function renderHome() {
@@ -115,8 +131,20 @@ function renderResearch() {
 }
 
 function renderArt() {
-  root.innerHTML = `${hero("Art & visuals", "Where I experiment without a brief.", "These are studies and creative-coding sketches — the place a lot of my design instincts come from.")}
-    <div class="art-grid">${data.art.map(artCard).join("")}</div>
+  const albums = getAlbums();
+  const match = location.hash.match(/a=(\d+)/);
+  const activeIndex = match ? Number(match[1]) : -1;
+  const active = albums[activeIndex];
+
+  if (active) {
+    root.innerHTML = `<a class="back-link" href="#">← All albums</a>
+      ${hero("Album", safe(active.name), active.description ? safe(active.description) : "")}
+      <div class="art-grid">${active.pieces.map((piece, i) => artCard(piece, i, activeIndex)).join("")}</div>`;
+    return;
+  }
+
+  root.innerHTML = `${hero("Art & visuals", "Albums of studies and experiments.", "Browse by album — visual studies, posters, and creative-coding sketches. Click an album to open it.")}
+    <div class="album-grid">${albums.map(albumCard).join("")}</div>
     <section class="section-block mixer"><div class="section-head"><div><p class="kicker">Interactive study</p><h2>Color field mixer</h2></div><span>Drag</span></div><input id="colorRange" type="range" min="0" max="100" value="46"><div id="colorField"></div></section>`;
 }
 
@@ -205,7 +233,7 @@ function bindPage() {
     });
   });
   $$("[data-open-project]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openProject(Number(buttonEl.dataset.openProject))));
-  $$("[data-open-art]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openArt(Number(buttonEl.dataset.openArt))));
+  $$("[data-piece]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openArt(Number(buttonEl.dataset.album), Number(buttonEl.dataset.piece))));
   $("#colorRange")?.addEventListener("input", (event) => $("#colorField").style.setProperty("--mix", `${event.target.value}%`));
   $("#contactForm")?.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -220,9 +248,10 @@ function openProject(index) {
   $("#featureDialog").showModal();
 }
 
-function openArt(index) {
-  const a = data.art[index];
-  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}"><div class="canvas-art large"><i></i><b></b><span></span></div><p class="kicker">${a.medium} / ${a.year}</p><h2>${a.title}</h2><p>${a.text}</p><div>${tags(a.tags)}</div></article>`;
+function openArt(albumIndex, pieceIndex) {
+  const a = getAlbums()[albumIndex]?.pieces[pieceIndex];
+  if (!a) return;
+  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}"><div class="canvas-art large"><i></i><b></b><span></span></div><p class="kicker">${safe(a.medium)} / ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags(a.tags)}</div></article>`;
   $("#featureDialog").showModal();
 }
 
@@ -235,7 +264,7 @@ function searchable() {
     ...data.pages.map(([id, label, href]) => ({ title: label, meta: "Page", text: id, href })),
     ...data.projects.map((p) => ({ title: p.title, meta: p.type, text: p.summary, href: "work.html" })),
     ...data.research.map((r) => ({ title: r.title, meta: r.area, text: r.question, href: "research.html" })),
-    ...data.art.map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: "art.html" })),
+    ...getAlbums().flatMap((al) => al.pieces).map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: "art.html" })),
     ...data.posts.map((p) => ({ title: p.title, meta: p.category, text: p.excerpt, href: "writing.html" })),
   ];
 }
@@ -319,3 +348,10 @@ renderPage();
 renderFooter();
 bindSearch();
 startMotion();
+
+if (page === "art") {
+  addEventListener("hashchange", () => {
+    renderPage();
+    scrollTo({ top: 0, behavior: "smooth" });
+  });
+}
