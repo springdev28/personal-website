@@ -60,14 +60,25 @@ person: {
   email: "hello@baharyuksel.com",       // used by the contact form + footer
   headline: "Building AI tools that make learning work.",  // the big homepage title
   intro: "Product engineer and designer working across AI...",
-  now: "Building Schoolar, designing AI learning flows...", // the "Now" block
-  about: "I build across education, software, AI, and design...",
-  available: "Available for new projects",  // the green status pill (see below)
+  now: "Building Schoolar, exploring AI for learning...", // the "Now" block
+  available: "Open to opportunities & collaboration",     // the green status pill (see below)
+  story: [                                 // your About-page narrative, one string per paragraph
+    "I'm Bahar Yüksel, a high school student in Istanbul...",
+    "My favorite work lives where code, design, and art overlap...",
+    "I'm still early — still learning, still shipping...",
+  ],
+  lookingFor: [                            // the "What I'm looking for" list on the About page
+    "Internships, programs, and mentorship",
+    "Collaborators on education and AI projects",
+    "People who will push me to build better",
+  ],
 },
 ```
 
 - **`headline`** is the giant text on the homepage. Keep it short and confident.
-- **`about`** is the intro paragraph on the About page.
+- **`intro`** is the sentence under the headline.
+- **`story`** is your personal narrative on the About page — a list of paragraphs. Add or remove paragraphs by adding/removing quoted lines (keep the commas).
+- **`lookingFor`** is the list under "What I'm looking for" — great for admissions officers and recruiters. Each quoted line is one bullet.
 - **`email`** is used by the contact form and the footer — update it in one place here.
 
 ### `available` — the "Available for new projects" pill
@@ -89,6 +100,18 @@ stats: [
 ```
 
 Each line is `["Label", "Value"]`. Keep it to four for the layout to stay even.
+
+### `disciplines` — the "What I do" cards on the homepage
+
+```js
+disciplines: [
+  { key: "Code", color: "#64a8ff", text: "Software and prototypes..." },
+  { key: "Design", color: "#4de2d0", text: "Interfaces and systems..." },
+  { key: "Art", color: "#966dff", text: "Visual and creative-coding work..." },
+],
+```
+
+These three cards on the homepage explain what you do. Each has a `key` (the title), a `color` (accent hex), and `text` (one or two sentences).
 
 ### `focusNodes` — the homepage orbit circles
 
@@ -144,17 +167,21 @@ Each is a list of items following the same copy-a-block pattern. Change the text
 - `art` → the Art page (each has a 3-color `palette`)
 - `posts` → the Writing page (each has a `date` in `YYYY-MM-DD` form)
 
-### `skills` and `approach` — the About page
+### `skillGroups` and `approach` — the About page
 
 ```js
-skills: ["Product thinking", "AI workflows", "Flutter", ...],
+skillGroups: [
+  { group: "Code", items: ["JavaScript", "Flutter", "AI workflows", ...] },
+  { group: "Design", items: ["UI/UX systems", "Interaction design", ...] },
+  { group: "Art & craft", items: ["Creative coding", "Writing", ...] },
+],
 approach: [
   { title: "Start from the question", text: "Every project begins with a real problem..." },
   ...
 ],
 ```
 
-- **`skills`** is a simple list of tags. Add or remove words in quotes.
+- **`skillGroups`** is your toolkit, grouped into three columns. Each group has a `group` name and an `items` list of tags. Add or remove tags in the `items` quotes.
 - **`approach`** is the "How I work" section — three cards, each with a `title` and `text`.
 
 ### `links` — the Contact page and footer links
@@ -184,6 +211,7 @@ Copy one block inside `projects` in `content.js` and change the fields:
   href: "https://example.com", // where "Open" goes
   color: "#64a8ff",            // accent color (hex)
   summary: "One short sentence describing it.",
+  why: "Why you made it — the problem behind it.",  // shown in the project's "Details" popup
   role: "What you did.",
   result: "What changed or what it proves.",  // keep this outcome-focused
   tags: ["Tag", "Tag"],
@@ -191,6 +219,7 @@ Copy one block inside `projects` in `content.js` and change the fields:
 },
 ```
 
+- **`why`** appears in the "Details" popup as "Why I built it" — a short, personal reason. This is what makes the work feel like *yours*.
 - **`result`** is the most important line for looking professional — say what the project *achieved* or *demonstrates*, not that it was practice.
 - **`featured: true`** promotes it to the homepage. Only your strongest 3 should be featured. Remove the line (or set `false`) to keep a project on the Work page only.
 - **`category`** feeds the filter buttons on the Work page automatically.
@@ -251,15 +280,19 @@ Browsers cache the old files. There are two things to try:
 | I want to… | Edit this in `content.js` |
 | --- | --- |
 | Change the big homepage title | `person.headline` |
-| Change my intro paragraph | `person.intro` / `person.about` |
+| Change my intro paragraph | `person.intro` |
+| Edit my personal story (About page) | `person.story` |
+| Edit "What I'm looking for" | `person.lookingFor` |
 | Change or hide the green "Available" pill | `person.available` (set `""` to hide) |
 | Update my email | `person.email` |
+| Edit the "What I do" cards | `disciplines` |
 | Add or edit a project | the `projects` list — [see above](#add-a-project) |
+| Add "why I built it" to a project | the project's `why` field |
 | Feature a project on the homepage | add `featured: true` to it |
 | Change the homepage orbit circles | `focusNodes` |
 | Add my photo | `focusPhoto.src` |
 | Edit the About "How I work" cards | `approach` |
-| Add a skill tag | `skills` |
+| Add a skill tag | `skillGroups` |
 | Update social/contact links | `links` |
 
 ---

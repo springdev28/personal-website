@@ -73,7 +73,7 @@ function renderHome() {
     </div>`;
 
   root.innerHTML = `
-    ${hero("Studio portfolio", data.person.headline, data.person.intro, heroAction)}
+    ${hero(data.person.role, data.person.headline, data.person.intro, heroAction)}
     <section class="stat-strip">${data.stats.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</section>
     <section class="home-stage">
       <div class="focus-card">
@@ -90,6 +90,12 @@ function renderHome() {
         ${data.pages.slice(1).map(([, label, href]) => `<a href="${href}">${label}<span>→</span></a>`).join("")}
       </div>
     </section>
+    ${data.disciplines ? `<section class="section-block disciplines-block">
+      <div class="section-head"><div><p class="kicker">What I do</p><h2>Three things, one person</h2></div><a href="about.html">More about me</a></div>
+      <div class="disciplines-grid">${data.disciplines
+        .map((d) => `<article class="discipline-card" style="--accent:${d.color}"><span class="discipline-dot"></span><strong>${safe(d.key)}</strong><p>${safe(d.text)}</p></article>`)
+        .join("")}</div>
+    </section>` : ""}
     <section class="section-block">
       <div class="section-head"><div><p class="kicker">Featured work</p><h2>Three active threads</h2></div><a href="work.html">All work</a></div>
       <div class="project-grid">${data.projects.filter((p) => p.featured).map(projectCard).join("")}</div>
@@ -98,7 +104,7 @@ function renderHome() {
 
 function renderWork() {
   const cats = ["All", ...new Set(data.projects.map((p) => p.category))];
-  root.innerHTML = `${hero("Selected work", "Projects, prototypes, systems.", "")}
+  root.innerHTML = `${hero("Work", "Things I've built.", "A mix of shipped products, prototypes, and experiments. Open any card to see why I made it.")}
     <div class="filters">${cats.map((cat, index) => `<button class="filter ${index === 0 ? "active" : ""}" data-filter="${cat}">${cat}</button>`).join("")}</div>
     <div class="project-grid wide">${data.projects.map(projectCard).join("")}</div>`;
 }
@@ -109,7 +115,7 @@ function renderResearch() {
 }
 
 function renderArt() {
-  root.innerHTML = `${hero("Art portfolio", "Visual experiments and interface studies.", "")}
+  root.innerHTML = `${hero("Art & visuals", "Where I experiment without a brief.", "These are studies and creative-coding sketches — the place a lot of my design instincts come from.")}
     <div class="art-grid">${data.art.map(artCard).join("")}</div>
     <section class="section-block mixer"><div class="section-head"><div><p class="kicker">Interactive study</p><h2>Color field mixer</h2></div><span>Drag</span></div><input id="colorRange" type="range" min="0" max="100" value="46"><div id="colorField"></div></section>`;
 }
@@ -123,15 +129,25 @@ function renderWriting() {
 }
 
 function renderAbout() {
+  const story = (data.person.story || []).map((para) => `<p>${safe(para)}</p>`).join("");
+  const skillGroups = (data.skillGroups || [])
+    .map((g) => `<div class="skill-group"><small>${safe(g.group)}</small><div>${tags(g.items)}</div></div>`)
+    .join("");
+  const lookingFor = (data.person.lookingFor || []).map((item) => `<li>${safe(item)}</li>`).join("");
   const approach = (data.approach || [])
     .map((item) => `<div class="approach-item"><strong>${safe(item.title)}</strong><p>${safe(item.text)}</p></div>`)
     .join("");
-  root.innerHTML = `${hero("About", data.person.role, data.person.about)}
-    <section class="about-grid">
-      <article><p class="kicker">Skills</p><div class="skill-cloud">${tags(data.skills)}</div></article>
-      <article><p class="kicker">Principles</p><ul><li>Make the work understandable quickly.</li><li>Keep visuals expressive but useful.</li><li>Turn experiments into artifacts with a story.</li></ul></article>
-      <article><p class="kicker">Now</p><p>${data.person.now}</p></article>
+
+  root.innerHTML = `${hero("About", data.person.name, data.person.role)}
+    <section class="story-layout">
+      <article class="story-card">${story || `<p>${safe(data.person.about || "")}</p>`}</article>
+      <aside class="story-side">
+        <div class="side-panel"><p class="kicker">Now</p><p>${safe(data.person.now)}</p></div>
+        ${lookingFor ? `<div class="side-panel"><p class="kicker">What I'm looking for</p><ul>${lookingFor}</ul></div>` : ""}
+        <a class="button" href="contact.html">Get in touch<span>→</span></a>
+      </aside>
     </section>
+    ${skillGroups ? `<section class="section-block"><div class="section-head"><div><p class="kicker">Toolkit</p><h2>What I work with</h2></div></div><div class="skill-groups">${skillGroups}</div></section>` : ""}
     ${approach ? `<section class="section-block approach-block"><div class="section-head"><div><p class="kicker">How I work</p><h2>Principles in practice</h2></div></div><div class="approach-grid">${approach}</div></section>` : ""}`;
 }
 
@@ -200,7 +216,7 @@ function bindPage() {
 
 function openProject(index) {
   const p = data.projects[index];
-  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--accent:${p.color}"><p class="kicker">${p.type} / ${p.year}</p><h2>${p.title}</h2><p>${p.summary}</p><dl><div><dt>Role</dt><dd>${p.role}</dd></div><div><dt>Result</dt><dd>${p.result}</dd></div></dl><div>${tags(p.tags)}</div><a class="button" href="${p.href}">Open project<span>→</span></a></article>`;
+  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--accent:${p.color}"><p class="kicker">${p.type} / ${p.year}</p><h2>${p.title}</h2><p>${p.summary}</p>${p.why ? `<p class="modal-why"><span>Why I built it</span>${safe(p.why)}</p>` : ""}<dl><div><dt>Role</dt><dd>${p.role}</dd></div><div><dt>Result</dt><dd>${p.result}</dd></div></dl><div>${tags(p.tags)}</div><a class="button" href="${p.href}">Open project<span>→</span></a></article>`;
   $("#featureDialog").showModal();
 }
 
