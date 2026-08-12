@@ -30,7 +30,7 @@ function button(label, href) {
 
 function projectCard(project, index) {
   const art = project.image
-    ? `<div class="project-art has-media"><img src="${project.image}" alt="${safe(project.title)}" loading="lazy"></div>`
+    ? `<div class="project-art has-media${project.imageBg ? " is-logo" : ""}"${project.imageBg ? ` style="--img-bg:${project.imageBg}"` : ""}><img src="${project.image}" alt="${safe(project.title)}" loading="lazy"></div>`
     : `<div class="project-art"><span></span><i></i></div>`;
   return `<article class="project-card interactive-card" data-index="${index}" data-category="${project.category}" style="--accent:${project.color}">
     ${art}
@@ -62,7 +62,7 @@ function getAlbums() {
 
 function canvasArt(item, extraClass = "") {
   return item.image
-    ? `<div class="canvas-art has-media ${extraClass}"><img src="${item.image}" alt="${safe(item.title || "")}" loading="lazy"></div>`
+    ? `<div class="canvas-art has-media ${extraClass}${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${item.image}" alt="${safe(item.title || "")}" loading="lazy"></div>`
     : `<div class="canvas-art ${extraClass}"><i></i><b></b><span></span></div>`;
 }
 
@@ -79,7 +79,7 @@ function albumCard(album, index) {
   const cover = first.palette || ["#4de2d0", "#17204a", "#966dff"];
   const count = album.pieces.length;
   const coverArt = first.image
-    ? `<div class="canvas-art album-cover has-media"><img src="${first.image}" alt="${safe(album.name)}" loading="lazy"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
+    ? `<div class="canvas-art album-cover has-media${first.imageBg ? " is-logo" : ""}"${first.imageBg ? ` style="--img-bg:${first.imageBg}"` : ""}><img src="${first.image}" alt="${safe(album.name)}" loading="lazy"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
     : `<div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>`;
   return `<a class="album-card interactive-card" href="#a=${index}" style="--a:${cover[0]};--b:${cover[1]};--c:${cover[2]}">
     ${coverArt}
@@ -404,7 +404,7 @@ function bindPage() {
 
 function mediaBlock(item, title) {
   if (item.embed) return `<div class="modal-embed"><iframe src="${item.embed}" title="${safe(title)}" loading="lazy" allowfullscreen></iframe></div>`;
-  if (item.image) return `<div class="modal-media"><img src="${item.image}" alt="${safe(title)}"></div>`;
+  if (item.image) return `<div class="modal-media${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${item.image}" alt="${safe(title)}"></div>`;
   return "";
 }
 

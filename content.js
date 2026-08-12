@@ -104,6 +104,7 @@ window.portfolio = {
       result: "A coordinated system that makes student support visible, structured, and easier to act on.",
       tags: ["EdTech", "AI", "Product"],
       image: "Schoolar-logo.png",
+      imageBg: "#4de2d0",
       featured: true,
     },
     {
@@ -119,6 +120,7 @@ window.portfolio = {
       result: "Turns vague academic planning into an inspectable, evidence-backed workflow.",
       tags: ["Agent", "Planning", "Evidence"],
       image: "iter-logo.png",
+      imageBg: "#ffffff",
       featured: true,
     },
     {
@@ -134,6 +136,7 @@ window.portfolio = {
       result: "Connects real educational needs with donors and volunteers through structured matching.",
       tags: ["Flutter", "Social good", "UX"],
       image: "E-Donation-logo.png",
+      imageBg: "#ffffff",
       featured: true,
     },
     

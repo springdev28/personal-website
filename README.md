@@ -197,6 +197,26 @@ Notes:
 - You can also use a full web URL instead of a filename (e.g. `image: "https://.../photo.jpg"`).
 - If an `image` isn't set, the site falls back to its generated gradient visual, so nothing breaks.
 
+### Photos vs. logos (`imageBg`)
+
+By default an `image` is treated as a **photo**: it fills the whole panel, cropped
+to fit. That is right for screenshots and photographs, but wrong for a **logo or
+icon** (transparent or with lots of empty space), which gets awkwardly cropped.
+
+For a logo, add an `imageBg` next to the `image`. The logo is then shown whole
+and centered on that background color, like an app icon:
+
+```js
+image: "Schoolar-logo.png",
+imageBg: "#4de2d0",   // panel color behind the logo (any hex color, or "#ffffff")
+```
+
+- Use a transparent PNG for the logo so the `imageBg` color shows through around it.
+- `imageBg` works on projects and on art pieces.
+- Tip: a logo saved with a checkerboard "transparent" background is **not** actually
+  transparent, that checkerboard is baked into the file. Re-export it as a real
+  transparent PNG (or ask for it to be cleaned up).
+
 ## Adding an iframe / embed (live preview)
 
 Any field named `embed` accepts a URL to embed as a live iframe. It appears inside the **Details popup** when the card is opened (works for both projects and art pieces).
