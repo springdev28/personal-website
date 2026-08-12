@@ -103,6 +103,7 @@ window.portfolio = {
       role: "Product thinking, learning flows, interface direction",
       result: "A coordinated system that makes student support visible, structured, and easier to act on.",
       tags: ["EdTech", "AI", "Product"],
+      image: ["Schoolar-logo.png"],
       featured: true,
     },
     {
@@ -117,6 +118,7 @@ window.portfolio = {
       role: "AI workflow design, dashboard UX, system modeling",
       result: "Turns vague academic planning into an inspectable, evidence-backed workflow.",
       tags: ["Agent", "Planning", "Evidence"],
+      image: ["iter-logo.png"],
       featured: true,
     },
     {
@@ -131,6 +133,7 @@ window.portfolio = {
       role: "Mobile architecture, support workflow, UI components",
       result: "Connects real educational needs with donors and volunteers through structured matching.",
       tags: ["Flutter", "Social good", "UX"],
+      image: ["E-Donation-logo.png"],
       featured: true,
     },
     
