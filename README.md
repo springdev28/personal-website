@@ -67,6 +67,16 @@ disciplines: [
 - `color`, accent color (hex)
 - `text`, the description
 
+The three role cards beside the homepage portrait show an **animated preview**
+chosen automatically from the `key`: a card named "Code" shows a binary "matrix
+rain", "Design" shows a moving design-tool mockup, and anything else (e.g.
+"Art") shows floating gradient shapes. These previews are drawn in code, there
+is nothing to edit, and they hold still for anyone who has "reduce motion" turned
+on. Renaming a discipline changes which preview it gets.
+
+The big homepage name (`person.name`) is set in a handwriting font and draws
+itself in with a left-to-right "pen stroke" reveal on load.
+
 ### `focusPhoto`
 
 The homepage portrait. It floats without a frame, so a **transparent PNG** looks best.
