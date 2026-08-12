@@ -1029,9 +1029,11 @@ dialog form button {
   width: clamp(10rem, 13vw, 12.5rem);
   pointer-events: auto;
 }
-.role-card:nth-child(1) { top: 4%; right: 4%; }
-.role-card:nth-child(2) { top: 38%; right: 4%; }
-.role-card:nth-child(3) { top: 72%; right: 4%; }
+/* Code (1) and Art (3) share the same x; Design (2) juts out to the right.
+   Even vertical spacing between all three. */
+.role-card:nth-child(1) { top: 6%; right: 7%; }
+.role-card:nth-child(2) { top: 39%; right: 0; }
+.role-card:nth-child(3) { top: 72%; right: 7%; }
 .role-thumb {
   position: relative;
   height: 8.8rem;
