@@ -1174,6 +1174,18 @@ body[data-page="home"] .status-pill {
   from { opacity: 0; transform: translateY(72px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* Code/Design/Art cards slide in from the left, staggered, after the portrait
+   rises. JS adds .slide-left up front, then .in to start it, then removes both
+   when done so the hover lift stays snappy. */
+.role-card.slide-left { opacity: 0; }
+.role-card.slide-left.in { animation: cardSlideLeft 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes cardSlideLeft {
+  from { opacity: 0; transform: translateX(-54px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .role-card.slide-left, .role-card.slide-left.in { opacity: 1 !important; animation: none !important; }
+}
 .portrait-frame img {
   height: clamp(19rem, 35vw, 33rem);
   width: auto;

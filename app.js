@@ -275,6 +275,35 @@ function renderHome() {
       frame.innerHTML = `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
     });
   }
+
+  // The Code/Design/Art cards slide in from the left, staggered, starting once
+  // the portrait has finished rising. A timeout is a safety net in case the
+  // portrait never animates (missing image, reduced motion handled separately).
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const roleEls = Array.from(root.querySelectorAll(".role-card"));
+  if (roleEls.length && !reduceMotion) {
+    roleEls.forEach((card, i) => {
+      card.classList.add("slide-left");
+      card.style.animationDelay = `${i * 140}ms`;
+      card.addEventListener("animationend", () => {
+        card.classList.remove("slide-left", "in");
+        card.style.animationDelay = "";
+      }, { once: true });
+    });
+    let shown = false;
+    const showRoles = () => {
+      if (shown) return;
+      shown = true;
+      roleEls.forEach((card) => card.classList.add("in"));
+    };
+    const frame = root.querySelector(".portrait-frame");
+    if (frame) {
+      frame.addEventListener("animationend", (event) => {
+        if (event.animationName === "portraitRise") showRoles();
+      }, { once: true });
+    }
+    setTimeout(showRoles, 2600);
+  }
 }
 
 function renderWork() {
@@ -355,7 +384,7 @@ function renderPage() {
 // Reveal elements as they scroll into view (staggered by position in their row/grid).
 // Note: elements centered via CSS transform (.intro-copy, .intro-portrait) are
 // excluded, a transform-based reveal would fight their positioning.
-const REVEAL_SELECTOR = ".hero, .role-card, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
+const REVEAL_SELECTOR = ".hero, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
 function animateIn() {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = $$(REVEAL_SELECTOR);
