@@ -1396,6 +1396,12 @@ dialog[open]::backdrop { animation: fadeIn .3s ease; }
 .modal-gallery .gal-item img { display: block; width: 100%; }
 .modal-gallery .gal-item.img-failed { min-height: 160px; background: linear-gradient(135deg, var(--a, #4de2d0), var(--c, #966dff)); }
 
+/* Give art-card image panels a fixed height so every preview is the same size
+   (tall/portrait images no longer stretch their card). Cover images fill it;
+   logo-mode images are centered and contained within it. */
+.canvas-art.has-media { height: 300px; }
+.album-card .canvas-art.album-cover.has-media { height: 260px; }
+
 /* Subtle hover-zoom on card images */
 .project-art.has-media, .canvas-art.has-media { overflow: hidden; }
 .project-art.has-media img, .canvas-art.has-media img { transition: transform .5s cubic-bezier(.2, .7, .2, 1); }

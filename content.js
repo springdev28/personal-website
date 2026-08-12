@@ -5,7 +5,7 @@ window.portfolio = {
     role: "High School Innovator",
     location: "Istanbul, Türkiye",
     email: "baharyuksel0403@gmail.com",
-    headline: "I build where code, design, and art meet..",
+    headline: "I build where code, design, and art meet.",
     intro:
       "I'm a high school student in Istanbul, Robert College. I make software, interfaces, and visual work, mostly tools that help people learn.",
     now: "Building Schoolar and Iter, exploring AI for learning, and turning experiments into things I can show.",
@@ -237,7 +237,7 @@ window.portfolio = {
           palette: ["#966dff", "#050611", "#4de2d0"],
           text: "Based on the book The Atlas of Misty Continents by İhsan Oktay Anar. One of the short stories within the book illustrated.",
           tags: ["Comic", "Old tales"],
-          images: ["Sayfa_1.png", "Sayfa_2.png", "Sayfa_3.png", "Sayfa_4.png", "Sayfa_5.png", "Son.png"],
+          images: ["sf1.png", "sf2.png", "sf3.png"],
         },
       ],
     },
