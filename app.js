@@ -90,6 +90,42 @@ function socialIcon(label) {
   return SOCIAL_ICONS.link;
 }
 
+// Small stylized "preview" mockups for the homepage role cards.
+const ROLE_THUMBS = {
+  code: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="200" height="132" fill="#0c1226"/>
+    <circle cx="16" cy="16" r="3.2" fill="#ff6b6b"/><circle cx="28" cy="16" r="3.2" fill="#ffd166"/><circle cx="40" cy="16" r="3.2" fill="#4de2d0"/>
+    <rect x="16" y="38" width="66" height="7" rx="3.5" fill="var(--accent)"/>
+    <rect x="16" y="53" width="120" height="7" rx="3.5" fill="rgba(255,255,255,.24)"/>
+    <rect x="32" y="68" width="86" height="7" rx="3.5" fill="rgba(255,255,255,.16)"/>
+    <rect x="32" y="83" width="56" height="7" rx="3.5" fill="var(--accent)"/>
+    <rect x="16" y="98" width="104" height="7" rx="3.5" fill="rgba(255,255,255,.16)"/>
+  </svg>`,
+  design: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="200" height="132" fill="#0c1226"/>
+    <rect x="14" y="14" width="172" height="30" rx="7" fill="rgba(255,255,255,.06)"/>
+    <circle cx="31" cy="29" r="8" fill="var(--accent)"/>
+    <rect x="47" y="24" width="58" height="5" rx="2.5" fill="rgba(255,255,255,.3)"/>
+    <rect x="47" y="33" width="88" height="4" rx="2" fill="rgba(255,255,255,.15)"/>
+    <rect x="14" y="54" width="80" height="64" rx="9" fill="rgba(255,255,255,.06)"/>
+    <rect x="102" y="54" width="84" height="29" rx="9" fill="var(--accent)" opacity=".5"/>
+    <rect x="102" y="89" width="84" height="29" rx="9" fill="rgba(255,255,255,.06)"/>
+  </svg>`,
+  art: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="200" height="132" fill="#0c1226"/>
+    <circle cx="72" cy="64" r="44" fill="var(--accent)" opacity=".55"/>
+    <circle cx="132" cy="82" r="34" fill="#ff75d8" opacity=".42"/>
+    <rect x="98" y="26" width="46" height="46" rx="9" transform="rotate(18 121 49)" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+  </svg>`,
+};
+
+function roleThumb(key) {
+  const k = String(key).toLowerCase();
+  if (k.includes("code")) return ROLE_THUMBS.code;
+  if (k.includes("design")) return ROLE_THUMBS.design;
+  return ROLE_THUMBS.art;
+}
+
 function renderHome() {
   const portrait = data.focusPhoto?.src
     ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
@@ -98,7 +134,7 @@ function renderHome() {
   const roleCards = (data.disciplines || [])
     .slice(0, 3)
     .map((d) => `<div class="role-card" style="--accent:${d.color}">
-        <div class="role-thumb"><i></i><b></b></div>
+        <div class="role-thumb">${roleThumb(d.key)}</div>
         <span class="role-pill">${safe(d.key)}</span>
       </div>`)
     .join("");
