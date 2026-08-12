@@ -274,6 +274,15 @@ git push
 
 Your changes go live wherever the site is hosted.
 
+### How the live site is hosted (Hostinger)
+
+The site is deployed on Hostinger, which **auto-deploys every push to `main`**. Hostinger runs it as a small Node.js app, so the repo includes two deploy-only files you don't need to edit:
+
+- `server.js` — a tiny server that just serves the site's files.
+- `package.json` — tells Hostinger to start that server.
+
+In Hostinger's **Deployments → settings**, the **Entry file** must be `server.js`. Don't delete `server.js` or `package.json` — they're what keep the live site running. Editing the site is still only `content.js` (and occasionally `styles.css`/`app.js`).
+
 ### Not seeing your changes?
 
 Browsers cache the old files. There are two things to try:

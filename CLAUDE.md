@@ -22,7 +22,19 @@ Personal portfolio site for Bahar Yüksel — plain HTML/CSS/JS, **no build step
   Istanbul working across code, design, and art. Do not invent biographical
   facts (schools, awards, dates) — write only what is known or ask.
 
-## Publishing
+## Publishing / deployment
 
-Publish by committing and pushing (per the session's branch instructions). The
-site is static, so pushed changes go live wherever it's hosted.
+Publish by committing and pushing (per the session's branch instructions).
+
+The live site is hosted on **Hostinger's Node.js Git deployment**, which
+auto-deploys `main` on every push. Because that deployment runs the app as a
+Node process, the repo includes two files **that must NOT be removed**:
+
+- `server.js` — a tiny zero-dependency static file server (serves the plain
+  HTML/CSS/JS; there is still no build step and no dependencies).
+- `package.json` — its only job is `"start": "node server.js"`.
+
+In Hostinger's deployment settings, the **Entry file must be `server.js`**
+(not `app.js` — `app.js` is browser code and crashes under Node). Do not
+delete `server.js`/`package.json` to "keep it static" — that breaks the
+Hostinger deploy.
