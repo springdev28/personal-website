@@ -1069,17 +1069,17 @@ dialog form button {
 .intro-name {
   margin: 0;
   color: var(--l-ink);
-  font-family: "Caveat", "Manrope", cursive;
+  font-family: "Dancing Script", "Manrope", cursive;
   font-weight: 700;
-  font-size: clamp(4.2rem, 11vw, 8.4rem);
-  line-height: 0.92;
-  letter-spacing: 0.002em;
-  /* Handwriting reveal: wipe in from the left, like a pen stroke. */
-  clip-path: inset(-14% 100% -20% -4%);
-  animation: handwrite 1.5s cubic-bezier(0.6, 0.02, 0.24, 1) 0.25s forwards;
+  font-size: clamp(4.4rem, 12vw, 9rem);
+  line-height: 1.04;
+  letter-spacing: 0;
+  /* Signature-script reveal: wipe in from the left, like a pen stroke. */
+  clip-path: inset(-8% 100% -14% -6%);
+  animation: handwrite 1.6s cubic-bezier(0.6, 0.02, 0.24, 1) 0.25s forwards;
 }
 @keyframes handwrite {
-  to { clip-path: inset(-14% -6% -20% -4%); }
+  to { clip-path: inset(-8% -8% -14% -6%); }
 }
 .intro-bio {
   margin: 6px 0 0;
@@ -1225,7 +1225,7 @@ body[data-page="home"] .status-pill {
   .stat-strip, .project-grid, .project-grid.wide, .art-grid, .album-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: 1fr; }
   .project-card { grid-template-columns: 1fr; }
   .project-art { min-height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
-  .intro-name { font-size: clamp(3.6rem, 20vw, 5.6rem); }
+  .intro-name { font-size: clamp(4rem, 22vw, 6.2rem); }
   .portrait-frame img { height: clamp(20rem, 78vw, 28rem); }
   .fc-1 { top: 2%; right: 0; }
   .fc-2 { top: 46%; right: 0; }
@@ -1391,13 +1391,14 @@ dialog[open]::backdrop { animation: fadeIn .3s ease; }
   .matrix .mcol { animation: none !important; }
 }
 
-/* Design role card motion: sweeping guide, pulsing shape, blinking handles */
-.d-guide { transform-box: fill-box; transform-origin: center; animation: dguide 5s ease-in-out infinite; }
-@keyframes dguide { 0%, 100% { transform: translateX(-26px); } 50% { transform: translateX(26px); } }
-.d-shape { transform-box: fill-box; transform-origin: center; animation: dpulse 3.4s ease-in-out infinite; }
-@keyframes dpulse { 0%, 100% { opacity: 0.72; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
-.d-handles { animation: dblink 2.2s ease-in-out infinite; }
-@keyframes dblink { 0%, 100% { opacity: 0.45; } 50% { opacity: 1; } }
+/* Design role card motion: selected shape (with its handles) nudges as if
+   being dragged, an alignment guide fades in, and a cursor drifts toward it */
+.d-select { transform-box: fill-box; transform-origin: center; animation: dnudge 4.6s ease-in-out infinite; }
+@keyframes dnudge { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5px, -4px); } }
+.d-guide { opacity: 0; animation: dguide 4.6s ease-in-out infinite; }
+@keyframes dguide { 0%, 100% { opacity: 0; } 40%, 70% { opacity: 0.6; } }
+.d-cursor { transform-box: fill-box; transform-origin: center; animation: dcursor 4.6s ease-in-out infinite; }
+@keyframes dcursor { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-7px, -6px); } }
 
 /* Art role card motion: floating blobs, slowly spinning square */
 .a-blob1 { transform-box: fill-box; transform-origin: center; animation: afloat1 7s ease-in-out infinite; }
@@ -1408,6 +1409,7 @@ dialog[open]::backdrop { animation: fadeIn .3s ease; }
 @keyframes aspin { to { transform: rotate(360deg); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .d-guide, .d-shape, .d-handles, .a-blob1, .a-blob2, .a-square { animation: none !important; }
+  .d-select, .d-guide, .d-cursor, .a-blob1, .a-blob2, .a-square { animation: none !important; }
+  .d-guide { opacity: 0.6; }
   .intro-name { animation: none !important; clip-path: none; }
 }
