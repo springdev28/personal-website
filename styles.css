@@ -1002,26 +1002,36 @@ dialog form button {
 @keyframes orbit-counter { to { transform: rotate(-360deg); } }
 
 /* ---------- Light, photo-centric home hero ---------- */
+/* Morgan-style stage: figure centred, text left, cards scattered around */
 .intro-hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr) minmax(0, 0.62fr);
-  gap: 18px;
-  align-items: center;
-  min-height: min(74vh, 720px);
+  position: relative;
+  min-height: min(84vh, 780px);
   margin-bottom: 6px;
 }
-.intro-copy { display: grid; align-content: center; gap: 14px; }
-
-/* Right column: Morgan-style role cards (thumbnail + label) */
-.intro-roles {
+.intro-copy {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(40%, 30rem);
   display: grid;
-  align-content: center;
-  gap: 30px;
-  padding: 10px 0;
+  gap: 14px;
+  z-index: 3;
 }
-.role-card { position: relative; }
-.role-card:nth-child(2) { margin-left: 2.4rem; }
-.role-card:nth-child(3) { margin-left: 0.8rem; }
+.intro-roles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.role-card {
+  position: absolute;
+  width: clamp(10rem, 13vw, 12.5rem);
+  pointer-events: auto;
+}
+.role-card:nth-child(1) { top: 11%; right: 3%; }
+.role-card:nth-child(2) { top: 43%; right: -1%; }
+.role-card:nth-child(3) { bottom: 9%; right: 16%; }
 .role-thumb {
   position: relative;
   height: 8.6rem;
@@ -1118,19 +1128,25 @@ body[data-page="home"] .status-pill {
 .social:hover { background: var(--blue); border-color: var(--blue); color: #fff; transform: translateY(-2px); }
 
 .intro-portrait {
-  position: relative;
+  position: absolute;
+  left: 56%;
+  bottom: 0;
+  transform: translateX(-50%);
+  z-index: 2;
   display: grid;
-  place-items: center;
-  min-height: clamp(24rem, 40vw, 38rem);
+  place-items: end center;
 }
 .portrait-glow {
   position: absolute;
-  bottom: 4%;
-  width: min(82%, 26rem);
+  left: 50%;
+  top: 46%;
+  width: min(132%, 42rem);
   aspect-ratio: 1;
+  transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle at 50% 50%, rgba(100, 168, 255, 0.34), rgba(150, 109, 255, 0.18) 56%, transparent 72%);
-  filter: blur(6px);
+  background: radial-gradient(circle at 50% 50%, rgba(100, 168, 255, 0.26), rgba(150, 109, 255, 0.13) 52%, transparent 70%);
+  filter: blur(10px);
+  z-index: -1;
 }
 /* Frameless floating cutout (Morgan-style) */
 .portrait-frame {
@@ -1188,10 +1204,14 @@ body[data-page="home"] .status-pill {
 @media (max-width: 1050px) {
   .topbar { grid-template-columns: 1fr auto; }
   .nav { grid-column: 1 / -1; justify-content: flex-start; overflow-x: auto; padding-bottom: 10px; }
-  .hero, .home-stage, .writing-layout, .contact-grid, .story-layout, .intro-hero { grid-template-columns: 1fr; }
-  .intro-portrait { min-height: 26rem; margin-top: 8px; }
-  .intro-roles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 14px; }
-  .role-card:nth-child(2), .role-card:nth-child(3) { margin-left: 0; }
+  .hero, .home-stage, .writing-layout, .contact-grid, .story-layout { grid-template-columns: 1fr; }
+  /* Undo the absolute Morgan stage — stack cleanly on tablet/phone */
+  .intro-hero { position: static; min-height: auto; display: grid; grid-template-columns: 1fr; gap: 8px; }
+  .intro-copy { position: static; transform: none; width: auto; }
+  .intro-portrait { position: static; transform: none; min-height: 26rem; margin-top: 8px; }
+  .intro-roles { position: static; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 14px; margin-bottom: 26px; pointer-events: auto; }
+  .role-card { position: relative; width: auto; }
+  .role-card:nth-child(1), .role-card:nth-child(2), .role-card:nth-child(3) { inset: auto; }
   .role-thumb { height: 7rem; }
   .stat-strip, .project-grid, .project-grid.wide, .art-grid, .album-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-actions { justify-items: start; }
