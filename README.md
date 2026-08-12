@@ -117,18 +117,18 @@ These cards explain what you do. Each has a `key` (the title), a `color` (accent
 
 ### `focusPhoto` — your homepage portrait
 
-The big portrait on the home page. It's already set to look for a file named `portrait.jpg`:
+The big portrait on the home page. It floats frameless (like a cut-out) on the hero, so it looks best as a **transparent-background PNG**. It's set to:
 
 ```js
 focusPhoto: {
-  src: "portrait.jpg",   // the site shows this image if the file exists
+  src: "portrait.png",   // the site shows this image if the file exists
   alt: "Bahar Yuksel",
 },
 ```
 
-- **To show your photo:** add a file named `portrait.jpg` to this folder (right next to `index.html`) and publish. It appears automatically — no code change needed.
-- **If that file doesn't exist**, the site quietly falls back to your initials in a styled frame, so it never shows a broken image.
-- **To use a different name or a `.png`**, change `src` to match (e.g. `src: "me.png"`). A photo with a plain or transparent background looks best in the frame.
+- **To change your photo:** replace `portrait.png` in this folder with a new image (same name), or point `src` at a different file.
+- A **transparent background** makes it float cleanly; a photo with a solid background will show that background as a rectangle.
+- **If the file doesn't exist**, the site quietly falls back to your initials, so it never shows a broken image.
 
 ### `projects` — the Work page and homepage featured cards
 

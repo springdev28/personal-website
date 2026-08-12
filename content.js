@@ -58,7 +58,7 @@ window.portfolio = {
   // styled frame; set src to a photo file (a cut-out / transparent-background
   // photo looks best) to show your picture instead.
   focusPhoto: {
-    src: "portrait.jpg",
+    src: "portrait.png",
     alt: "Bahar Yüksel",
   },
   research: [
