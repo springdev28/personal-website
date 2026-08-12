@@ -304,7 +304,7 @@ function renderArt() {
 function renderWriting() {
   root.innerHTML = `${hero("Writing", "Notes on building, learning, AI, and design.", "")}
     <section class="writing-layout">
-      <div class="post-grid">${data.posts.map((post) => `<article class="post-card"><small>${post.category} / ${post.read}</small><h2>${post.title}</h2><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time></article>`).join("")}</div>
+      <div class="post-grid">${data.posts.map((post, index) => `<article class="post-card" data-post="${index}" tabindex="0" role="button"><small>${post.category} / ${post.read}</small><h2>${post.title}</h2><p>${safe(post.excerpt)}</p><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time><span class="post-read">Read<span aria-hidden="true"> →</span></span></article>`).join("")}</div>
       <aside class="idea-card writing-note"><p class="kicker">Themes</p><div>${tags(["AI", "Education", "Design", "Building"])}</div></aside>
     </section>`;
 }
@@ -413,12 +413,18 @@ function bindPage() {
       $$(".filter").forEach((item) => item.classList.remove("active"));
       filter.classList.add("active");
       $$(".project-card").forEach((card) => {
-        card.hidden = filter.dataset.filter !== "All" && card.dataset.filter !== card.dataset.category;
+        card.hidden = filter.dataset.filter !== "All" && filter.dataset.filter !== card.dataset.category;
       });
     });
   });
   $$("[data-open-project]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openProject(Number(buttonEl.dataset.openProject))));
   $$("[data-piece]").forEach((buttonEl) => buttonEl.addEventListener("click", () => openArt(Number(buttonEl.dataset.album), Number(buttonEl.dataset.piece))));
+  $$("[data-post]").forEach((el) => {
+    el.addEventListener("click", () => openPost(Number(el.dataset.post)));
+    el.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openPost(Number(el.dataset.post)); }
+    });
+  });
   $("#colorRange")?.addEventListener("input", (event) => $("#colorField").style.setProperty("--mix", `${event.target.value}%`));
   $("#contactForm")?.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -453,6 +459,17 @@ function openArt(albumIndex, pieceIndex) {
   if (!a) return;
   const visual = a.embed || imageList(a).length ? mediaBlock(a, a.title) : `<div class="canvas-art large"><i></i><b></b><span></span></div>`;
   $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}">${visual}<p class="kicker">${safe(a.medium)} / ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags(a.tags)}</div></article>`;
+  $("#featureDialog").showModal();
+}
+
+function openPost(index) {
+  const post = data.posts[index];
+  if (!post) return;
+  const body = Array.isArray(post.body) && post.body.length
+    ? post.body.map((para) => `<p>${safe(para)}</p>`).join("")
+    : `<p>${safe(post.excerpt || "")}</p>`;
+  const date = new Date(post.date).toLocaleDateString("en", { month: "long", day: "numeric", year: "numeric" });
+  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card modal-article"><p class="kicker">${safe(post.category)} / ${safe(post.read)}</p><h2>${safe(post.title)}</h2><time>${date}</time><div class="article-body">${body}</div></article>`;
   $("#featureDialog").showModal();
 }
 

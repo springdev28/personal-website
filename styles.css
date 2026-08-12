@@ -416,6 +416,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   border-radius: 16px;
   background: var(--panel);
 }
+/* The filter sets [hidden] to hide non-matching cards; the display:grid above
+   would otherwise override it, so re-assert none. */
+.project-card[hidden] { display: none; }
+
+/* Clickable blog post cards + the article reader in the popup */
+.post-card[data-post] { cursor: pointer; }
+.post-card .post-read { display: inline-flex; align-items: center; margin-left: 14px; color: var(--green); font-weight: 700; font-size: 0.9rem; }
+.modal-article time { display: block; margin: 2px 0 16px; color: var(--muted); font-size: 0.9rem; }
+.modal-article .article-body p { margin: 0 0 1.05em; line-height: 1.75; }
+.modal-article .article-body p:last-child { margin-bottom: 0; }
 .project-card::before, .art-card::before {
   content: "";
   position: absolute;
