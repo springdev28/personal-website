@@ -199,6 +199,16 @@ Notes:
   usually means a filename typo or the file was not uploaded.)
 - `.png`, `.jpg`, `.webp`, and `.gif` all work.
 - You can also use a full web URL instead of a filename (e.g. `image: "https://.../photo.jpg"`).
+- **Multiple images (art pieces only):** for a piece with several images (e.g. the
+  pages of a comic), use `images` with a list instead of a single `image`:
+
+  ```js
+  images: ["Sayfa_1.png", "Sayfa_2.png", "Sayfa_3.png"],
+  ```
+
+  The first image becomes the cover; opening the piece shows them all in order.
+  Note the **square brackets** and the **comma between each name in quotes**,
+  writing `image: "a.png","b.png"` is invalid and blanks the whole site.
 - If an `image` isn't set, the site falls back to its generated gradient visual, so nothing breaks.
 
 ### Photos vs. logos (`imageBg`)

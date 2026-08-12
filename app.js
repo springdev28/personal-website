@@ -60,9 +60,20 @@ function getAlbums() {
   return [];
 }
 
+// An art piece may have one `image` or several `images` (a gallery). These
+// helpers give the full list, or just the first (used for cover thumbnails).
+function imageList(item) {
+  if (Array.isArray(item.images) && item.images.length) return item.images;
+  return item.image ? [item.image] : [];
+}
+function firstImage(item) {
+  return imageList(item)[0] || "";
+}
+
 function canvasArt(item, extraClass = "") {
-  return item.image
-    ? `<div class="canvas-art has-media ${extraClass}${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${item.image}" alt="${safe(item.title || "")}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
+  const cover = firstImage(item);
+  return cover
+    ? `<div class="canvas-art has-media ${extraClass}${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${cover}" alt="${safe(item.title || "")}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
     : `<div class="canvas-art ${extraClass}"><i></i><b></b><span></span></div>`;
 }
 
@@ -78,8 +89,9 @@ function albumCard(album, index) {
   const first = album.pieces[0] || {};
   const cover = first.palette || ["#4de2d0", "#17204a", "#966dff"];
   const count = album.pieces.length;
-  const coverArt = first.image
-    ? `<div class="canvas-art album-cover has-media${first.imageBg ? " is-logo" : ""}"${first.imageBg ? ` style="--img-bg:${first.imageBg}"` : ""}><img src="${first.image}" alt="${safe(album.name)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
+  const coverImg = firstImage(first);
+  const coverArt = coverImg
+    ? `<div class="canvas-art album-cover has-media${first.imageBg ? " is-logo" : ""}"${first.imageBg ? ` style="--img-bg:${first.imageBg}"` : ""}><img src="${coverImg}" alt="${safe(album.name)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
     : `<div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>`;
   return `<a class="album-card interactive-card" href="#a=${index}" style="--a:${cover[0]};--b:${cover[1]};--c:${cover[2]}">
     ${coverArt}
@@ -404,7 +416,13 @@ function bindPage() {
 
 function mediaBlock(item, title) {
   if (item.embed) return `<div class="modal-embed"><iframe src="${item.embed}" title="${safe(title)}" loading="lazy" allowfullscreen></iframe></div>`;
-  if (item.image) return `<div class="modal-media${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${item.image}" alt="${safe(title)}" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`;
+  const imgs = imageList(item);
+  if (imgs.length > 1) {
+    return `<div class="modal-gallery">${imgs
+      .map((src) => `<div class="gal-item"><img src="${src}" alt="${safe(title)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`)
+      .join("")}</div>`;
+  }
+  if (imgs.length === 1) return `<div class="modal-media${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${imgs[0]}" alt="${safe(title)}" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`;
   return "";
 }
 
@@ -417,7 +435,7 @@ function openProject(index) {
 function openArt(albumIndex, pieceIndex) {
   const a = getAlbums()[albumIndex]?.pieces[pieceIndex];
   if (!a) return;
-  const visual = a.image ? mediaBlock(a, a.title) : `<div class="canvas-art large"><i></i><b></b><span></span></div>`;
+  const visual = a.embed || imageList(a).length ? mediaBlock(a, a.title) : `<div class="canvas-art large"><i></i><b></b><span></span></div>`;
   $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}">${visual}<p class="kicker">${safe(a.medium)} / ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags(a.tags)}</div></article>`;
   $("#featureDialog").showModal();
 }

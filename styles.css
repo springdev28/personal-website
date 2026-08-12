@@ -1389,6 +1389,12 @@ dialog[open]::backdrop { animation: fadeIn .3s ease; }
 .project-art.has-media.img-failed { background: linear-gradient(135deg, var(--accent, #4de2d0), #0c1226); }
 .canvas-art.has-media.img-failed { background: linear-gradient(135deg, var(--a, #4de2d0), var(--c, #966dff)); }
 .modal-media.img-failed { min-height: 140px; border-radius: 12px; margin-bottom: 4px; background: linear-gradient(135deg, var(--accent, #4de2d0), #0c1226); }
+
+/* Multi-image gallery in the Details popup (art pieces with several images) */
+.modal-gallery { display: grid; gap: 10px; margin-bottom: 4px; }
+.modal-gallery .gal-item { border-radius: 12px; overflow: hidden; }
+.modal-gallery .gal-item img { display: block; width: 100%; }
+.modal-gallery .gal-item.img-failed { min-height: 160px; background: linear-gradient(135deg, var(--a, #4de2d0), var(--c, #966dff)); }
 .modal-embed {
   position: relative;
   aspect-ratio: 16 / 10;
