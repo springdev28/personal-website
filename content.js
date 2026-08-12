@@ -2,18 +2,18 @@ window.portfolio = {
   person: {
     name: "Bahar Yüksel",
     initials: "BY",
-    role: "High school builder — code, design & art",
+    role: "High school builder, code, design & art",
     location: "Istanbul, Türkiye",
     email: "hello@baharyuksel.com",
     headline: "I build where code, design, and art meet.",
     intro:
-      "I'm a high school student in Istanbul. I make software, interfaces, and visual work — mostly tools that help people learn.",
+      "I'm a high school student in Istanbul. I make software, interfaces, and visual work, mostly tools that help people learn.",
     now: "Building Schoolar, exploring AI for learning, and turning experiments into things I can show.",
     available: "Open to opportunities & collaboration",
     story: [
-      "I'm Bahar Yüksel, a high school student in Istanbul. I've always wanted to understand how things work — and then make my own version. That curiosity turned into building software, designing interfaces, and making visual work, often all at the same time.",
+      "I'm Bahar Yüksel, a high school student in Istanbul. I've always wanted to understand how things work, and then make my own version. That curiosity turned into building software, designing interfaces, and making visual work, often all at the same time.",
       "My favorite work lives where code, design, and art overlap. I care about tools that are engineered to actually work, designed to be clear, and made with enough personality to feel human. Most of what I build points at one question: how do we make learning better?",
-      "I'm still early — still learning, still shipping, still figuring out where this goes. But I'd rather build real things now than wait. If you're looking for someone curious, self-directed, and genuinely excited to make things, that's me.",
+      "I'm still early, still learning, still shipping, still figuring out where this goes. But I'd rather build real things now than wait. If you're looking for someone curious, self-directed, and genuinely excited to make things, that's me.",
     ],
     lookingFor: [
       "Internships, programs, and mentorship",
@@ -41,7 +41,7 @@ window.portfolio = {
     {
       key: "Code",
       color: "#64a8ff",
-      text: "Software and prototypes — from mobile apps to AI-assisted tools. I like turning a messy idea into something that actually runs.",
+      text: "Software and prototypes, from mobile apps to AI-assisted tools. I like turning a messy idea into something that actually runs.",
     },
     {
       key: "Design",
@@ -51,7 +51,7 @@ window.portfolio = {
     {
       key: "Art",
       color: "#966dff",
-      text: "Visual and creative-coding work — where I experiment without a brief, and where a lot of my design instincts come from.",
+      text: "Visual and creative-coding work, where I experiment without a brief, and where a lot of my design instincts come from.",
     },
   ],
   // Your homepage portrait. Leave src empty to show your initials in a
@@ -266,7 +266,7 @@ window.portfolio = {
     },
     {
       title: "Design for clarity",
-      text: "Interfaces should make complex ideas legible — expressive when it helps, quiet when it should be.",
+      text: "Interfaces should make complex ideas legible, expressive when it helps, quiet when it should be.",
     },
   ],
 };

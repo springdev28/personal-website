@@ -213,7 +213,7 @@ function renderArt() {
     return;
   }
 
-  root.innerHTML = `${hero("Art & visuals", "Albums of studies and experiments.", "Browse by album — visual studies, posters, and creative-coding sketches. Click an album to open it.")}
+  root.innerHTML = `${hero("Art & visuals", "Albums of studies and experiments.", "Browse by album, visual studies, posters, and creative-coding sketches. Click an album to open it.")}
     <div class="album-grid">${albums.map(albumCard).join("")}</div>
     <section class="section-block mixer"><div class="section-head"><div><p class="kicker">Interactive study</p><h2>Color field mixer</h2></div><span>Drag</span></div><input id="colorRange" type="range" min="0" max="100" value="46"><div id="colorField"></div></section>`;
 }
@@ -265,7 +265,7 @@ function renderPage() {
 
 // Reveal elements as they scroll into view (staggered by position in their row/grid).
 // Note: elements centered via CSS transform (.intro-copy, .intro-portrait) are
-// excluded — a transform-based reveal would fight their positioning.
+// excluded, a transform-based reveal would fight their positioning.
 const REVEAL_SELECTOR = ".hero, .role-card, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
 function animateIn() {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;

@@ -2,7 +2,7 @@
 //
 // This exists only so the site can run on Hostinger's Node.js deployment,
 // which starts the app by running this file. It just serves the plain
-// HTML/CSS/JS files in this folder — there is no build step and no
+// HTML/CSS/JS files in this folder, there is no build step and no
 // dependencies. Editing the site is still done in content.js/app.js/styles.css.
 const http = require("http");
 const fs = require("fs");

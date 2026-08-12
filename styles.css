@@ -134,8 +134,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
-  align-items: start;
-  margin-bottom: 18px;
+  align-items: end;
+  margin: 8px 0 28px;
 }
 .kicker, .tag, .project-card small, .post-card small, .link-panel span {
   font-family: "DM Mono", monospace;
@@ -148,19 +148,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
   font-size: 0.62rem;
 }
 .hero h1 {
-  max-width: 980px;
-  margin: 0 0 14px;
+  max-width: 820px;
+  margin: 0 0 12px;
   color: var(--l-ink);
-  font-size: clamp(2.5rem, 7vw, 7.8rem);
-  line-height: 0.88;
-  letter-spacing: 0;
+  font-size: clamp(1.75rem, 3.2vw, 2.6rem);
+  line-height: 1.12;
+  letter-spacing: -0.01em;
 }
 .hero p {
-  max-width: 760px;
+  max-width: 680px;
   margin: 0;
   color: var(--l-muted);
   font-size: 1rem;
-  line-height: 1.72;
+  line-height: 1.7;
 }
 
 .button {
@@ -1210,7 +1210,7 @@ body[data-page="home"] .status-pill {
   .topbar { padding: 10px 12px; }
   .brand b { display: none; }
   .page { padding: 20px 12px; }
-  .hero h1 { font-size: clamp(2.4rem, 15vw, 4.4rem); overflow-wrap: anywhere; }
+  .hero h1 { font-size: clamp(1.9rem, 8vw, 2.6rem); overflow-wrap: anywhere; }
   .stat-strip, .project-grid, .project-grid.wide, .art-grid, .album-grid, .about-grid, .research-grid, .approach-grid, .disciplines-grid, .skill-groups { grid-template-columns: 1fr; }
   .project-card { grid-template-columns: 1fr; }
   .project-art { min-height: 180px; border-right: 0; border-bottom: 1px solid var(--line); }
