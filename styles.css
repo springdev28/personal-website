@@ -1005,7 +1005,7 @@ dialog form button {
 /* Morgan-style stage: figure centred, text left, cards scattered around */
 .intro-hero {
   position: relative;
-  min-height: min(84vh, 780px);
+  min-height: min(72vh, 660px);
   margin-bottom: 6px;
 }
 .intro-copy {
@@ -1029,9 +1029,9 @@ dialog form button {
   width: clamp(10rem, 13vw, 12.5rem);
   pointer-events: auto;
 }
-.role-card:nth-child(1) { top: 11%; right: 3%; }
-.role-card:nth-child(2) { top: 43%; right: -1%; }
-.role-card:nth-child(3) { bottom: 9%; right: 16%; }
+.role-card:nth-child(1) { top: 8%; right: 4%; }
+.role-card:nth-child(2) { top: 40%; right: 1%; }
+.role-card:nth-child(3) { bottom: 8%; right: 17%; }
 .role-thumb {
   position: relative;
   height: 8.6rem;
@@ -1157,7 +1157,7 @@ body[data-page="home"] .status-pill {
   width: 100%;
 }
 .portrait-frame img {
-  height: clamp(20rem, 38vw, 37rem);
+  height: clamp(19rem, 35vw, 33rem);
   width: auto;
   max-width: 100%;
   object-fit: contain;
