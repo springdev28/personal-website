@@ -228,7 +228,7 @@ window.portfolio = {
           palette: ["#966dff", "#050611", "#4de2d0"],
           text: "Based on the book The Legend of Mt. Ararat by Yaşar Kemal. A brand new story.",
           tags: ["Comic", "Old tales"],
-          image: "Sayfa_1.png","Sayfa_2.png","Sayfa_3.png","Sayfa_4.png","Sayfa_5.png","Sayfa_6.png";
+          image: "Sayfa_1.png","Sayfa_2.png","Sayfa_3.png","Sayfa_4.png","Sayfa_5.png","Son.png";
         },
         {
           title: "The Unhappy Child",
