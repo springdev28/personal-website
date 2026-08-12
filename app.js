@@ -95,9 +95,12 @@ function renderHome() {
     ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
     : `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
 
-  const floatCards = (data.disciplines || [])
+  const roleCards = (data.disciplines || [])
     .slice(0, 3)
-    .map((d, i) => `<span class="float-card fc-${i + 1}" style="--accent:${d.color}"><i></i>${safe(d.key)}</span>`)
+    .map((d) => `<div class="role-card" style="--accent:${d.color}">
+        <div class="role-thumb"><i></i><b></b></div>
+        <span class="role-pill">${safe(d.key)}</span>
+      </div>`)
     .join("");
 
   const socialLinks = data.links.filter((l) => /email|github|linkedin/i.test(l.label));
@@ -127,8 +130,8 @@ function renderHome() {
       <div class="intro-portrait">
         <span class="portrait-glow" aria-hidden="true"></span>
         <div class="portrait-frame">${portrait}</div>
-        ${floatCards}
       </div>
+      <div class="intro-roles">${roleCards}</div>
     </header>
     ${disciplines ? `<section class="section-block disciplines-block">
       <div class="section-head"><div><p class="kicker">What I do</p><h2>Three things, one person</h2></div><a href="about.html">More about me</a></div>

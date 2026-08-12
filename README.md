@@ -113,7 +113,7 @@ disciplines: [
 ],
 ```
 
-These cards explain what you do. Each has a `key` (the title), a `color` (accent hex), and `text` (one or two sentences). The **first three also appear as the small floating cards** around your homepage portrait.
+These cards explain what you do. Each has a `key` (the title), a `color` (accent hex), and `text` (one or two sentences). The **first three also appear as the role cards** beside your homepage portrait (thumbnail + label).
 
 ### `focusPhoto` — your homepage portrait
 
