@@ -1163,10 +1163,13 @@ body[data-page="home"] .status-pill {
   display: grid;
   place-items: end center;
   width: 100%;
-  /* Slide the portrait up from the bottom on load. It lives on the frame (not
-     .intro-portrait, which uses a transform to center) so nothing shifts. */
-  animation: portraitRise 1.1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s both;
 }
+/* Slide the portrait up from the bottom. JS adds .portrait-pending immediately
+   (hiding it), then .portrait-in the moment the image is ready to paint, so the
+   slide starts right on load with no fixed delay and is always visible. It lives
+   on the frame (not .intro-portrait, which is transform-centered) so nothing shifts. */
+.portrait-frame.portrait-pending { opacity: 0; }
+.portrait-frame.portrait-pending.portrait-in { animation: portraitRise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
 @keyframes portraitRise {
   from { opacity: 0; transform: translateY(72px); }
   to { opacity: 1; transform: translateY(0); }

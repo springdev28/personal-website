@@ -211,7 +211,7 @@ function roleThumb(key) {
 
 function renderHome() {
   const portrait = data.focusPhoto?.src
-    ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
+    ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}" fetchpriority="high" decoding="async">`
     : `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
 
   const roleCards = (data.disciplines || [])
@@ -261,12 +261,18 @@ function renderHome() {
       <div class="project-grid">${data.projects.filter((p) => p.featured).map(projectCard).join("")}</div>
     </section>`;
 
-  // If the portrait photo is missing or fails to load, fall back to the initials
-  // so visitors never see a broken image.
+  // Slide the portrait up the instant the image is ready to paint (no fixed
+  // delay), and fall back to the initials if it is missing or fails to load.
   const portraitImg = root.querySelector(".portrait-frame img");
   if (portraitImg) {
+    const frame = portraitImg.parentElement;
+    frame.classList.add("portrait-pending");
+    const rise = () => requestAnimationFrame(() => frame.classList.add("portrait-in"));
+    if (portraitImg.complete && portraitImg.naturalWidth) rise();
+    else portraitImg.addEventListener("load", rise, { once: true });
     portraitImg.addEventListener("error", () => {
-      portraitImg.parentElement.innerHTML = `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
+      frame.classList.remove("portrait-pending", "portrait-in");
+      frame.innerHTML = `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
     });
   }
 }
