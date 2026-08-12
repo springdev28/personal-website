@@ -29,8 +29,11 @@ function button(label, href) {
 }
 
 function projectCard(project, index) {
+  const art = project.image
+    ? `<div class="project-art has-media"><img src="${project.image}" alt="${safe(project.title)}" loading="lazy"></div>`
+    : `<div class="project-art"><span></span><i></i></div>`;
   return `<article class="project-card interactive-card" data-index="${index}" data-category="${project.category}" style="--accent:${project.color}">
-    <div class="project-art"><span></span><i></i></div>
+    ${art}
     <div class="project-copy">
       <small>${project.type} / ${project.year}</small>
       <h2>${project.title}</h2>
@@ -57,19 +60,29 @@ function getAlbums() {
   return [];
 }
 
+function canvasArt(item, extraClass = "") {
+  return item.image
+    ? `<div class="canvas-art has-media ${extraClass}"><img src="${item.image}" alt="${safe(item.title || "")}" loading="lazy"></div>`
+    : `<div class="canvas-art ${extraClass}"><i></i><b></b><span></span></div>`;
+}
+
 function artCard(item, pieceIndex, albumIndex) {
   return `<button class="art-card interactive-card" data-album="${albumIndex}" data-piece="${pieceIndex}" style="--a:${item.palette[0]};--b:${item.palette[1]};--c:${item.palette[2]}">
-    <div class="canvas-art"><i></i><b></b><span></span></div>
+    ${canvasArt(item)}
     <strong>${safe(item.title)}</strong>
     <p>${safe(item.medium)} / ${safe(item.year)}</p>
   </button>`;
 }
 
 function albumCard(album, index) {
-  const cover = album.pieces[0]?.palette || ["#4de2d0", "#17204a", "#966dff"];
+  const first = album.pieces[0] || {};
+  const cover = first.palette || ["#4de2d0", "#17204a", "#966dff"];
   const count = album.pieces.length;
+  const coverArt = first.image
+    ? `<div class="canvas-art album-cover has-media"><img src="${first.image}" alt="${safe(album.name)}" loading="lazy"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
+    : `<div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>`;
   return `<a class="album-card interactive-card" href="#a=${index}" style="--a:${cover[0]};--b:${cover[1]};--c:${cover[2]}">
-    <div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>
+    ${coverArt}
     <strong>${safe(album.name)}</strong>
     <p>${album.description ? safe(album.description) : "&nbsp;"}</p>
   </a>`;
@@ -344,16 +357,23 @@ function bindPage() {
   });
 }
 
+function mediaBlock(item, title) {
+  if (item.embed) return `<div class="modal-embed"><iframe src="${item.embed}" title="${safe(title)}" loading="lazy" allowfullscreen></iframe></div>`;
+  if (item.image) return `<div class="modal-media"><img src="${item.image}" alt="${safe(title)}"></div>`;
+  return "";
+}
+
 function openProject(index) {
   const p = data.projects[index];
-  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--accent:${p.color}"><p class="kicker">${p.type} / ${p.year}</p><h2>${p.title}</h2><p>${p.summary}</p>${p.why ? `<p class="modal-why"><span>Why I built it</span>${safe(p.why)}</p>` : ""}<dl><div><dt>Role</dt><dd>${p.role}</dd></div><div><dt>Result</dt><dd>${p.result}</dd></div></dl><div>${tags(p.tags)}</div><a class="button" href="${p.href}">Open project<span>→</span></a></article>`;
+  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--accent:${p.color}">${mediaBlock(p, p.title)}<p class="kicker">${p.type} / ${p.year}</p><h2>${p.title}</h2><p>${p.summary}</p>${p.why ? `<p class="modal-why"><span>Why I built it</span>${safe(p.why)}</p>` : ""}<dl><div><dt>Role</dt><dd>${p.role}</dd></div><div><dt>Result</dt><dd>${p.result}</dd></div></dl><div>${tags(p.tags)}</div><a class="button" href="${p.href}">Open project<span>→</span></a></article>`;
   $("#featureDialog").showModal();
 }
 
 function openArt(albumIndex, pieceIndex) {
   const a = getAlbums()[albumIndex]?.pieces[pieceIndex];
   if (!a) return;
-  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}"><div class="canvas-art large"><i></i><b></b><span></span></div><p class="kicker">${safe(a.medium)} / ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags(a.tags)}</div></article>`;
+  const visual = a.image ? mediaBlock(a, a.title) : `<div class="canvas-art large"><i></i><b></b><span></span></div>`;
+  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}">${visual}<p class="kicker">${safe(a.medium)} / ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags(a.tags)}</div></article>`;
   $("#featureDialog").showModal();
 }
 
