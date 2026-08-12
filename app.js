@@ -30,7 +30,7 @@ function button(label, href) {
 
 function projectCard(project, index) {
   const art = project.image
-    ? `<div class="project-art has-media${project.imageBg ? " is-logo" : ""}"${project.imageBg ? ` style="--img-bg:${project.imageBg}"` : ""}><img src="${project.image}" alt="${safe(project.title)}" loading="lazy"></div>`
+    ? `<div class="project-art has-media${project.imageBg ? " is-logo" : ""}"${project.imageBg ? ` style="--img-bg:${project.imageBg}${project.imageScale ? `;--logo-max:${project.imageScale}` : ""}"` : ""}><img src="${project.image}" alt="${safe(project.title)}" loading="lazy"></div>`
     : `<div class="project-art"><span></span><i></i></div>`;
   return `<article class="project-card interactive-card" data-index="${index}" data-category="${project.category}" style="--accent:${project.color}">
     ${art}

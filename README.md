@@ -213,6 +213,9 @@ imageBg: "#4de2d0",   // panel color behind the logo (any hex color, or "#ffffff
 
 - Use a transparent PNG for the logo so the `imageBg` color shows through around it.
 - `imageBg` works on projects and on art pieces.
+- To make a logo bigger or smaller in its panel, add `imageScale` (a percentage,
+  default `"88%"`): `imageScale: "97%"` fills more, `imageScale: "70%"` leaves
+  more space around it.
 - Tip: a logo saved with a checkerboard "transparent" background is **not** actually
   transparent, that checkerboard is baked into the file. Re-export it as a real
   transparent PNG (or ask for it to be cleaned up).

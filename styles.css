@@ -1377,8 +1377,8 @@ dialog[open]::backdrop { animation: fadeIn .3s ease; }
   inset: auto;
   width: auto;
   height: auto;
-  max-width: 88%;
-  max-height: 88%;
+  max-width: var(--logo-max, 88%);
+  max-height: var(--logo-max, 88%);
   object-fit: contain;
 }
 .modal-media.is-logo { background: var(--img-bg); border-radius: 12px; display: grid; place-items: center; padding: 24px; margin-bottom: 4px; }

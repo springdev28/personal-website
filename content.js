@@ -105,6 +105,7 @@ window.portfolio = {
       tags: ["EdTech", "AI", "Product"],
       image: "Schoolar-logo.png",
       imageBg: "#4de2d0",
+      imageScale: "97%",
       featured: true,
     },
     {
