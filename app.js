@@ -29,8 +29,9 @@ function button(label, href) {
 }
 
 function projectCard(project, index) {
+  const m = mediaAttrs(project);
   const art = project.image
-    ? `<div class="project-art has-media${project.imageBg ? " is-logo" : ""}"${project.imageBg ? ` style="--img-bg:${project.imageBg}${project.imageScale ? `;--logo-max:${project.imageScale}` : ""}"` : ""}><img src="${project.image}" alt="${safe(project.title)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
+    ? `<div class="project-art has-media${m.cls}"${m.style}><img src="${project.image}" alt="${safe(project.title)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
     : `<div class="project-art"><span></span><i></i></div>`;
   return `<article class="project-card interactive-card" data-index="${index}" data-category="${project.category}" style="--accent:${project.color}">
     ${art}
@@ -70,10 +71,21 @@ function firstImage(item) {
   return imageList(item)[0] || "";
 }
 
+// Build the class + inline style for a media panel from an item's imageBg
+// (panel background color; turns on "logo" contain mode) and imageScale (how
+// big the image sits in its panel). Works for projects and art pieces alike.
+function mediaAttrs(item) {
+  const styles = [];
+  if (item.imageBg) styles.push(`--img-bg:${item.imageBg}`);
+  if (item.imageScale) styles.push(`--logo-max:${item.imageScale}`);
+  return { cls: item.imageBg ? " is-logo" : "", style: styles.length ? ` style="${styles.join(";")}"` : "" };
+}
+
 function canvasArt(item, extraClass = "") {
   const cover = firstImage(item);
+  const m = mediaAttrs(item);
   return cover
-    ? `<div class="canvas-art has-media ${extraClass}${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${cover}" alt="${safe(item.title || "")}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
+    ? `<div class="canvas-art has-media ${extraClass}${m.cls}"${m.style}><img src="${cover}" alt="${safe(item.title || "")}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
     : `<div class="canvas-art ${extraClass}"><i></i><b></b><span></span></div>`;
 }
 
@@ -90,8 +102,9 @@ function albumCard(album, index) {
   const cover = first.palette || ["#4de2d0", "#17204a", "#966dff"];
   const count = album.pieces.length;
   const coverImg = firstImage(first);
+  const m = mediaAttrs(first);
   const coverArt = coverImg
-    ? `<div class="canvas-art album-cover has-media${first.imageBg ? " is-logo" : ""}"${first.imageBg ? ` style="--img-bg:${first.imageBg}"` : ""}><img src="${coverImg}" alt="${safe(album.name)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
+    ? `<div class="canvas-art album-cover has-media${m.cls}"${m.style}><img src="${coverImg}" alt="${safe(album.name)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
     : `<div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>`;
   return `<a class="album-card interactive-card" href="#a=${index}" style="--a:${cover[0]};--b:${cover[1]};--c:${cover[2]}">
     ${coverArt}
@@ -419,10 +432,13 @@ function mediaBlock(item, title) {
   const imgs = imageList(item);
   if (imgs.length > 1) {
     return `<div class="modal-gallery">${imgs
-      .map((src) => `<div class="gal-item"><img src="${src}" alt="${safe(title)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`)
+      .map((src) => `<div class="gal-item"><img class="zoomable" src="${src}" alt="${safe(title)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`)
       .join("")}</div>`;
   }
-  if (imgs.length === 1) return `<div class="modal-media${item.imageBg ? " is-logo" : ""}"${item.imageBg ? ` style="--img-bg:${item.imageBg}"` : ""}><img src="${imgs[0]}" alt="${safe(title)}" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`;
+  if (imgs.length === 1) {
+    const m = mediaAttrs(item);
+    return `<div class="modal-media${m.cls}"${m.style}><img class="zoomable" src="${imgs[0]}" alt="${safe(title)}" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`;
+  }
   return "";
 }
 
@@ -527,6 +543,79 @@ function startMotion() {
   addEventListener("resize", resize);
   frame();
 }
+
+// --- Image preview lightbox (click any .zoomable image to open; scroll or the
+// +/- buttons to zoom; drag to pan; Esc / click outside / × to close) ---
+function ensureLightbox() {
+  let lb = document.getElementById("lightbox");
+  if (lb) return lb;
+  lb = document.createElement("dialog");
+  lb.id = "lightbox";
+  lb.className = "lightbox";
+  lb.innerHTML =
+    '<button class="lb-btn lb-close" type="button" aria-label="Close preview">×</button>' +
+    '<div class="lb-stage"><img class="lb-img" alt=""></div>' +
+    '<div class="lb-controls">' +
+    '<button class="lb-btn lb-out" type="button" aria-label="Zoom out">−</button>' +
+    '<button class="lb-btn lb-reset" type="button" aria-label="Reset zoom">100%</button>' +
+    '<button class="lb-btn lb-in" type="button" aria-label="Zoom in">+</button></div>';
+  document.body.appendChild(lb);
+
+  const img = lb.querySelector(".lb-img");
+  const stage = lb.querySelector(".lb-stage");
+  const resetBtn = lb.querySelector(".lb-reset");
+  const s = { scale: 1, x: 0, y: 0, dragging: false, px: 0, py: 0 };
+  lb._img = img;
+
+  function apply() {
+    img.style.transform = `translate(${s.x}px, ${s.y}px) scale(${s.scale})`;
+    resetBtn.textContent = Math.round(s.scale * 100) + "%";
+    img.style.cursor = s.scale > 1 ? (s.dragging ? "grabbing" : "grab") : "zoom-in";
+  }
+  function setScale(next) {
+    s.scale = Math.min(6, Math.max(1, Math.round(next * 100) / 100));
+    if (s.scale === 1) { s.x = 0; s.y = 0; }
+    apply();
+  }
+  lb._setScale = setScale;
+
+  lb.querySelector(".lb-in").addEventListener("click", (e) => { e.stopPropagation(); setScale(s.scale + 0.4); });
+  lb.querySelector(".lb-out").addEventListener("click", (e) => { e.stopPropagation(); setScale(s.scale - 0.4); });
+  resetBtn.addEventListener("click", (e) => { e.stopPropagation(); setScale(1); });
+  lb.querySelector(".lb-close").addEventListener("click", () => lb.close());
+  // Click on the empty stage (not the image) closes.
+  stage.addEventListener("click", (e) => { if (e.target === stage) lb.close(); });
+  img.addEventListener("dblclick", (e) => { e.preventDefault(); setScale(s.scale > 1 ? 1 : 2.5); });
+  img.addEventListener("wheel", (e) => { e.preventDefault(); setScale(s.scale + (e.deltaY < 0 ? 0.25 : -0.25)); }, { passive: false });
+  img.addEventListener("pointerdown", (e) => {
+    if (s.scale <= 1) return;
+    s.dragging = true; s.px = e.clientX - s.x; s.py = e.clientY - s.y;
+    img.setPointerCapture(e.pointerId); apply();
+  });
+  img.addEventListener("pointermove", (e) => {
+    if (!s.dragging) return;
+    s.x = e.clientX - s.px; s.y = e.clientY - s.py; apply();
+  });
+  const endDrag = () => { if (s.dragging) { s.dragging = false; apply(); } };
+  img.addEventListener("pointerup", endDrag);
+  img.addEventListener("pointercancel", endDrag);
+  lb.addEventListener("close", () => { setScale(1); });
+  return lb;
+}
+function openLightbox(src, alt) {
+  const lb = ensureLightbox();
+  lb._img.src = src;
+  lb._img.alt = alt || "";
+  lb._setScale(1);
+  lb.showModal();
+}
+document.addEventListener("click", (event) => {
+  const zoomable = event.target.closest("img.zoomable");
+  if (zoomable && zoomable.getAttribute("src")) {
+    event.preventDefault();
+    openLightbox(zoomable.currentSrc || zoomable.src, zoomable.alt);
+  }
+});
 
 renderShell();
 renderPage();

@@ -229,7 +229,15 @@ imageBg: "#4de2d0",   // panel color behind the logo (any hex color, or "#ffffff
 - `imageBg` works on projects and on art pieces.
 - To make a logo bigger or smaller in its panel, add `imageScale` (a percentage,
   default `"88%"`): `imageScale: "97%"` fills more, `imageScale: "70%"` leaves
-  more space around it.
+  more space around it. `imageBg` and `imageScale` work the same way on projects
+  and on art pieces.
+
+### Previewing / zooming an image
+
+Open a project or art piece (the **Details** popup) and **click its image** to
+open a full-screen preview. There you can zoom with the `+` / `−` buttons or the
+scroll wheel, drag to pan when zoomed in, and close with `×`, the `Esc` key, or a
+click outside the image. Nothing to configure, it works for every image.
 - Tip: a logo saved with a checkerboard "transparent" background is **not** actually
   transparent, that checkerboard is baked into the file. Re-export it as a real
   transparent PNG (or ask for it to be cleaned up).
