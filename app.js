@@ -260,6 +260,38 @@ function renderContact() {
 function renderPage() {
   ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
+  animateIn();
+}
+
+// Reveal elements as they scroll into view (staggered by position in their row/grid).
+// Note: elements centered via CSS transform (.intro-copy, .intro-portrait) are
+// excluded — a transform-based reveal would fight their positioning.
+const REVEAL_SELECTOR = ".hero, .role-card, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
+function animateIn() {
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const els = $$(REVEAL_SELECTOR);
+  if (reduce || !("IntersectionObserver" in window)) {
+    els.forEach((el) => el.classList.add("in"));
+    return;
+  }
+  els.forEach((el) => {
+    el.classList.add("reveal");
+    const sibs = el.parentElement ? Array.from(el.parentElement.children) : [el];
+    const idx = Math.max(0, sibs.indexOf(el));
+    el.style.setProperty("--reveal-delay", `${Math.min(idx, 5) * 70}ms`);
+  });
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: "0px 0px -6% 0px" }
+  );
+  els.forEach((el) => io.observe(el));
 }
 
 function renderFooter() {
