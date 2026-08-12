@@ -302,7 +302,7 @@ function renderArt() {
 }
 
 function renderWriting() {
-  root.innerHTML = `${hero("Writing", "Notes on building, learning, AI, and design.", "")}
+  root.innerHTML = `${hero("Writing", "An innovator's journal.", "")}
     <section class="writing-layout">
       <div class="post-grid">${data.posts.map((post, index) => `<article class="post-card" data-post="${index}" tabindex="0" role="button"><small>${post.category} / ${post.read}</small><h2>${post.title}</h2><p>${safe(post.excerpt)}</p><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time><span class="post-read">Read<span aria-hidden="true"> →</span></span></article>`).join("")}</div>
       <aside class="idea-card writing-note"><p class="kicker">Themes</p><div>${tags(["AI", "Education", "Design", "Building"])}</div></aside>
