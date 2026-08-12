@@ -89,20 +89,21 @@ The small green pulsing pill on the homepage comes from `person.available`.
 - To change the text: edit the words, e.g. `available: "Open to internships"`.
 - To hide the pill entirely: set it to empty — `available: ""`.
 
-### `stats` — the four homepage cards
+### The homepage hero (your intro)
 
-```js
-stats: [
-  ["Based in", "Istanbul, TR"],
-  ["Stage", "High school"],
-  ["Disciplines", "Code · Design · Art"],
-  ["Focus", "AI + Education"],
-],
-```
+The home page leads with a big personal intro — a "Hello, I'm ___" landing page — built automatically from your `person` info and a few other fields:
 
-Each line is `["Label", "Value"]`. Keep it to four for the layout to stay even.
+- **Big name:** `person.name`
+- **Bio line:** `person.intro`
+- **Green status pill:** `person.available` (set `""` to hide it)
+- **Email button:** `person.email`
+- **Social icons:** your Email / GitHub / LinkedIn entries from `links`
+- **Portrait:** `focusPhoto` (see below)
+- **Floating cards** around the portrait: the first three `disciplines` (see below)
 
-### `disciplines` — the "What I do" cards on the homepage
+The home page uses a **light** theme; the other pages stay dark. This is automatic — you don't set it.
+
+### `disciplines` — the "What I do" cards (and the homepage floating cards)
 
 ```js
 disciplines: [
@@ -112,49 +113,29 @@ disciplines: [
 ],
 ```
 
-These three cards on the homepage explain what you do. Each has a `key` (the title), a `color` (accent hex), and `text` (one or two sentences).
+These cards explain what you do. Each has a `key` (the title), a `color` (accent hex), and `text` (one or two sentences). The **first three also appear as the small floating cards** around your homepage portrait.
 
-### `focusNodes` — the homepage orbit circles
+### `focusPhoto` — your homepage portrait
 
-```js
-focusNodes: [
-  { label: "Code", href: "work.html", angle: 225 },
-  { label: "Design", href: "about.html", angle: 315 },
-  { label: "Art", href: "art.html", angle: 45 },
-  { label: "Learning", href: "research.html", angle: 135 },
-],
-```
-
-Each orbit circle has:
-
-- `label` — the text inside the circle
-- `href` — the page or link it opens when clicked
-- `angle` — where it sits on the orbit, in degrees
-
-Angle guide: `0` = right, `90` = bottom, `180` = left, `270` = top.
-
-- **Add a circle:** copy one line and change its values.
-- **Remove a circle:** delete its line.
-- **Rename:** change `label`.
-- **Move it:** change `angle`.
-
-### `focusPhoto` — the center photo (or your initials)
+The big portrait on the home page. Leave `src` empty to show your initials in a styled frame:
 
 ```js
 focusPhoto: {
-  src: "",                    // leave empty to show your initials
+  src: "",                    // empty = show your initials
   alt: "Bahar Yuksel",
 },
 ```
 
-To use a photo instead of your initials, put an image file in this folder (for example `portrait.jpg`) and set:
+To use a real photo, put an image file in this folder (for example `portrait.png`) and point `src` at it:
 
 ```js
 focusPhoto: {
-  src: "portrait.jpg",
+  src: "portrait.png",
   alt: "Bahar Yuksel",
 },
 ```
+
+A **cut-out photo with a transparent background** (a `.png`) looks best in the frame — like the person photo on many designer portfolios.
 
 ### `projects` — the Work page and homepage featured cards
 
@@ -329,12 +310,12 @@ Browsers cache the old files. There are two things to try:
 | Edit "What I'm looking for" | `person.lookingFor` |
 | Change or hide the green "Available" pill | `person.available` (set `""` to hide) |
 | Update my email | `person.email` |
-| Edit the "What I do" cards | `disciplines` |
+| Edit the "What I do" cards / homepage floating cards | `disciplines` |
 | Add or edit a project | the `projects` list — [see above](#add-a-project) |
 | Add "why I built it" to a project | the project's `why` field |
 | Feature a project on the homepage | add `featured: true` to it |
-| Change the homepage orbit circles | `focusNodes` |
-| Add my photo | `focusPhoto.src` |
+| Add/change my homepage portrait photo | `focusPhoto.src` |
+| Change the homepage social icons | `links` (Email / GitHub / LinkedIn) |
 | Edit the About "How I work" cards | `approach` |
 | Add a skill tag | `skillGroups` |
 | Update social/contact links | `links` |

@@ -75,45 +75,67 @@ function albumCard(album, index) {
   </a>`;
 }
 
-function renderHome() {
-  const focusNodes = data.focusNodes
-    .map((node) => `<a class="signal-node" href="${node.href}" style="--angle:${node.angle}deg"><span>${safe(node.label)}</span></a>`)
-    .join("");
-  const focusPhoto = data.focusPhoto?.src
-    ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
-    : `<span>${data.person.initials}</span>`;
+const SOCIAL_ICONS = {
+  email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
+  github: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.85 9.73.5.1.68-.22.68-.49l-.01-1.9c-2.79.62-3.38-1.22-3.38-1.22-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.34 9.34 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>',
+  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.1c0-1.22-.02-2.8-1.9-2.8-1.9 0-2.2 1.35-2.2 2.7V21H9z"/></svg>',
+  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>',
+};
 
-  const heroAction = `<div class="hero-actions">
-      ${data.person.available ? `<span class="status-pill"><i></i>${safe(data.person.available)}</span>` : ""}
-      ${button("Explore work", "work.html")}
-    </div>`;
+function socialIcon(label) {
+  const key = String(label).toLowerCase();
+  if (key.includes("mail")) return SOCIAL_ICONS.email;
+  if (key.includes("github")) return SOCIAL_ICONS.github;
+  if (key.includes("linkedin")) return SOCIAL_ICONS.linkedin;
+  return SOCIAL_ICONS.link;
+}
+
+function renderHome() {
+  const portrait = data.focusPhoto?.src
+    ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}">`
+    : `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
+
+  const floatCards = (data.disciplines || [])
+    .slice(0, 3)
+    .map((d, i) => `<span class="float-card fc-${i + 1}" style="--accent:${d.color}"><i></i>${safe(d.key)}</span>`)
+    .join("");
+
+  const socialLinks = data.links.filter((l) => /email|github|linkedin/i.test(l.label));
+  const socials = socialLinks
+    .map((l) => {
+      const external = /^https?:/i.test(l.href);
+      return `<a class="social" href="${l.href}" aria-label="${safe(l.label)}"${external ? ' target="_blank" rel="noopener"' : ""}>${socialIcon(l.label)}</a>`;
+    })
+    .join("");
+
+  const disciplines = (data.disciplines || [])
+    .map((d) => `<article class="discipline-card" style="--accent:${d.color}"><span class="discipline-dot"></span><strong>${safe(d.key)}</strong><p>${safe(d.text)}</p></article>`)
+    .join("");
 
   root.innerHTML = `
-    ${hero(data.person.role, data.person.headline, data.person.intro, heroAction)}
-    <section class="stat-strip">${data.stats.map(([label, value]) => `<div><span>${label}</span><strong>${value}</strong></div>`).join("")}</section>
-    <section class="home-stage">
-      <div class="focus-card">
-        <p class="kicker">Now</p>
-        <h2>${data.person.now}</h2>
-        <div class="signal-map">
-          <span class="signal-ring" aria-hidden="true"></span>
-          <div class="signal-orbit">${focusNodes}</div>
-          <div class="signal-photo">${focusPhoto}</div>
+    <header class="intro-hero">
+      <div class="intro-copy">
+        <p class="hello">Hello, I'm</p>
+        <h1 class="intro-name">${safe(data.person.name)}</h1>
+        <p class="intro-bio">${safe(data.person.intro)}</p>
+        ${data.person.available ? `<span class="status-pill"><i></i>${safe(data.person.available)}</span>` : ""}
+        <div class="intro-actions">
+          <a class="email-pill" href="mailto:${data.person.email}">${safe(data.person.email)}</a>
+          <div class="socials">${socials}</div>
         </div>
       </div>
-      <div class="jump-card">
-        <p class="kicker">Sections</p>
-        ${data.pages.slice(1).map(([, label, href]) => `<a href="${href}">${label}<span>→</span></a>`).join("")}
+      <div class="intro-portrait">
+        <span class="portrait-glow" aria-hidden="true"></span>
+        <div class="portrait-frame">${portrait}</div>
+        ${floatCards}
       </div>
-    </section>
-    ${data.disciplines ? `<section class="section-block disciplines-block">
+    </header>
+    ${disciplines ? `<section class="section-block disciplines-block">
       <div class="section-head"><div><p class="kicker">What I do</p><h2>Three things, one person</h2></div><a href="about.html">More about me</a></div>
-      <div class="disciplines-grid">${data.disciplines
-        .map((d) => `<article class="discipline-card" style="--accent:${d.color}"><span class="discipline-dot"></span><strong>${safe(d.key)}</strong><p>${safe(d.text)}</p></article>`)
-        .join("")}</div>
+      <div class="disciplines-grid">${disciplines}</div>
     </section>` : ""}
     <section class="section-block">
-      <div class="section-head"><div><p class="kicker">Featured work</p><h2>Three active threads</h2></div><a href="work.html">All work</a></div>
+      <div class="section-head"><div><p class="kicker">Featured work</p><h2>Selected projects</h2></div><a href="work.html">All work</a></div>
       <div class="project-grid">${data.projects.filter((p) => p.featured).map(projectCard).join("")}</div>
     </section>`;
 }

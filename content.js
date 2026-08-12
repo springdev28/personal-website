@@ -37,12 +37,6 @@ window.portfolio = {
     { label: "Schoolar", href: "../schoolar/", note: "My flagship project" },
     { label: "Iter Agent", href: "../iter-agent/public/index.html", note: "An interactive prototype" },
   ],
-  stats: [
-    ["Based in", "Istanbul, TR"],
-    ["Stage", "High school"],
-    ["Disciplines", "Code · Design · Art"],
-    ["Focus", "AI + Education"],
-  ],
   disciplines: [
     {
       key: "Code",
@@ -60,12 +54,9 @@ window.portfolio = {
       text: "Visual and creative-coding work — where I experiment without a brief, and where a lot of my design instincts come from.",
     },
   ],
-  focusNodes: [
-    { label: "Code", href: "work.html", angle: 225 },
-    { label: "Design", href: "about.html", angle: 315 },
-    { label: "Art", href: "art.html", angle: 45 },
-    { label: "Learning", href: "research.html", angle: 135 },
-  ],
+  // Your homepage portrait. Leave src empty to show your initials in a
+  // styled frame; set src to a photo file (a cut-out / transparent-background
+  // photo looks best) to show your picture instead.
   focusPhoto: {
     src: "",
     alt: "Bahar Yüksel",
