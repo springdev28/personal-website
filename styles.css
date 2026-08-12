@@ -1147,8 +1147,8 @@ body[data-page="home"] .status-pill {
   max-width: 100%;
   object-fit: contain;
   filter: drop-shadow(0 26px 40px rgba(0, 0, 0, 0.5));
-  -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent 98%);
-  mask-image: linear-gradient(to bottom, #000 74%, transparent 98%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
 }
 .portrait-frame .portrait-initials { padding: 3rem 0; }
 .portrait-initials {
