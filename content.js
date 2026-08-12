@@ -4,7 +4,7 @@ window.portfolio = {
     initials: "BY",
     role: "High school builder, code, design & art",
     location: "Istanbul, Türkiye",
-    email: "hello@baharyuksel.com",
+    email: "baharyuksel0403@gmail.com",
     headline: "I build where code, design, and art meet.",
     intro:
       "I'm a high school student in Istanbul. I make software, interfaces, and visual work, mostly tools that help people learn.",
@@ -31,7 +31,7 @@ window.portfolio = {
     ["contact", "Contact", "contact.html"],
   ],
   links: [
-    { label: "Email", href: "mailto:hello@baharyuksel.com", note: "The fastest way to reach me" },
+    { label: "Email", href: "mailto:baharyuksel0403@gmail.com", note: "The fastest way to reach me" },
     { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/bahar-y%C3%BCksel-15030930b/", note: "Professional profile" },
     { label: "Schoolar", href: "../schoolar/", note: "My flagship project" },
