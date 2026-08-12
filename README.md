@@ -239,9 +239,18 @@ git push
 
 ### Not seeing a change?
 
-Browsers cache files. A hard refresh usually fixes it: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac).
+**Content edits (`content.js`) show up on a normal refresh.** The site tells
+browsers not to cache `content.js` or the pages, so your text and project
+changes appear as soon as the deploy finishes, no version stamp needed. If an
+old version lingers, a hard refresh clears it: `Ctrl+Shift+R` (Windows/Linux)
+or `Cmd+Shift+R` (Mac).
 
-If a **CSS or JS** change still doesn't show for others, bump the version stamp in the `.html` files, each links assets like `styles.css?v=20260814`. Change every `?v=...` to a new value (a date works) in all `.html` files to force browsers to reload. Image files use the same trick (`portrait.png?v=2` in `content.js`).
+**Design/behavior edits (`styles.css` or `app.js`) do need a stamp bump.**
+Those two files are cached hard for speed, so after editing them, change the
+version stamp in every `.html` file, each links them like
+`styles.css?v=20260814`. Set every `?v=...` to a new value (a date works) in
+all `.html` files to force browsers to reload. Image files use the same trick
+(`portrait.png?v=2` in `content.js`).
 
 ### Hosting
 

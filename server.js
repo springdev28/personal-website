@@ -51,11 +51,19 @@ const server = http.createServer((req, res) => {
         // Unknown path -> serve the homepage (single-page-friendly fallback).
         return fs.readFile(path.join(ROOT, "index.html"), (err2, home) => {
           if (err2) return send(res, 404, { "Content-Type": "text/plain" }, "Not found");
-          send(res, 200, { "Content-Type": "text/html; charset=utf-8" }, home);
+          send(res, 200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }, home);
         });
       }
       const ext = path.extname(filePath).toLowerCase();
-      send(res, 200, { "Content-Type": TYPES[ext] || "application/octet-stream" }, data);
+      const base = path.basename(filePath).toLowerCase();
+      const headers = { "Content-Type": TYPES[ext] || "application/octet-stream" };
+      // Always revalidate the pages and the owner-edited content file, so edits
+      // to content.js appear on a normal refresh with no cache-busting needed.
+      // (styles.css / app.js still use the ?v= stamp for their cache-busting.)
+      if (ext === ".html" || base === "content.js") {
+        headers["Cache-Control"] = "no-cache";
+      }
+      send(res, 200, headers, data);
     });
   } catch (e) {
     send(res, 500, { "Content-Type": "text/plain" }, "Server error");
