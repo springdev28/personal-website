@@ -101,7 +101,7 @@ The home page leads with a big personal intro — a "Hello, I'm ___" landing pag
 - **Portrait:** `focusPhoto` (see below)
 - **Floating cards** around the portrait: the first three `disciplines` (see below)
 
-The whole site uses one cohesive **light + dark** look on every page — a light background and chrome with dark "showcase" cards (projects, art, disciplines, etc.). This is automatic — you don't set it.
+The whole site uses one cohesive **light + dark** look on every page — a dark background and chrome with light (white) "showcase" cards (projects, art, disciplines, etc.). This is automatic — you don't set it.
 
 ### `disciplines` — the "What I do" cards (and the homepage floating cards)
 

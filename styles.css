@@ -1166,3 +1166,87 @@ body[data-page="home"] .status-pill {
   }
   .modal-card dl { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   Inverted theme — dark page/chrome + light (white) cards.
+   ("Switch the light and dark parts.")
+   Appended last so it overrides the light-base rules above.
+   ============================================================ */
+
+/* --- Chrome goes dark --- */
+html { background: var(--black); }
+body {
+  color: var(--text);
+  background:
+    radial-gradient(circle at 12% 6%, rgba(77, 226, 208, 0.14), transparent 28rem),
+    radial-gradient(circle at 86% 14%, rgba(150, 109, 255, 0.2), transparent 34rem),
+    radial-gradient(circle at 52% 100%, rgba(100, 168, 255, 0.12), transparent 30rem),
+    var(--black);
+}
+#motionCanvas { display: block; }
+.shell {
+  border-color: var(--line-strong);
+  background: linear-gradient(135deg, rgba(255,255,255,0.045), transparent 34%), rgba(6, 8, 24, 0.82);
+  box-shadow: var(--shadow), inset 0 1px rgba(255,255,255,0.05);
+  backdrop-filter: blur(22px);
+}
+.topbar { background: rgba(7, 9, 27, 0.88); border-bottom-color: var(--line); }
+.brand, .brand b { color: var(--text); }
+.nav a { color: var(--muted); }
+.nav a:hover, .nav a.active { border-color: var(--line); background: rgba(100,168,255,.1); color: var(--text); }
+.search-btn { background: rgba(255,255,255,.035); border-color: var(--line-strong); color: var(--muted); }
+.search-btn:hover { border-color: var(--blue); color: var(--text); }
+.kicker { color: var(--green); }
+.hero h1 { color: var(--text); }
+.hero p { color: var(--muted); }
+.section-head h2 { color: var(--text); }
+.filter { background: rgba(37,42,84,.3); border-color: var(--line); color: var(--muted); }
+.filter:hover, .filter.active { border-color: rgba(77,226,208,.42); color: var(--green); background: rgba(77,226,208,.08); }
+.back-link { background: rgba(255,255,255,.035); border-color: var(--line); color: var(--muted); }
+.back-link:hover { border-color: var(--blue); color: var(--text); }
+.section-block { background: rgba(255,255,255,.03); border-color: var(--line); box-shadow: none; }
+.sitefoot { background: rgba(5, 7, 20, 0.5); border-top-color: var(--line); }
+.sitefoot-brand strong { color: var(--text); }
+.sitefoot-brand span, .sitefoot-meta small { color: var(--subtle); }
+.sitefoot-nav a { color: var(--muted); }
+.sitefoot-nav a:hover { color: var(--green); }
+.sitefoot-meta a { color: var(--blue); }
+
+/* Home hero text back to light on the dark page */
+.intro-name { color: var(--text); }
+.hello, .intro-bio { color: var(--muted); }
+.intro-copy .status-pill { border-color: rgba(77,226,208,.4); background: rgba(77,226,208,.08); color: var(--green); }
+
+/* --- Cards go light (white, dark text) --- */
+.project-card, .art-card, .album-card, .skill-group, .approach-item,
+.story-card, .side-panel, .post-card, .about-grid article, .contact-form, .idea-card {
+  background: #ffffff;
+  border-color: rgba(24, 36, 68, 0.10);
+  box-shadow: 0 12px 30px rgba(20, 32, 66, 0.06);
+}
+.discipline-card { background: radial-gradient(circle at 22% 0%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 12rem), #ffffff; border-color: rgba(24,36,68,0.10); }
+.research-card { background: radial-gradient(circle at 18% 12%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 13rem), #ffffff; border-color: rgba(24,36,68,0.10); }
+
+/* Card text -> dark */
+.project-card h2, .post-card h2, .idea-card h2, .research-card h2,
+.discipline-card strong, .art-card strong, .album-card strong,
+.link-panel a strong, .approach-item strong, .story-card p:first-child { color: #1b2231; }
+.project-card p, .post-card p, .idea-card p, .about-grid p, .research-card p,
+.discipline-card p, .approach-item p, .art-card p, .album-card p,
+.about-grid article ul, .story-card p, .side-panel p, .side-panel ul { color: #5c6579; }
+.project-card small, .post-card small, .post-card time, .research-card small,
+.album-card p, .contact-form label, .link-panel span { color: #8a93a8; }
+.tag { color: #5c6579; border-color: rgba(24, 36, 68, 0.16); }
+.skill-group small, .research-card footer, .project-card footer button { color: #0d8f7d; }
+.project-card footer a, .section-head a { color: #2b7bff; }
+.project-art { border-right-color: rgba(24, 36, 68, 0.10); }
+
+/* Light chips / inputs inside the now-light cards */
+.link-panel a, .jump-card a { background: #f3f6fc; border-color: rgba(24,36,68,0.10); }
+.link-panel a:hover, .jump-card a:hover { border-color: rgba(43,123,255,.4); background: #eaf1ff; }
+.contact-form input, .contact-form textarea { background: #f3f6fc; border-color: rgba(24,36,68,0.12); color: #1b2231; }
+
+/* Keep the modal/search overlays dark, so their tags stay light */
+dialog .tag { color: var(--muted); border-color: rgba(153,174,255,.19); }
+/* Kicker labels sitting inside the now-light cards need a dark accent. */
+.side-panel .kicker, .idea-card .kicker { color: #0d8f7d; }
