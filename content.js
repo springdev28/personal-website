@@ -146,16 +146,17 @@ window.portfolio = {
   // description, and a list of pieces. Add an album by copying one block.
   artAlbums: [
     {
-      name: "Learning Systems",
-      description: "Interface studies about progress, routes, and momentum.",
+      name: "RC Makers MateROV Team",
+      description: "Designs made for Robert College's robotics team.",
       pieces: [
         {
           title: "Learning Signal",
           medium: "Interface study",
           year: "2026",
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
-          text: "A visual system for routes, progress, and learning momentum.",
-          tags: ["Interface", "Education"],
+          text: "A full-body drawing of our mascot Carchorodon the Great White. Made to be a body-size cardboard cutout.",
+          tags: ["Mascot", "Robotics"],
+          image: "Carcharodon-cutout",
         },
         {
           title: "Orbit Field",
