@@ -166,6 +166,7 @@ window.portfolio = {
           text: "The robotics team's t-shirt and sweatshirt back design, combining the mascot and mechanics.",
           tags: ["Graphic design", "Merchandise"],
           image: "Sweat.png",
+          imageBg: "#ffffff"
         },
         {
           title: "Team Clothing Design - Back",
@@ -175,6 +176,7 @@ window.portfolio = {
           text: "The robotics team's t-shirt and sweatshirt front design, focusing on the water aspect of the team.",
           tags: ["Graphic design", "Merchandise"],
           image: "Makers-logo1.png",
+          imageBg: "#ffffff"
         },
         {
           title: "Team Logo",
@@ -184,6 +186,7 @@ window.portfolio = {
           text: "The robotics team's logo design, featuring a more animalistic Carcharodon.",
           tags: ["Graphic design", "Merchandise"],
           image: "Makers-logo.png",
+          imageBg: "#ffffff"
         },
         {
           title: "Team Sticker Design - 1",
@@ -191,7 +194,7 @@ window.portfolio = {
           year: "2025",
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "A sticker design for the team, slogan: The Apex Predators.",
-          tags: ["Sticker design", "Merchandise"],
+          tags: ["Sticker", "Merchandise"],
           image: "Makers-sticker.png",
         },
         {
@@ -200,8 +203,8 @@ window.portfolio = {
           year: "2026",
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "A sticker design for the team, featuring the confidently-smiling face of the mascot.",
-          tags: ["Sticker design", "Merchandise"],
-          image: "Makers-sticker.png",
+          tags: ["Sticker", "Merchandise"],
+          image: "Makers-sticker1.png",
         },
         {
           title: "Team Banner Design",
@@ -209,36 +212,104 @@ window.portfolio = {
           year: "2026",
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "A banner for the team's social media pages, slogan: Beware of the apex predator lurking in the depths.",
-          tags: ["Banner design", "Social media"],
+          tags: ["Banner", "Social media"],
           image: "Makers-banner.png",
         },
       ],
     },
     {
-      name: "Posters",
-      description: "Type and poster studies for personal projects.",
+      name: "Graphic Novels",
+      description: "Short comics based on various stories.",
       pieces: [
         {
-          title: "Night Index",
-          medium: "Digital poster",
+          title: "Ağrıdağı'nın Laneti (The Curse of Mt. Ararat)",
+          medium: "Graphic novel",
+          year: "2025",
+          palette: ["#966dff", "#050611", "#4de2d0"],
+          text: "Based on the book The Legend of Mt. Ararat by Yaşar Kemal. A brand new story.",
+          tags: ["Comic", "Old tales"],
+          image: "Sayfa_1.png","Sayfa_2.png","Sayfa_3.png","Sayfa_4.png","Sayfa_5.png","Sayfa_6.png";
+        },
+        {
+          title: "The Unhappy Child",
+          medium: "Graphic novel",
           year: "2026",
           palette: ["#966dff", "#050611", "#4de2d0"],
-          text: "A poster study for a personal archive: dark surface, bright signal.",
-          tags: ["Poster", "Typography"],
+          text: "Based on the book The Atlas of Misty Continents by İhsan Oktay Anar. One of the short stories within the book illustrated.",
+          tags: ["Comic", "Old tales"],
+          image: "Sayfa_1.png","Sayfa_2.png","Sayfa_3.png","Sayfa_4.png","Sayfa_5.png","Son.png";
         },
       ],
     },
     {
-      name: "Creative Coding",
-      description: "Generative sketches and motion experiments.",
+      name: "Magazine Illustrations",
+      description: "Illustrations of stories and poems for various school magazines.",
       pieces: [
         {
-          title: "Signal Garden",
-          medium: "Creative coding sketch",
+          title: "Kalabalık (Crowded)",
+          medium: "Story illustration",
           year: "2026",
           palette: ["#4de2d0", "#17204a", "#966dff"],
-          text: "Abstract forms that react like connected ideas.",
-          tags: ["Creative code", "Motion"],
+          text: "Abstract forms that react like connected ideas. Based on the short story by the same name.",
+          tags: ["Illustration", "Abstract"],
+          image: "MS1.png",
+        },
+        {
+          title: "O Yoldan Geçtim (I Went That Way)",
+          medium: "Poem illustration",
+          year: "2026",
+          palette: ["#4de2d0", "#17204a", "#966dff"],
+          text: "Abstract forms that react like connected ideas. Based on the poem by the same name.",
+          tags: ["Illustration", "Abstract"],
+          image: "MS2.png",
+        },
+      ],
+    },
+    {
+      name: "Character Concept Art",
+      description: "Some characters I designed to be used later in stories and games.",
+      pieces: [
+        {
+          title: "Nihilunus",
+          medium: "Character concept",
+          year: "2025",
+          palette: ["#64a8ff", "#4de2d0", "#966dff"],
+          text: "The main character of a 2D story-driven RPG game, currently being developed.",
+          tags: ["Concept art", "Game"],
+          image: "Nihilunus.png",
+        },
+      ],
+    },
+    {
+      name: "Other Artwork",
+      description: "Works mainly related to school clubs and organizations.",
+      pieces: [
+        {
+          title: "Macbeth",
+          medium: "Play illustration",
+          year: "2026",
+          palette: ["#966dff", "#050611", "#4de2d0"],
+          text: "Artwork made for a project about Macbeth by William Shakespeare in English class.",
+          tags: ["Illustration", "Poster"],
+          image: "Macbeth 3.png",
+        },
+        {
+          title: "SEC Logo",
+          medium: "Logo design",
+          year: "2026",
+          palette: ["#966dff", "#050611", "#4de2d0"],
+          text: "Logo made for Robert College's Social Entrepreneurship Club.",
+          tags: ["Logo", "Graphic design"],
+          image: "SEC-logo.png",
+        },
+        {
+          title: "SEC Sticker",
+          medium: "Sticker design",
+          year: "2026",
+          palette: ["#966dff", "#050611", "#4de2d0"],
+          text: "Sticker made for RC SEC's Social Entrepreneurship Festival 2026, which was on February 14.",
+          tags: ["Sticker", "Graphic design"],
+          image: "SEC-val-logo.png",
         },
       ],
     },
