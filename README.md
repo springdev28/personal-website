@@ -1,6 +1,6 @@
 # Personal Website
 
-A plain HTML / CSS / JavaScript portfolio site. **No build step, no dependencies** — edit a text file, refresh the browser, publish.
+A plain HTML / CSS / JavaScript portfolio site. **No build step, no dependencies**, edit a text file, refresh the browser, publish.
 
 All content lives in one file: **`content.js`**. Everything below is a reference for the fields in that file and how the site uses them.
 
@@ -14,7 +14,7 @@ All content lives in one file: **`content.js`**. Everything below is a reference
 | `styles.css` | Colors, spacing, fonts | Occasionally, for design tweaks |
 | `app.js` | Rendering and behavior | Rarely |
 | `*.html` | One near-identical shell per page (`index`, `work`, `research`, `art`, `writing`, `about`, `contact`) | Rarely (see [caching](#publishing)) |
-| `server.js` + `package.json` | Tiny static server used by the host — **do not delete** | Never |
+| `server.js` + `package.json` | Tiny static server used by the host, **do not delete** | Never |
 
 The pages are generated from `content.js` at load time, so the `.html` files usually don't need editing.
 
@@ -25,7 +25,7 @@ The pages are generated from `content.js` at load time, so the `.html` files usu
 Open `content.js`. It is a single JavaScript object. The rules:
 
 - Change text **inside the quotes** (`"like this"`).
-- Keep every comma, bracket, quote, and colon in place — one missing character breaks the whole page.
+- Keep every comma, bracket, quote, and colon in place, one missing character breaks the whole page.
 - After editing, it's worth running `node --check content.js` if Node is installed (optional).
 
 > Only the values between quotes are meant to be edited. Leave the surrounding structure alone.
@@ -63,9 +63,9 @@ disciplines: [
 ]
 ```
 
-- `key` — the card title
-- `color` — accent color (hex)
-- `text` — the description
+- `key`, the card title
+- `color`, accent color (hex)
+- `text`, the description
 
 ### `focusPhoto`
 
@@ -75,7 +75,7 @@ The homepage portrait. It floats without a frame, so a **transparent PNG** looks
 focusPhoto: { src: "portrait.png", alt: "Name" }
 ```
 
-- `src` — an image file in this folder. Set to `""` to show the initials instead.
+- `src`, an image file in this folder. Set to `""` to show the initials instead.
 - See [Adding images](#adding-images).
 
 ### `projects`
@@ -96,14 +96,14 @@ The Work page, and the featured cards on the homepage.
   result: "The outcome.",
   tags: ["Tag", "Tag"],
   featured: true,              // true = also show on the homepage
-  image: "project1.png",       // OPTIONAL — see Adding images
-  embed: "https://example.com" // OPTIONAL — see Adding an iframe
+  image: "project1.png",       // OPTIONAL, see Adding images
+  embed: "https://example.com" // OPTIONAL, see Adding an iframe
 }
 ```
 
 - `featured: true` promotes a project to the homepage (keep it to the strongest three).
 - `category` values automatically become filter buttons on the Work page.
-- `image` and `embed` are optional — see the sections below.
+- `image` and `embed` are optional, see the sections below.
 
 ### `research`
 
@@ -130,8 +130,8 @@ artAlbums: [
         palette: ["#64a8ff", "#4de2d0", "#966dff"], // 3 colors for the generated visual
         text: "A sentence about it.",
         tags: ["Tag"],
-        image: "artwork1.jpg",   // OPTIONAL — see Adding images
-        embed: "https://..."     // OPTIONAL — see Adding an iframe
+        image: "artwork1.jpg",   // OPTIONAL, see Adding images
+        embed: "https://..."     // OPTIONAL, see Adding an iframe
       }
     ]
   }
@@ -201,7 +201,7 @@ Use it to show a live demo, a CodePen/YouTube/Figma embed, a Google Slides deck,
 
 ## The footer
 
-Built automatically from `person.name`, `person.role`, `person.email`, and the page list — no separate field to edit.
+Built automatically from `person.name`, `person.role`, `person.email`, and the page list, no separate field to edit.
 
 ---
 
@@ -231,11 +231,11 @@ git push
 
 Browsers cache files. A hard refresh usually fixes it: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac).
 
-If a **CSS or JS** change still doesn't show for others, bump the version stamp in the `.html` files — each links assets like `styles.css?v=20260814`. Change every `?v=...` to a new value (a date works) in all `.html` files to force browsers to reload. Image files use the same trick (`portrait.png?v=2` in `content.js`).
+If a **CSS or JS** change still doesn't show for others, bump the version stamp in the `.html` files, each links assets like `styles.css?v=20260814`. Change every `?v=...` to a new value (a date works) in all `.html` files to force browsers to reload. Image files use the same trick (`portrait.png?v=2` in `content.js`).
 
 ### Hosting
 
-The site is deployed on a host that runs it as a small static server. `server.js` and `package.json` exist only for that — leave them in place. In the host's deployment settings, the **Entry file must be `server.js`**.
+The site is deployed on a host that runs it as a small static server. `server.js` and `package.json` exist only for that, leave them in place. In the host's deployment settings, the **Entry file must be `server.js`**.
 
 ---
 
