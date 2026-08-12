@@ -259,18 +259,17 @@ git push
 
 ### Not seeing a change?
 
-**Content edits (`content.js`) show up on a normal refresh.** The site tells
-browsers not to cache `content.js` or the pages, so your text and project
-changes appear as soon as the deploy finishes, no version stamp needed. If an
-old version lingers, a hard refresh clears it: `Ctrl+Shift+R` (Windows/Linux)
-or `Cmd+Shift+R` (Mac).
+**Everything updates on a normal refresh.** The server asks browsers to
+re-check each file every visit, so edits to `content.js`, images, `styles.css`,
+`app.js`, or the pages all show up once the deploy finishes, no version stamp
+needed (including when you replace an image with a new one of the same name).
+Unchanged files are still served from cache, so the site stays fast.
 
-**Design/behavior edits (`styles.css` or `app.js`) do need a stamp bump.**
-Those two files are cached hard for speed, so after editing them, change the
-version stamp in every `.html` file, each links them like
-`styles.css?v=20260814`. Set every `?v=...` to a new value (a date works) in
-all `.html` files to force browsers to reload. Image files use the same trick
-(`portrait.png?v=2` in `content.js`).
+If an old version ever lingers (usually a very aggressive browser cache), a
+hard refresh clears it: `Ctrl+Shift+R` (Windows/Linux) or `Cmd+Shift+R` (Mac).
+
+The `?v=...` stamps you may see on `styles.css` / `app.js` in the `.html` files
+are a harmless extra safety net; you no longer need to bump them by hand.
 
 ### Hosting
 

@@ -46,24 +46,28 @@ const server = http.createServer((req, res) => {
       return send(res, 403, { "Content-Type": "text/plain" }, "Forbidden");
     }
 
-    fs.readFile(filePath, (err, data) => {
-      if (err) {
+    fs.stat(filePath, (statErr, stat) => {
+      if (statErr || !stat.isFile()) {
         // Unknown path -> serve the homepage (single-page-friendly fallback).
         return fs.readFile(path.join(ROOT, "index.html"), (err2, home) => {
           if (err2) return send(res, 404, { "Content-Type": "text/plain" }, "Not found");
           send(res, 200, { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-cache" }, home);
         });
       }
+      // Revalidate every file with an ETag. Browsers keep caching for speed but
+      // must check back each time, so replacing any file (a page, content.js, an
+      // image, the CSS/JS) shows up on a normal refresh, no cache-busting needed.
+      // Unchanged files come back as a tiny 304, so this stays fast.
+      const etag = 'W/"' + stat.size + "-" + Math.round(stat.mtimeMs) + '"';
       const ext = path.extname(filePath).toLowerCase();
-      const base = path.basename(filePath).toLowerCase();
-      const headers = { "Content-Type": TYPES[ext] || "application/octet-stream" };
-      // Always revalidate the pages and the owner-edited content file, so edits
-      // to content.js appear on a normal refresh with no cache-busting needed.
-      // (styles.css / app.js still use the ?v= stamp for their cache-busting.)
-      if (ext === ".html" || base === "content.js") {
-        headers["Cache-Control"] = "no-cache";
+      const base = { "Content-Type": TYPES[ext] || "application/octet-stream", "Cache-Control": "no-cache", "ETag": etag };
+      if (req.headers["if-none-match"] === etag) {
+        return send(res, 304, base, "");
       }
-      send(res, 200, headers, data);
+      fs.readFile(filePath, (err, data) => {
+        if (err) return send(res, 404, { "Content-Type": "text/plain" }, "Not found");
+        send(res, 200, base, data);
+      });
     });
   } catch (e) {
     send(res, 500, { "Content-Type": "text/plain" }, "Server error");
