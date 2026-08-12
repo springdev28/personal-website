@@ -138,6 +138,15 @@ function renderHome() {
       <div class="section-head"><div><p class="kicker">Featured work</p><h2>Selected projects</h2></div><a href="work.html">All work</a></div>
       <div class="project-grid">${data.projects.filter((p) => p.featured).map(projectCard).join("")}</div>
     </section>`;
+
+  // If the portrait photo is missing or fails to load, fall back to the initials
+  // so visitors never see a broken image.
+  const portraitImg = root.querySelector(".portrait-frame img");
+  if (portraitImg) {
+    portraitImg.addEventListener("error", () => {
+      portraitImg.parentElement.innerHTML = `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
+    });
+  }
 }
 
 function renderWork() {

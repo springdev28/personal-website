@@ -117,25 +117,18 @@ These cards explain what you do. Each has a `key` (the title), a `color` (accent
 
 ### `focusPhoto` — your homepage portrait
 
-The big portrait on the home page. Leave `src` empty to show your initials in a styled frame:
+The big portrait on the home page. It's already set to look for a file named `portrait.jpg`:
 
 ```js
 focusPhoto: {
-  src: "",                    // empty = show your initials
+  src: "portrait.jpg",   // the site shows this image if the file exists
   alt: "Bahar Yuksel",
 },
 ```
 
-To use a real photo, put an image file in this folder (for example `portrait.png`) and point `src` at it:
-
-```js
-focusPhoto: {
-  src: "portrait.png",
-  alt: "Bahar Yuksel",
-},
-```
-
-A **cut-out photo with a transparent background** (a `.png`) looks best in the frame — like the person photo on many designer portfolios.
+- **To show your photo:** add a file named `portrait.jpg` to this folder (right next to `index.html`) and publish. It appears automatically — no code change needed.
+- **If that file doesn't exist**, the site quietly falls back to your initials in a styled frame, so it never shows a broken image.
+- **To use a different name or a `.png`**, change `src` to match (e.g. `src: "me.png"`). A photo with a plain or transparent background looks best in the frame.
 
 ### `projects` — the Work page and homepage featured cards
 
