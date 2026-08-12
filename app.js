@@ -150,18 +150,18 @@ const ROLE_THUMBS = {
     <circle cx="31" cy="9" r="2.6" fill="rgba(255,255,255,.18)"/>
     <rect x="150" y="6" width="16" height="7" rx="3.5" fill="rgba(255,255,255,.14)"/>
     <rect x="170" y="6" width="22" height="7" rx="3.5" fill="var(--accent)" opacity=".7"/>
-    <line class="d-guide" x1="100" y1="28" x2="100" y2="122" stroke="#4de2d0" stroke-width="1" stroke-dasharray="3 3"/>
-    <rect x="112" y="82" width="38" height="28" rx="6" fill="#966dff" opacity=".62"/>
+    <line class="d-guide" x1="100" y1="34" x2="100" y2="116" stroke="#4de2d0" stroke-width="1" stroke-dasharray="3 3"/>
+    <rect x="114" y="86" width="36" height="24" rx="6" fill="#966dff" opacity=".62"/>
     <g class="d-select">
-      <rect x="58" y="44" width="54" height="36" rx="7" fill="var(--accent)"/>
+      <rect x="56" y="50" width="52" height="34" rx="7" fill="var(--accent)"/>
       <g fill="#fff" stroke="#0b1026" stroke-width=".8">
-        <rect x="55.5" y="41.5" width="5" height="5" rx="1"/>
-        <rect x="109.5" y="41.5" width="5" height="5" rx="1"/>
-        <rect x="55.5" y="77.5" width="5" height="5" rx="1"/>
-        <rect x="109.5" y="77.5" width="5" height="5" rx="1"/>
+        <rect x="53.5" y="47.5" width="5" height="5" rx="1"/>
+        <rect x="105.5" y="47.5" width="5" height="5" rx="1"/>
+        <rect x="53.5" y="81.5" width="5" height="5" rx="1"/>
+        <rect x="105.5" y="81.5" width="5" height="5" rx="1"/>
       </g>
     </g>
-    <path class="d-cursor" d="M0 0 L0 13 L3.4 9.7 L5.6 14 L7.7 13 L5.5 8.8 L10 8.8 Z" fill="#fff" stroke="#0b1026" stroke-width=".8" transform="translate(116 90)"/>
+    <path class="d-cursor" d="M0 0 L0 13 L3.4 9.7 L5.6 14 L7.7 13 L5.5 8.8 L10 8.8 Z" fill="#fff" stroke="#0b1026" stroke-width=".8" transform="translate(110 86)"/>
   </svg>`,
   art: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs>
