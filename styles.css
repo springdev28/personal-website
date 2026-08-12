@@ -1366,3 +1366,18 @@ dialog[open]::backdrop { animation: fadeIn .3s ease; }
   background: #0c1226;
 }
 .modal-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* Matrix binary rain (Code role card) */
+.matrix .mcol {
+  animation-name: matrixfall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@keyframes matrixfall {
+  from { transform: translateY(-132px); }
+  to { transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .matrix .mcol { animation: none !important; }
+}

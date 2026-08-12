@@ -103,27 +103,39 @@ function socialIcon(label) {
   return SOCIAL_ICONS.link;
 }
 
+// Animated binary "matrix rain" background for the Code card.
+function matrixRain() {
+  const cols = 16, colW = 200 / cols, rows = 15, rowH = 132 / rows, cyan = "#4de2d0";
+  let groups = "";
+  for (let c = 0; c < cols; c++) {
+    const x = ((c + 0.5) * colW).toFixed(1);
+    const head = Math.floor(Math.random() * rows);
+    const trail = 5 + Math.floor(Math.random() * 5);
+    const tile = [];
+    for (let r = 0; r < rows; r++) {
+      const d = head - r;
+      let fill = cyan, op;
+      if (d === 0) { fill = "#e9fffb"; op = 0.95; }
+      else if (d > 0 && d <= trail) { op = 0.5 * (1 - d / trail) + 0.14; }
+      else { op = 0.08 + (r % 3) * 0.02; }
+      tile.push({ bit: Math.random() < 0.5 ? "0" : "1", fill, op: op.toFixed(2) });
+    }
+    let digits = "";
+    for (let copy = 0; copy < 2; copy++) {
+      const yOff = copy * 132;
+      tile.forEach((t, r) => {
+        digits += `<text x="${x}" y="${(yOff + r * rowH + rowH).toFixed(1)}" fill="${t.fill}" fill-opacity="${t.op}">${t.bit}</text>`;
+      });
+    }
+    const dur = (3 + Math.random() * 4).toFixed(1);
+    const delay = (-Math.random() * 6).toFixed(1);
+    groups += `<g class="mcol" style="animation-duration:${dur}s;animation-delay:${delay}s">${digits}</g>`;
+  }
+  return `<svg class="role-svg matrix" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1a34"/><stop offset="1" stop-color="#081428"/></linearGradient></defs><rect width="200" height="132" fill="url(#mbg)"/><g font-family="'DM Mono', ui-monospace, monospace" font-size="8" text-anchor="middle">${groups}</g></svg>`;
+}
+
 // Small stylized "preview" mockups for the homepage role cards.
 const ROLE_THUMBS = {
-  code: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <rect width="200" height="132" fill="#0b1026"/>
-    <rect width="200" height="22" fill="rgba(255,255,255,.05)"/>
-    <circle cx="15" cy="11" r="3" fill="#ff6b6b"/><circle cx="26" cy="11" r="3" fill="#ffd166"/><circle cx="37" cy="11" r="3" fill="#4de2d0"/>
-    <rect x="0" y="22" width="22" height="110" fill="rgba(255,255,255,.03)"/>
-    <g fill="rgba(255,255,255,.22)"><circle cx="11" cy="39" r="1.3"/><circle cx="11" cy="53" r="1.3"/><circle cx="11" cy="67" r="1.3"/><circle cx="11" cy="81" r="1.3"/><circle cx="11" cy="95" r="1.3"/></g>
-    <rect x="22" y="75" width="178" height="12" fill="rgba(120,150,255,.09)"/>
-    <rect x="30" y="36" width="13" height="6" rx="3" fill="#c678dd"/>
-    <rect x="47" y="36" width="36" height="6" rx="3" fill="var(--accent)"/>
-    <rect x="87" y="36" width="9" height="6" rx="3" fill="rgba(255,255,255,.3)"/>
-    <rect x="40" y="50" width="48" height="6" rx="3" fill="#8fd18a"/>
-    <rect x="92" y="50" width="16" height="6" rx="3" fill="rgba(255,255,255,.22)"/>
-    <rect x="40" y="64" width="22" height="6" rx="3" fill="#e5c07b"/>
-    <rect x="66" y="64" width="42" height="6" rx="3" fill="rgba(255,255,255,.18)"/>
-    <rect x="30" y="78" width="16" height="6" rx="3" fill="#c678dd"/>
-    <rect x="50" y="78" width="32" height="6" rx="3" fill="var(--accent)"/>
-    <rect x="30" y="92" width="12" height="6" rx="3" fill="rgba(255,255,255,.2)"/>
-    <rect x="46" y="91" width="4" height="8" rx="1" fill="var(--accent)"/>
-  </svg>`,
   design: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs><radialGradient id="dgrad" cx="36%" cy="34%" r="74%"><stop offset="0" stop-color="#9ecbff"/><stop offset="1" stop-color="#6a5cff"/></radialGradient></defs>
     <rect width="200" height="132" fill="#0b1026"/>
@@ -152,7 +164,7 @@ const ROLE_THUMBS = {
 
 function roleThumb(key) {
   const k = String(key).toLowerCase();
-  if (k.includes("code")) return ROLE_THUMBS.code;
+  if (k.includes("code")) return matrixRain();
   if (k.includes("design")) return ROLE_THUMBS.design;
   return ROLE_THUMBS.art;
 }
