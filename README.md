@@ -260,6 +260,27 @@ Built automatically from `person.name`, `person.role`, `person.email`, and the p
 
 ---
 
+## Domain, favicon, and link previews
+
+The site is set up for the domain **`baharyuksel.dev`**. A few files exist just
+for that:
+
+| File | What it does |
+| --- | --- |
+| `favicon.png` / `apple-touch-icon.png` | The little icon in the browser tab and on phone home screens. Replace the files (keep the names) to change it. |
+| `og-card.png` | The preview image shown when the site is shared on LinkedIn, Messages, etc. (1200×630). Replace the file to change it. |
+| `sitemap.xml` / `robots.txt` | Help search engines find every page. |
+
+Each `.html` file also has social/SEO tags in its `<head>` (title, description,
+and `og:`/`twitter:` tags) pointing at `https://baharyuksel.dev`.
+
+**If the domain ever changes**, update the URL in three places: the `og:` and
+`canonical` tags inside each `.html` file, `sitemap.xml`, and `robots.txt`.
+After changing `og-card.png`, bump its `?v=` number in the `.html` files (search
+for `og-card.png?v=`) so the new preview shows.
+
+---
+
 ## Running locally
 
 Double-click `index.html`, or run a local server from this folder for a more accurate preview:
