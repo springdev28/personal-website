@@ -106,29 +106,47 @@ function socialIcon(label) {
 // Small stylized "preview" mockups for the homepage role cards.
 const ROLE_THUMBS = {
   code: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <rect width="200" height="132" fill="#0c1226"/>
-    <circle cx="16" cy="16" r="3.2" fill="#ff6b6b"/><circle cx="28" cy="16" r="3.2" fill="#ffd166"/><circle cx="40" cy="16" r="3.2" fill="#4de2d0"/>
-    <rect x="16" y="38" width="66" height="7" rx="3.5" fill="var(--accent)"/>
-    <rect x="16" y="53" width="120" height="7" rx="3.5" fill="rgba(255,255,255,.24)"/>
-    <rect x="32" y="68" width="86" height="7" rx="3.5" fill="rgba(255,255,255,.16)"/>
-    <rect x="32" y="83" width="56" height="7" rx="3.5" fill="var(--accent)"/>
-    <rect x="16" y="98" width="104" height="7" rx="3.5" fill="rgba(255,255,255,.16)"/>
+    <rect width="200" height="132" fill="#0b1026"/>
+    <rect width="200" height="22" fill="rgba(255,255,255,.05)"/>
+    <circle cx="15" cy="11" r="3" fill="#ff6b6b"/><circle cx="26" cy="11" r="3" fill="#ffd166"/><circle cx="37" cy="11" r="3" fill="#4de2d0"/>
+    <rect x="0" y="22" width="22" height="110" fill="rgba(255,255,255,.03)"/>
+    <g fill="rgba(255,255,255,.22)"><circle cx="11" cy="39" r="1.3"/><circle cx="11" cy="53" r="1.3"/><circle cx="11" cy="67" r="1.3"/><circle cx="11" cy="81" r="1.3"/><circle cx="11" cy="95" r="1.3"/></g>
+    <rect x="22" y="75" width="178" height="12" fill="rgba(120,150,255,.09)"/>
+    <rect x="30" y="36" width="13" height="6" rx="3" fill="#c678dd"/>
+    <rect x="47" y="36" width="36" height="6" rx="3" fill="var(--accent)"/>
+    <rect x="87" y="36" width="9" height="6" rx="3" fill="rgba(255,255,255,.3)"/>
+    <rect x="40" y="50" width="48" height="6" rx="3" fill="#8fd18a"/>
+    <rect x="92" y="50" width="16" height="6" rx="3" fill="rgba(255,255,255,.22)"/>
+    <rect x="40" y="64" width="22" height="6" rx="3" fill="#e5c07b"/>
+    <rect x="66" y="64" width="42" height="6" rx="3" fill="rgba(255,255,255,.18)"/>
+    <rect x="30" y="78" width="16" height="6" rx="3" fill="#c678dd"/>
+    <rect x="50" y="78" width="32" height="6" rx="3" fill="var(--accent)"/>
+    <rect x="30" y="92" width="12" height="6" rx="3" fill="rgba(255,255,255,.2)"/>
+    <rect x="46" y="91" width="4" height="8" rx="1" fill="var(--accent)"/>
   </svg>`,
   design: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <rect width="200" height="132" fill="#0c1226"/>
-    <rect x="14" y="14" width="172" height="30" rx="7" fill="rgba(255,255,255,.06)"/>
-    <circle cx="31" cy="29" r="8" fill="var(--accent)"/>
-    <rect x="47" y="24" width="58" height="5" rx="2.5" fill="rgba(255,255,255,.3)"/>
-    <rect x="47" y="33" width="88" height="4" rx="2" fill="rgba(255,255,255,.15)"/>
-    <rect x="14" y="54" width="80" height="64" rx="9" fill="rgba(255,255,255,.06)"/>
-    <rect x="102" y="54" width="84" height="29" rx="9" fill="var(--accent)" opacity=".5"/>
-    <rect x="102" y="89" width="84" height="29" rx="9" fill="rgba(255,255,255,.06)"/>
+    <defs><radialGradient id="dgrad" cx="36%" cy="34%" r="74%"><stop offset="0" stop-color="#9ecbff"/><stop offset="1" stop-color="#6a5cff"/></radialGradient></defs>
+    <rect width="200" height="132" fill="#0b1026"/>
+    <rect x="14" y="14" width="126" height="104" rx="12" fill="rgba(255,255,255,.04)" stroke="rgba(255,255,255,.08)"/>
+    <circle cx="62" cy="54" r="26" fill="url(#dgrad)"/>
+    <path d="M26 100 C 46 70 92 108 126 74" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="1.6"/>
+    <circle cx="26" cy="100" r="3.2" fill="#fff"/><circle cx="126" cy="74" r="3.2" fill="#fff"/>
+    <rect x="150" y="18" width="36" height="18" rx="5" fill="var(--accent)"/>
+    <rect x="150" y="42" width="36" height="18" rx="5" fill="#966dff"/>
+    <rect x="150" y="66" width="36" height="18" rx="5" fill="#ff75d8"/>
+    <rect x="150" y="90" width="36" height="18" rx="5" fill="#4de2d0"/>
   </svg>`,
   art: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <rect width="200" height="132" fill="#0c1226"/>
-    <circle cx="72" cy="64" r="44" fill="var(--accent)" opacity=".55"/>
-    <circle cx="132" cy="82" r="34" fill="#ff75d8" opacity=".42"/>
-    <rect x="98" y="26" width="46" height="46" rx="9" transform="rotate(18 121 49)" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+    <defs>
+      <radialGradient id="ablob" cx="38%" cy="34%" r="72%"><stop offset="0" stop-color="#a97bff"/><stop offset="1" stop-color="#5a3fb8"/></radialGradient>
+      <radialGradient id="ablob2" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#ff8fd6"/><stop offset="1" stop-color="#ff5db4"/></radialGradient>
+    </defs>
+    <rect width="200" height="132" fill="#0b1026"/>
+    <circle cx="78" cy="60" r="48" fill="url(#ablob)" opacity=".92"/>
+    <circle cx="128" cy="84" r="36" fill="url(#ablob2)" opacity=".62"/>
+    <path d="M18 106 q 34 -22 70 -8 t 80 -12" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3.2" stroke-linecap="round"/>
+    <rect x="98" y="24" width="42" height="42" rx="9" transform="rotate(20 119 45)" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+    <circle cx="30" cy="28" r="5" fill="#4de2d0"/><circle cx="46" cy="24" r="5" fill="#ffd166"/><circle cx="62" cy="26" r="4" fill="var(--accent)"/>
   </svg>`,
 };
 
