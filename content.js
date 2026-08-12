@@ -150,8 +150,8 @@ window.portfolio = {
       description: "Designs made for Robert College's robotics team.",
       pieces: [
         {
-          title: "Learning Signal",
-          medium: "Interface study",
+          title: "Carcharodon the Great White",
+          medium: "Mascot design",
           year: "2026",
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "A full-body drawing of our mascot Carchorodon the Great White. Made to be a body-size cardboard cutout.",
