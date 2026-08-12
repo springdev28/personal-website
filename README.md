@@ -193,6 +193,10 @@ focusPhoto: { src: "portrait.png", alt: "Name" }
 ```
 
 Notes:
+- The filename must match **exactly**, including the extension and capitalization.
+  `Carcharodon-cutout` will not load, `Carcharodon-cutout.png` will. (If an image
+  fails to load, the panel shows a soft color instead of a broken-image icon, that
+  usually means a filename typo or the file was not uploaded.)
 - `.png`, `.jpg`, `.webp`, and `.gif` all work.
 - You can also use a full web URL instead of a filename (e.g. `image: "https://.../photo.jpg"`).
 - If an `image` isn't set, the site falls back to its generated gradient visual, so nothing breaks.

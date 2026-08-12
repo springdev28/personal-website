@@ -156,7 +156,7 @@ window.portfolio = {
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "A full-body drawing of our mascot Carchorodon the Great White. Made to be a body-size cardboard cutout.",
           tags: ["Mascot", "Robotics"],
-          image: "Carcharodon-cutout",
+          image: "Carcharodon-cutout.png",
         },
         {
           title: "Orbit Field",
