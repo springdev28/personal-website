@@ -20,6 +20,15 @@ python3 -m http.server 8080
 
 Then open `http://localhost:8080` in your browser.
 
+If you have Node installed, there are also two convenience scripts in `package.json`:
+
+```bash
+npm start    # start the local server (same as the command above)
+npm run check   # check that content.js and app.js have no syntax errors
+```
+
+There is **no build step** — these are just shortcuts. The site is plain files that run as-is.
+
 ### The edit → preview → publish loop
 
 1. **Edit** `content.js` (or another file) in any text editor.
@@ -36,6 +45,7 @@ Then open `http://localhost:8080` in your browser.
 | `styles.css` | Colors, spacing, fonts — the visual design | ⚠️ Only for design tweaks |
 | `app.js` | How the site is built and behaves | ⛔ Rarely — advanced |
 | `index.html` + the other `.html` files | The page files (one per section) | ⛔ Rarely — see cache note |
+| `package.json` | Project metadata + handy scripts (no build step, no dependencies) | ⛔ Rarely |
 
 The `.html` files (`index`, `work`, `research`, `art`, `writing`, `about`, `contact`) are nearly identical shells. You almost never need to touch them — the content is injected from `content.js`.
 

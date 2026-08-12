@@ -1,0 +1,18 @@
+{
+  "name": "personal-website",
+  "version": "1.0.0",
+  "description": "Personal portfolio site for Bahar Yüksel — plain HTML/CSS/JS, no build step.",
+  "private": true,
+  "author": "Bahar Yüksel",
+  "license": "UNLICENSED",
+  "homepage": "https://github.com/springdev28/personal-website",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/springdev28/personal-website.git"
+  },
+  "scripts": {
+    "start": "python3 -m http.server 8080",
+    "serve": "python3 -m http.server 8080",
+    "check": "node --check content.js && node --check app.js"
+  }
+}
