@@ -221,8 +221,8 @@ For a logo, add an `imageBg` next to the `image`. The logo is then shown whole
 and centered on that background color, like an app icon:
 
 ```js
-image: "Schoolar-logo.png",
-imageBg: "#4de2d0",   // panel color behind the logo (any hex color, or "#ffffff")
+image: "Casparel-logo.png",
+imageBg: "#ffffff",   // panel color behind the logo (any hex color, or "#ffffff")
 ```
 
 - Use a transparent PNG for the logo so the `imageBg` color shows through around it.

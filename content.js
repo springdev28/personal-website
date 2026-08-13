@@ -8,7 +8,7 @@ window.portfolio = {
     headline: "I build where code, design, and art meet.",
     intro:
       "I'm a high school student in Istanbul, Robert College. I make software, interfaces, and visual work, mostly tools that help people learn.",
-    now: "Building Schoolar and Iter, exploring AI for learning, and turning experiments into things I can show.",
+    now: "Building Casparel and Iter, exploring AI for learning, and turning experiments into things I can show.",
     available: "Open to opportunities & collaboration",
     story: [
       "I'm Bahar Yüksel, a high school student in Robert College. I've always wanted to understand how things work, and what they could be. That curiosity turned into the need for developing my own version: building software, designing interfaces, and making visual work, often all at the same time.",
@@ -34,7 +34,7 @@ window.portfolio = {
     { label: "Email", href: "mailto:baharyuksel0403@gmail.com", note: "The fastest way to reach me" },
     { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/baharyuksel0403", note: "Professional profile" },
-    { label: "Schoolar", href: "https://lightgrey-oyster-122608.hostingersite.com/", note: "My flagship project" },
+    { label: "Casparel", href: "https://lightgrey-oyster-122608.hostingersite.com/", note: "My flagship project" },
     { label: "Iter", href: "https://greenyellow-eagle-758815.hostingersite.com/", note: "An interactive prototype" },
   ],
   disciplines: [
@@ -92,7 +92,7 @@ window.portfolio = {
   ],
   projects: [
     {
-      title: "Schoolar",
+      title: "Casparel",
       type: "Education platform",
       category: "Education",
       year: "2026",
@@ -103,9 +103,9 @@ window.portfolio = {
       role: "Product thinking, learning flows, interface direction",
       result: "A coordinated system that makes student support visible, structured, and easier to act on.",
       tags: ["EdTech", "AI", "Product"],
-      image: "Schoolar-logo.png",
-      imageBg: "#4de2d0",
-      imageScale: "97%",
+      image: "Casparel-logo.png",
+      imageBg: "#ffffff",
+      imageScale: "88%",
       featured: true,
     },
     {
@@ -325,7 +325,7 @@ window.portfolio = {
         "  When I started building this site, my first instinct was to make a museum. Clean white walls, a few finished pieces under glass, everything labeled and done. It took me embarrassingly long to admit that a museum was exactly the wrong shape for where I am right now.",
         "  A museum is for things that are finished. It says: here is the final version, please do not touch. But I am not finished, and honestly I hope I never feel finished. Almost everything I care about is still moving, still being rewritten, still one version away from what I actually want it to be. Freezing it behind glass would have been a small lie, and small lies about your work have a way of becoming the truth you live in.",
         "  So I decided to build a workshop instead. A workshop is a place where you can see the tools on the bench, the half-built thing in the corner, and the sketch taped to the wall that shows where it is all going. It is not messy for the sake of being messy. It is honest about the fact that work is a process, not a trophy.",
-        "  In practice that changed what I put here. Instead of only showing polished screenshots, I tried to show the questions I am still chasing. Schoolar and Iter are not case studies I finished and walked away from, they are systems I am still inside of, still arguing with. I would rather tell you what I am trying to figure out than pretend I already have the answer.",
+        "  In practice that changed what I put here. Instead of only showing polished screenshots, I tried to show the questions I am still chasing. Casparel and Iter are not case studies I finished and walked away from, they are systems I am still inside of, still arguing with. I would rather tell you what I am trying to figure out than pretend I already have the answer.",
         "  The scary part is that a workshop shows your reach exceeding your grasp. If I tell you I am trying to make learning feel less scattered, you can measure exactly how far I still am from that. But I have come to think that gap is the most interesting thing about anyone. A finished museum piece tells you what a person could do once. A workshop tells you what they are becoming.",
         "  There is a practical reason too. The people I want to reach, the ones who might hand me a chance, a program, a place on a team, are not really choosing the finished thing. They are betting on the next ten versions of me. The only honest way to show a trajectory is to show the work in motion, including the parts that are still rough and a little wrong.",
         "  So if you are reading this, treat the site like a workshop. Open the drawers. The projects are real but unfinished, the writing is me thinking out loud, and the art is where a lot of my instincts get tested long before they ever reach code. Come back in a few months and it should look different. If it does not, something has gone wrong.",
@@ -342,7 +342,7 @@ window.portfolio = {
         "  My honest rule is simple: AI in learning should reduce friction, not remove the effort that actually teaches you. There is a real difference between the two. Friction is the twenty minutes you waste figuring out which chapter to read, or the fact that your schedule, your resources, your feedback, and your deadlines all live in five different apps. Effort is the part where you struggle with the idea itself. The first one is worth deleting. The second one is the whole point of learning, and a tool that removes it is stealing from you while smiling.",
         "  The second thing I care about is that good learning AI should reveal patterns you cannot see on your own. It is hard to notice that you always lose momentum in the third week of a project, or that you understand something better when you draw it than when you read it. A tool that quietly surfaces that, and then steps back, is doing something genuinely useful instead of just impressive.",
         "  This is most of what I am trying to build into Iter. I did not want an agent that hands you an answer and hides its reasoning. I wanted planning you can inspect, where the evidence is visible and you are allowed to argue with it. If a system tells you what to do next, you should be able to see why, and disagree out loud. A black box that is usually right still teaches you the worst possible lesson, which is to stop thinking.",
-        "  Schoolar comes from a different angle but the same belief. School life is scattered across a dozen apps and group chats, and that scattering quietly taxes the attention that should go to actual learning. So the goal there is not to be clever, it is to hold the pieces together, classes, resources, schedules, progress, support, in one place that makes the next step obvious. Coordination is unglamorous, but for a real student it is often the thing that is actually broken.",
+        "  Casparel comes from a different angle but the same belief. School life is scattered across a dozen apps and group chats, and that scattering quietly taxes the attention that should go to actual learning. So the goal there is not to be clever, it is to hold the pieces together, classes, resources, schedules, progress, support, in one place that makes the next step obvious. Coordination is unglamorous, but for a real student it is often the thing that is actually broken.",
         "  There are things I try hard not to build. I do not want tools that do your thinking and let you believe you understand. I do not want to hide effort in a way that feels great today and leaves you hollow at the exam, or worse, in the real moment you needed to know the thing and no tool was there. If a feature makes a student more dependent and less capable, it is a bad feature, no matter how good the launch video looks.",
         "  I want to be honest about my limits. I am a high school student building for students, which means I get some things right precisely because I am close to the problem, and I will get some things wrong for exactly the same reason. But I would rather build inside that gap than wait for permission to care. The friction is real, I am living in it, and that is a very good place to start.",
       ],
