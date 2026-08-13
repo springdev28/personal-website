@@ -34,7 +34,7 @@ window.portfolio = {
     { label: "Email", href: "mailto:baharyuksel0403@gmail.com", note: "The fastest way to reach me" },
     { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/baharyuksel0403", note: "Professional profile" },
-    { label: "Casparel", href: "https://lightgrey-oyster-122608.hostingersite.com/", note: "My flagship project" },
+    { label: "Casparel", href: "https://casparel.com", note: "My flagship project" },
     { label: "Iter", href: "https://greenyellow-eagle-758815.hostingersite.com/", note: "An interactive prototype" },
   ],
   disciplines: [
@@ -96,7 +96,7 @@ window.portfolio = {
       type: "Education platform",
       category: "Education",
       year: "2026",
-      href: "../schoolar/",
+      href: "https://casparel.com",
       color: "#4de2d0",
       summary: "An education platform for classes, resources, schedules, safety, progress, and AI support.",
       why: "School life is scattered across a dozen apps and chats. I wanted one place that actually holds it together.",
