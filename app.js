@@ -372,6 +372,11 @@ function renderContact() {
     <section class="contact-grid">
       <article class="link-panel"><p class="kicker">Links</p>${data.links.map((link) => `<a href="${link.href}"><span>${link.note}</span><strong>${link.label}</strong></a>`).join("")}</article>
       <form class="contact-form" id="contactForm"><label><span>Your email</span><input type="email" placeholder="name@example.com"></label><label><span>Message</span><textarea rows="7" placeholder="What should I know?"></textarea></label><button class="button" type="submit">Prepare email<span>→</span></button></form>
+    </section>
+    <section class="li-badge-section">
+      <div class="li-badge-wrap">
+        <div class="badge-base LI-profile-badge" data-locale="en_US" data-size="medium" data-theme="light" data-type="VERTICAL" data-vanity="bahar-yüksel-15030930b" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://tr.linkedin.com/in/bahar-y%C3%BCksel-15030930b?trk=profile-badge">Bahar Yüksel</a></div>
+      </div>
     </section>`;
 }
 
@@ -379,6 +384,22 @@ function renderPage() {
   ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
   animateIn();
+  renderLinkedInBadge();
+}
+
+// The LinkedIn profile badge is a plain <div> until LinkedIn's script turns it
+// into the embedded card. Because pages are built by JS, load that script (or
+// re-run its renderer) after the page draws so the badge appears.
+function renderLinkedInBadge() {
+  if (!document.querySelector(".LI-profile-badge")) return;
+  if (window.LIRenderAll) { window.LIRenderAll(); return; }
+  if (document.getElementById("li-badge-js")) return;
+  const s = document.createElement("script");
+  s.id = "li-badge-js";
+  s.async = true;
+  s.defer = true;
+  s.src = "https://platform.linkedin.com/badges/js/profile.js";
+  document.body.appendChild(s);
 }
 
 // Reveal elements as they scroll into view (staggered by position in their row/grid).

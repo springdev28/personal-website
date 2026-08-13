@@ -1174,6 +1174,11 @@ body[data-page="home"] .status-pill {
   from { opacity: 0; transform: translateY(72px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* LinkedIn profile badge on the Contact page */
+.li-badge-section { display: flex; justify-content: center; margin-top: 24px; }
+.li-badge-wrap { min-height: 1px; }
+.li-badge-wrap .LI-simple-link { color: var(--blue); font-weight: 700; text-decoration: none; }
+
 /* Code/Design/Art cards slide in from the left, staggered, after the portrait
    rises. JS adds .slide-left up front, then .in to start it, then removes both
    when done so the hover lift stays snappy. */
