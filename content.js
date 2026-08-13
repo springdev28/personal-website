@@ -33,7 +33,7 @@ window.portfolio = {
   links: [
     { label: "Email", href: "mailto:baharyuksel0403@gmail.com", note: "The fastest way to reach me" },
     { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/bahar-y%C3%BCksel-15030930b/", note: "Professional profile" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/baharyuksel0403", note: "Professional profile" },
     { label: "Schoolar", href: "https://lightgrey-oyster-122608.hostingersite.com/", note: "My flagship project" },
     { label: "Iter", href: "https://greenyellow-eagle-758815.hostingersite.com/", note: "An interactive prototype" },
   ],
