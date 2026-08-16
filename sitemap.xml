@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://baharyuksel.dev/</loc><priority>1.0</priority></url>
-  <url><loc>https://baharyuksel.dev/work.html</loc><priority>0.9</priority></url>
-  <url><loc>https://baharyuksel.dev/art.html</loc><priority>0.8</priority></url>
-  <url><loc>https://baharyuksel.dev/research.html</loc><priority>0.7</priority></url>
-  <url><loc>https://baharyuksel.dev/writing.html</loc><priority>0.7</priority></url>
-  <url><loc>https://baharyuksel.dev/about.html</loc><priority>0.6</priority></url>
-  <url><loc>https://baharyuksel.dev/contact.html</loc><priority>0.6</priority></url>
+  <url><loc>https://baharyuksel.dev/</loc><lastmod>2026-08-16</lastmod><priority>1.0</priority></url>
+  <url><loc>https://baharyuksel.dev/work.html</loc><lastmod>2026-08-16</lastmod><priority>0.9</priority></url>
+  <url><loc>https://baharyuksel.dev/art.html</loc><lastmod>2026-08-16</lastmod><priority>0.8</priority></url>
+  <url><loc>https://baharyuksel.dev/research.html</loc><lastmod>2026-08-16</lastmod><priority>0.7</priority></url>
+  <url><loc>https://baharyuksel.dev/writing.html</loc><lastmod>2026-08-16</lastmod><priority>0.7</priority></url>
+  <url><loc>https://baharyuksel.dev/about.html</loc><lastmod>2026-08-16</lastmod><priority>0.6</priority></url>
+  <url><loc>https://baharyuksel.dev/contact.html</loc><lastmod>2026-08-16</lastmod><priority>0.6</priority></url>
 </urlset>
