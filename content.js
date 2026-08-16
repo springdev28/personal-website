@@ -2,16 +2,16 @@ window.portfolio = {
   person: {
     name: "Bahar Yüksel",
     initials: "BY",
-    role: "High School Innovator",
+    role: "Aspiring Innovator",
     location: "Istanbul, Türkiye",
     email: "baharyuksel0403@gmail.com",
     headline: "I build where code, design, and art meet.",
     intro:
-      "I'm a high school student in Istanbul, Robert College. I make software, interfaces, and visual work, mostly tools that help people learn.",
+      "I'm a student in Istanbul, Robert College. I make software, interfaces, and visual work, mostly tools that help people learn.",
     now: "Building Casparel and Iter, exploring AI for learning, and turning experiments into things I can show.",
     available: "Open to opportunities & collaboration",
     story: [
-      "I'm Bahar Yüksel, a high school student in Robert College. I've always wanted to understand how things work, and what they could be. That curiosity turned into the need for developing my own version: building software, designing interfaces, and making visual work, often all at the same time.",
+      "I'm Bahar Yüksel, a student in Robert College. I've always wanted to understand how things work, and what they could be. That curiosity turned into the need for developing my own version: building software, designing interfaces, and making visual work, often all at the same time.",
       "My favorite work lives where code, design, and art overlap. I care about tools that are engineered to actually work, designed to be clear, and made with enough personality to feel human. Most of what I build points at one question: how do I leave my mark?",
       "I'm still early, still learning, still shipping, still figuring out where this goes. But I'd rather be brave and build real things now than wait. If you're looking for someone innovative, curious, self-directed, and genuinely excited to make things, you now know where to look for.",
     ],
@@ -344,7 +344,7 @@ window.portfolio = {
         "  This is most of what I am trying to build into Iter. I did not want an agent that hands you an answer and hides its reasoning. I wanted planning you can inspect, where the evidence is visible and you are allowed to argue with it. If a system tells you what to do next, you should be able to see why, and disagree out loud. A black box that is usually right still teaches you the worst possible lesson, which is to stop thinking.",
         "  Casparel comes from a different angle but the same belief. School life is scattered across a dozen apps and group chats, and that scattering quietly taxes the attention that should go to actual learning. So the goal there is not to be clever, it is to hold the pieces together, classes, resources, schedules, progress, support, in one place that makes the next step obvious. Coordination is unglamorous, but for a real student it is often the thing that is actually broken.",
         "  There are things I try hard not to build. I do not want tools that do your thinking and let you believe you understand. I do not want to hide effort in a way that feels great today and leaves you hollow at the exam, or worse, in the real moment you needed to know the thing and no tool was there. If a feature makes a student more dependent and less capable, it is a bad feature, no matter how good the launch video looks.",
-        "  I want to be honest about my limits. I am a high school student building for students, which means I get some things right precisely because I am close to the problem, and I will get some things wrong for exactly the same reason. But I would rather build inside that gap than wait for permission to care. The friction is real, I am living in it, and that is a very good place to start.",
+        "  I want to be honest about my limits. I am a student building for students, which means I get some things right precisely because I am close to the problem, and I will get some things wrong for exactly the same reason. But I would rather build inside that gap than wait for permission to care. The friction is real, I am living in it, and that is a very good place to start.",
       ],
     },
     {
