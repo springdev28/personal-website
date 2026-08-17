@@ -15,6 +15,7 @@ All content lives in one file: **`content.js`**. Everything below is a reference
 | `app.js` | Rendering and behavior | Rarely |
 | `*.html` | One near-identical shell per page (`index`, `work`, `research`, `art`, `writing`, `about`, `contact`) | Rarely (see [caching](#publishing)) |
 | `server.js` + `package.json` | Tiny static server used by the host, **do not delete** | Never |
+| `prerender.js` | Puts a plain-text copy of each page into the HTML for search engines, **do not delete** | Never |
 
 The pages are generated from `content.js` at load time, so the `.html` files usually don't need editing.
 
@@ -281,15 +282,68 @@ for `og-card.png?v=`) so the new preview shows.
 
 ---
 
+## Search engines (SEO)
+
+**Nothing here needs editing.** This section explains what the site already does
+so it makes sense if you ever look at Google Search Console.
+
+### Why prerendering exists
+
+The `.html` files are empty shells, the visible page is built in your browser by
+`app.js` using the text in `content.js`. People never notice, because their
+browser runs the script. A search engine crawler often does not: Google *can*
+run JavaScript, but only on a slow second pass, which is a common reason new
+sites sit in **"Discovered / Crawled, currently not indexed"** for a long time.
+
+So `prerender.js` fills in the blanks on the server, before the page is sent. It
+reads the same `content.js` and writes a plain-HTML version of the page (real
+headings, real paragraphs, real links to the other pages) into the shell.
+`app.js` then replaces it with the normal interactive page the instant it runs.
+
+What this means for you:
+
+- **`content.js` is still the only file you edit.** The prerendered text is
+  generated from it, so it updates automatically and can never fall out of sync.
+- **Visitors see no difference.** The swap happens before the page is painted.
+- **If JavaScript fails**, the site still shows readable text instead of a blank
+  page.
+- **Blog posts are included in full.** The whole `body` of every post is in the
+  HTML, not just the excerpt, so your writing is the part search engines can
+  actually read.
+
+### The other two rules the server follows
+
+| Behavior | Why |
+| --- | --- |
+| A URL that doesn't exist returns a real **404** page | It used to answer with the homepage and a "success" code, which tells Google every typo'd URL is a real page and creates duplicates of the homepage. `/work` (no `.html`) still works, it resolves to `work.html`. |
+| **`www.baharyuksel.dev` redirects** to `baharyuksel.dev` | Both used to serve the same site, which counts as two competing copies. Now there is one address. |
+
+### After publishing a change
+
+Indexing is not instant, expect days to weeks, especially for a newer domain.
+To nudge it: open [Google Search Console](https://search.google.com/search-console),
+paste a page's URL into **URL inspection** at the top, and click
+**Request indexing**. Worth doing for the homepage plus any page you care most
+about. `sitemap.xml` lists every page, and its `lastmod` dates tell Google
+something changed, so bump them (to today's date) when you make a real content
+update.
+
+---
+
 ## Running locally
 
-Double-click `index.html`, or run a local server from this folder for a more accurate preview:
+Run the real server from this folder:
 
 ```bash
-python3 -m http.server 8080
+node server.js
 ```
 
-Then open `http://localhost:8080`.
+Then open `http://localhost:3000`.
+
+Use this rather than double-clicking `index.html` or `python3 -m http.server`.
+Those still show the site correctly, but only `node server.js` also does the
+[search-engine prerendering](#search-engines-seo), so it is the only preview
+that matches what actually gets published.
 
 ---
 
@@ -319,7 +373,9 @@ are a harmless extra safety net; you no longer need to bump them by hand.
 
 ### Hosting
 
-The site is deployed on a host that runs it as a small static server. `server.js` and `package.json` exist only for that, leave them in place. In the host's deployment settings, the **Entry file must be `server.js`**.
+The site is deployed on a host that runs it as a small static server. `server.js`, `package.json`, and `prerender.js` exist only for that, leave all three in place. In the host's deployment settings, the **Entry file must be `server.js`**.
+
+Deleting `prerender.js` would not break the site visually, but it would stop the server booting, and removing the prerendering is what makes pages invisible to search engines again.
 
 ---
 
