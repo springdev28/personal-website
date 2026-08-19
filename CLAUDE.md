@@ -28,13 +28,31 @@ Publish by committing and pushing (per the session's branch instructions).
 
 The live site is hosted on **Hostinger's Node.js Git deployment**, which
 auto-deploys `main` on every push. Because that deployment runs the app as a
-Node process, the repo includes two files **that must NOT be removed**:
+Node process, the repo includes three files **that must NOT be removed**:
 
 - `server.js`, a tiny zero-dependency static file server (serves the plain
   HTML/CSS/JS; there is still no build step and no dependencies).
 - `package.json`, its only job is `"start": "node server.js"`.
+- `prerender.js`, required by `server.js` (removing it stops the server
+  booting). See below.
 
 In Hostinger's deployment settings, the **Entry file must be `server.js`**
 (not `app.js`, `app.js` is browser code and crashes under Node). Do not
-delete `server.js`/`package.json` to "keep it static", that breaks the
-Hostinger deploy.
+delete these files to "keep it static", that breaks the Hostinger deploy.
+
+## Server-side prerendering (SEO)
+
+Every `.html` file is an empty shell, `app.js` builds the visible page in the
+browser. Crawlers that do not run JS would see nothing, so `server.js` calls
+`prerender.js` to inject a plain-HTML version of the page (headings, text,
+and `<a href>` links to every page) before sending it. `app.js` then replaces
+it in the browser.
+
+- `prerender.js` reads `content.js` at runtime, so `content.js` stays the
+  **single source of truth**, never hardcode content into `prerender.js`.
+- **When adding a new content field or page section to `app.js`, add it to
+  the matching renderer in `prerender.js` too**, or it will be invisible to
+  search engines.
+- Prerendering must always fail safe: any error falls back to the raw file.
+- `server.js` also returns real 404s (no soft 404s) and 301s `www` to the
+  apex domain. Keep both.
