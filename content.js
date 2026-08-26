@@ -166,7 +166,7 @@ window.portfolio = {
           text: "The robotics team's t-shirt and sweatshirt back design, combining the mascot and mechanics.",
           tags: ["Graphic design", "Merchandise"],
           image: "Makers-logo1.png".png",
-          imageBg: "#ffffff"
+          imageBg: "#ffffff",
         },
         {
           title: "Team Clothing Design - Back",
@@ -176,7 +176,7 @@ window.portfolio = {
           text: "The robotics team's t-shirt and sweatshirt front design, focusing on the water aspect of the team.",
           tags: ["Graphic design", "Merchandise"],
           image: "Sweat.png",
-          imageBg: "#ffffff"
+          imageBg: "#ffffff",
         },
         {
           title: "Team Logo",
@@ -186,7 +186,7 @@ window.portfolio = {
           text: "The robotics team's logo design, featuring a more animalistic Carcharodon.",
           tags: ["Graphic design", "Merchandise"],
           image: "Makers-logo.png",
-          imageBg: "#ffffff"
+          imageBg: "#ffffff",
         },
         {
           title: "Team Sticker Design - 1",
