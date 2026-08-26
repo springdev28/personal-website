@@ -165,7 +165,7 @@ window.portfolio = {
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "The robotics team's t-shirt and sweatshirt back design, combining the mascot and mechanics.",
           tags: ["Graphic design", "Merchandise"],
-          image: "Makers-logo1.png".png",
+          image: "Makers-logo1.png",
           imageBg: "#ffffff",
         },
         {
