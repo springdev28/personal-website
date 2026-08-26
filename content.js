@@ -154,7 +154,7 @@ window.portfolio = {
           medium: "Mascot design",
           year: "2026",
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
-          text: "A full-body drawing of our mascot Carchorodon the Great White. With the combination of a shark, lifeguard outwear, and robotic legs, the design comminucates the message: The apex predator is here, beware! Made to be a body-size cardboard cutout.",
+          text: "A full-body drawing of our mascot Carcharodon the Great White. With the combination of a shark, lifeguard outfit, and robotic legs, the design communicates the message: The apex predator is here, beware! Made to be a body-size cardboard cutout.",
           tags: ["Mascot", "Robotics"],
           image: "Carcharodon-cutout.png",
         },
@@ -165,7 +165,7 @@ window.portfolio = {
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "The robotics team's t-shirt and sweatshirt back design, combining the mascot and mechanics.",
           tags: ["Graphic design", "Merchandise"],
-          image: "Sweat.png",
+          image: "Makers-logo1.png".png",
           imageBg: "#ffffff"
         },
         {
@@ -175,7 +175,7 @@ window.portfolio = {
           palette: ["#64a8ff", "#4de2d0", "#966dff"],
           text: "The robotics team's t-shirt and sweatshirt front design, focusing on the water aspect of the team.",
           tags: ["Graphic design", "Merchandise"],
-          image: "Makers-logo1.png",
+          image: "Sweat.png",
           imageBg: "#ffffff"
         },
         {
