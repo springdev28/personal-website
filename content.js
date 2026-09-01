@@ -32,8 +32,12 @@ window.portfolio = {
   ],
   links: [
     { label: "Email", href: "mailto:baharyuksel0403@gmail.com", note: "The fastest way to reach me" },
-    { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
+    { label: "Website", href: "https://baharyuksel.dev", note: "baharyuksel.dev" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/baharyuksel0403", note: "Professional profile" },
+    { label: "GitHub", href: "https://github.com/springdev28", note: "Code and experiments" },
+    { label: "Twitter/X", href: "https://x.com/baharyuksel0403", note: "@baharyuksel0403" },
+    { label: "Reddit", href: "https://www.reddit.com/user/bhryksl0403", note: "u/bhryksl0403" },
+    { label: "YouTube", href: "https://www.youtube.com/@BaharY-0403", note: "@BaharY-0403" },
     { label: "Casparel", href: "https://casparel.com", note: "My flagship project" },
     { label: "Iter", href: "https://greenyellow-eagle-758815.hostingersite.com/", note: "An interactive prototype" },
   ],

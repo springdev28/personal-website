@@ -370,7 +370,7 @@ function renderAbout() {
 function renderContact() {
   root.innerHTML = `${hero("Contact", "Send the signal.", "")}
     <section class="contact-grid">
-      <article class="link-panel"><p class="kicker">Links</p>${data.links.map((link) => `<a href="${link.href}"><span>${link.note}</span><strong>${link.label}</strong></a>`).join("")}</article>
+      <article class="link-panel"><p class="kicker">Links</p>${data.links.map((link) => `<a href="${link.href}" target="_blank" rel="noopener noreferrer"><span>${link.note}</span><strong>${link.label}</strong></a>`).join("")}</article>
       <form class="contact-form" id="contactForm"><label><span>Your email</span><input type="email" placeholder="name@example.com"></label><label><span>Message</span><textarea rows="7" placeholder="What should I know?"></textarea></label><button class="button" type="submit">Prepare email<span>→</span></button></form>
     </section>`;
 }
