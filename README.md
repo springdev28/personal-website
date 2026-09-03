@@ -13,7 +13,7 @@ All content lives in one file: **`content.js`**. Everything below is a reference
 | `content.js` | All text and content (the only file most edits touch) | Often |
 | `styles.css` | Colors, spacing, fonts | Occasionally, for design tweaks |
 | `app.js` | Rendering and behavior | Rarely |
-| `*.html` | One near-identical shell per page (`index`, `work`, `research`, `art`, `writing`, `logs`, `about`, `contact`) | Rarely (see [caching](#publishing)) |
+| `*.html` | One near-identical shell per page (`index`, `work`, `research`, `art`, `writing`, `logs`, project-log pages, `about`, `contact`) | Rarely (see [caching](#publishing)) |
 | `server.js` + `package.json` | Tiny static server used by the host, **do not delete** | Never |
 | `prerender.js` | Puts a plain-text copy of each page into the HTML for search engines, **do not delete** | Never |
 
@@ -156,15 +156,27 @@ artAlbums: [
 
 The Writing page. Each item: `{ title, category, date, read, excerpt }` (date is `YYYY-MM-DD`).
 
-### `casparelLogs`
+### `logProjects`, `casparelLogs`, and `casparelHighlights`
 
-The chronological Casparel Logs page. Every calendar day from the first commit has one item:
+`logProjects` controls the folder cards on the main Logs page. A folder can point to a detailed log page, a source repository, or a project archive.
+
+`casparelLogs` controls the chronological Casparel detail page. Every calendar day from the first commit has one item:
 
 ```js
 { date: "2026-09-03", title: "What changed", summary: "One concise daily note.", commits: 3, tags: ["Theme"] }
 ```
 
 Use `commits: 0` and an empty `tags` list for a day with no recorded Git activity.
+
+`casparelHighlights` adds the selected, directly linked commits shown inside each active day:
+
+```js
+casparelHighlights: {
+  "2026-09-03": [
+    ["7b07a8d", "Fix Android plans, ads, and mobile overflow"],
+  ],
+}
+```
 
 ### `skillGroups` and `approach`
 

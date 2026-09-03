@@ -13,7 +13,7 @@ function tags(items) {
 }
 
 function renderShell() {
-  const nav = data.pages.map(([id, label, href]) => `<a class="${id === page ? "active" : ""}" href="${href}">${label}</a>`).join("");
+  const nav = data.pages.map(([id, label, href]) => `<a class="${id === page || (id === "logs" && page.endsWith("-logs")) ? "active" : ""}" href="${href}">${label}</a>`).join("");
   document.querySelector("[data-shell]").innerHTML = `
     <a class="brand" href="index.html"><span>${data.person.initials}</span><b>${data.person.name}</b></a>
     <nav class="nav" aria-label="Portfolio navigation">${nav}</nav>
@@ -349,7 +349,36 @@ function logDate(date) {
 }
 
 function renderLogs() {
+  const projects = Array.isArray(data.logProjects) ? data.logProjects : [];
+  const folders = projects.map((project) => {
+    const external = project.external ? ' target="_blank" rel="noopener noreferrer"' : "";
+    return `<a class="log-folder interactive-card" href="${safe(project.href)}"${external} style="--accent:${safe(project.color)}">
+      <span class="folder-shape" aria-hidden="true"><i></i></span>
+      <small>${safe(project.type)}</small>
+      <h2>${safe(project.title)}</h2>
+      <p>${safe(project.description)}</p>
+      <footer><span>${safe(project.status)}</span><strong>Open folder ${project.external ? "↗" : "→"}</strong></footer>
+    </a>`;
+  }).join("");
+
+  root.innerHTML = `${hero(
+    "Project archive",
+    "Logs, organized by project.",
+    "Open a folder for its build history, source record, and project links. Casparel contains the full day-by-day journal from its first commit."
+  )}
+    <section class="log-folders" aria-label="Project log folders">${folders}</section>`;
+}
+
+function casparelDayHistory(date) {
+  const start = new Date(`${date}T00:00:00+03:00`);
+  const end = new Date(start.getTime() + 86_400_000 - 1);
+  const params = new URLSearchParams({ since: start.toISOString(), until: end.toISOString() });
+  return `https://github.com/springdev28/casparel/commits/main/?${params}`;
+}
+
+function renderCasparelLogs() {
   const logs = Array.isArray(data.casparelLogs) ? data.casparelLogs : [];
+  const highlights = data.casparelHighlights || {};
   const commitTotal = logs.reduce((sum, entry) => sum + Number(entry.commits || 0), 0);
   const activeDays = logs.filter((entry) => entry.commits > 0).length;
   const quietDays = logs.length - activeDays;
@@ -357,20 +386,25 @@ function renderLogs() {
     .map((entry, index) => {
       const commits = Number(entry.commits || 0);
       const count = commits === 0 ? "Quiet day" : `${commits} ${commits === 1 ? "commit" : "commits"}`;
+      const work = Array.isArray(highlights[entry.date]) ? highlights[entry.date] : [];
+      const linkedWork = work.length ? `<section class="log-work"><h3>Selected work</h3><ul>${work.map(([sha, label]) => `<li><a href="https://github.com/springdev28/casparel/commit/${safe(sha)}" target="_blank" rel="noopener noreferrer"><code>${safe(sha)}</code><span>${safe(label)}</span><b aria-hidden="true">↗</b></a></li>`).join("")}</ul></section>` : "";
+      const allCommits = commits > 0 ? `<a class="log-day-link" href="${safe(casparelDayHistory(entry.date))}" target="_blank" rel="noopener noreferrer">View all ${commits} ${commits === 1 ? "commit" : "commits"} from this day <span>↗</span></a>` : "";
       return `<article class="log-entry${commits === 0 ? " quiet" : ""}">
         <span class="log-marker" aria-hidden="true"></span>
         <header><div><span>Day ${String(index + 1).padStart(2, "0")}</span><time datetime="${safe(entry.date)}">${logDate(entry.date)}</time></div><strong>${count}</strong></header>
         <h2>${safe(entry.title)}</h2>
         <p>${safe(entry.summary)}</p>
+        ${linkedWork}
         ${entry.tags?.length ? `<div class="log-tags">${tags(entry.tags)}</div>` : ""}
+        ${allCommits}
       </article>`;
     })
     .join("");
 
-  root.innerHTML = `${hero(
+  root.innerHTML = `<a class="back-link" href="logs.html">← All project folders</a>${hero(
     "Build log",
     "Casparel, day by day.",
-    "A chronological record from the first commit, reconstructed from the repository's Git history in Istanbul time.",
+    "Every calendar day from the first commit, with concrete work items and direct links to the repository history. Dates use Istanbul time.",
     '<a class="button" href="https://github.com/springdev28/casparel/commits/main" target="_blank" rel="noopener noreferrer">Source history<span>↗</span></a>'
   )}
     <section class="log-summary" aria-label="Casparel log summary">
@@ -414,7 +448,7 @@ function renderContact() {
 }
 
 function renderPage() {
-  ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, logs: renderLogs, about: renderAbout, contact: renderContact }[page] || renderHome)();
+  ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, logs: renderLogs, "casparel-logs": renderCasparelLogs, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
   animateIn();
 }
@@ -422,7 +456,7 @@ function renderPage() {
 // Reveal elements as they scroll into view (staggered by position in their row/grid).
 // Note: elements centered via CSS transform (.intro-copy, .intro-portrait) are
 // excluded, a transform-based reveal would fight their positioning.
-const REVEAL_SELECTOR = ".hero, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .log-summary article, .log-entry, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
+const REVEAL_SELECTOR = ".hero, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .log-folder, .log-summary article, .log-entry, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
 function animateIn() {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = $$(REVEAL_SELECTOR);
@@ -557,7 +591,8 @@ function searchable() {
     ...data.research.map((r) => ({ title: r.title, meta: r.area, text: r.question, href: "research.html" })),
     ...getAlbums().flatMap((al) => al.pieces).map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: "art.html" })),
     ...data.posts.map((p) => ({ title: p.title, meta: p.category, text: p.excerpt, href: "writing.html" })),
-    ...(data.casparelLogs || []).map((entry) => ({ title: entry.title, meta: `Casparel / ${entry.date}`, text: entry.summary, href: "logs.html" })),
+    ...(data.logProjects || []).map((project) => ({ title: project.title, meta: project.type, text: project.description, href: project.href })),
+    ...(data.casparelLogs || []).map((entry) => ({ title: entry.title, meta: `Casparel / ${entry.date}`, text: entry.summary, href: "casparel-logs.html" })),
   ];
 }
 

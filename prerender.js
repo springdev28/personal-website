@@ -182,24 +182,52 @@ function renderWriting(data) {
 }
 
 function renderLogs(data) {
+  const folders = list(data.logProjects)
+    .map((project) => `<article>
+      <p>${esc(project.type)} &middot; ${esc(project.status)}</p>
+      <h2>${link(project.href, project.title)}</h2>
+      <p>${esc(project.description)}</p>
+      <p>${link(project.href, "Open folder")}</p>
+    </article>`)
+    .join("");
+
+  return `${heading("Project archive", "Logs, organized by project.", "Open a folder for its build history, source record, and project links. Casparel contains the full day-by-day journal from its first commit.")}
+    ${folders ? `<section><h2>Project folders</h2>${folders}</section>` : ""}`;
+}
+
+function casparelDayHistory(date) {
+  const start = new Date(`${date}T00:00:00+03:00`);
+  const end = new Date(start.getTime() + 86_400_000 - 1);
+  const params = new URLSearchParams({ since: start.toISOString(), until: end.toISOString() });
+  return `https://github.com/springdev28/casparel/commits/main/?${params}`;
+}
+
+function renderCasparelLogs(data) {
   const logs = list(data.casparelLogs);
+  const highlights = data.casparelHighlights || {};
   const commits = logs.reduce((sum, entry) => sum + Number(entry.commits || 0), 0);
   const activeDays = logs.filter((entry) => Number(entry.commits || 0) > 0).length;
   const entries = logs
     .map((entry, index) => {
       const count = Number(entry.commits || 0);
+      const work = list(highlights[entry.date])
+        .map(([sha, label]) => `<li>${link(`https://github.com/springdev28/casparel/commit/${sha}`, `${sha} — ${label}`)}</li>`)
+        .join("");
       return `<li>
         <article>
           <p>Day ${index + 1} &middot; <time datetime="${esc(entry.date)}">${esc(entry.date)}</time> &middot; ${count} ${count === 1 ? "commit" : "commits"}</p>
           <h2>${esc(entry.title)}</h2>
           <p>${esc(entry.summary)}</p>
+          ${work ? `<h3>Selected work</h3><ul>${work}</ul>` : ""}
           ${bullets(entry.tags)}
+          ${count > 0 ? `<p>${link(casparelDayHistory(entry.date), `View all ${count} ${count === 1 ? "commit" : "commits"} from this day`)}</p>` : ""}
         </article>
       </li>`;
     })
     .join("");
 
-  return `${heading("Build log", "Casparel, day by day.", "A chronological record from the first commit, reconstructed from the repository's Git history in Istanbul time.")}
+  return `<p>${link("logs.html", "Back to all project folders")}</p>
+    ${heading("Build log", "Casparel, day by day.", "Every calendar day from the first commit, with concrete work items and direct links to the repository history. Dates use Istanbul time.")}
     <p>${logs.length} calendar days &middot; ${commits} commits &middot; ${activeDays} active days &middot; ${logs.length - activeDays} quiet days</p>
     <p>${link("https://github.com/springdev28/casparel/commits/main", "View the source history")}</p>
     ${entries ? `<section><h2>Timeline</h2><ol>${entries}</ol></section>` : ""}`;
@@ -242,6 +270,7 @@ const PAGES = {
   art: renderArt,
   writing: renderWriting,
   logs: renderLogs,
+  "casparel-logs": renderCasparelLogs,
   about: renderAbout,
   contact: renderContact,
 };
@@ -254,7 +283,7 @@ const PAGES = {
 function renderShell(data, page) {
   const person = data.person || {};
   const nav = list(data.pages)
-    .map(([id, label, href]) => `<a class="${id === page ? "active" : ""}" href="${esc(href)}">${esc(label)}</a>`)
+    .map(([id, label, href]) => `<a class="${id === page || (id === "logs" && page.endsWith("-logs")) ? "active" : ""}" href="${esc(href)}">${esc(label)}</a>`)
     .join("");
   return `<a class="brand" href="index.html"><span>${esc(person.initials)}</span><b>${esc(person.name)}</b></a>
     <nav class="nav" aria-label="Portfolio navigation">${nav}</nav>`;
