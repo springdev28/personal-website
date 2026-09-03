@@ -79,7 +79,7 @@ function heading(kicker, title, intro) {
 // A link is external when it points somewhere off the site (http, mailto).
 function link(href, label) {
   const external = /^(https?:|mailto:)/i.test(href || "");
-  return `<a href="${esc(href)}"${external ? ' rel="noopener"' : ""}>${esc(label)}</a>`;
+  return `<a href="${esc(href)}"${external ? ' target="_blank" rel="noopener noreferrer"' : ""}>${esc(label)}</a>`;
 }
 
 /* ---------------------------------------------------------------- pages -- */
@@ -181,6 +181,30 @@ function renderWriting(data) {
   return `${heading("Writing", "An innovator's journal.", "")}${posts}`;
 }
 
+function renderLogs(data) {
+  const logs = list(data.casparelLogs);
+  const commits = logs.reduce((sum, entry) => sum + Number(entry.commits || 0), 0);
+  const activeDays = logs.filter((entry) => Number(entry.commits || 0) > 0).length;
+  const entries = logs
+    .map((entry, index) => {
+      const count = Number(entry.commits || 0);
+      return `<li>
+        <article>
+          <p>Day ${index + 1} &middot; <time datetime="${esc(entry.date)}">${esc(entry.date)}</time> &middot; ${count} ${count === 1 ? "commit" : "commits"}</p>
+          <h2>${esc(entry.title)}</h2>
+          <p>${esc(entry.summary)}</p>
+          ${bullets(entry.tags)}
+        </article>
+      </li>`;
+    })
+    .join("");
+
+  return `${heading("Build log", "Casparel, day by day.", "A chronological record from the first commit, reconstructed from the repository's Git history in Istanbul time.")}
+    <p>${logs.length} calendar days &middot; ${commits} commits &middot; ${activeDays} active days &middot; ${logs.length - activeDays} quiet days</p>
+    <p>${link("https://github.com/springdev28/casparel/commits/main", "View the source history")}</p>
+    ${entries ? `<section><h2>Timeline</h2><ol>${entries}</ol></section>` : ""}`;
+}
+
 function renderAbout(data) {
   const person = data.person || {};
   const skills = list(data.skillGroups)
@@ -217,6 +241,7 @@ const PAGES = {
   research: renderResearch,
   art: renderArt,
   writing: renderWriting,
+  logs: renderLogs,
   about: renderAbout,
   contact: renderContact,
 };

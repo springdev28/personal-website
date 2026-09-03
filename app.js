@@ -344,6 +344,44 @@ function renderWriting() {
     </section>`;
 }
 
+function logDate(date) {
+  return new Date(`${date}T12:00:00`).toLocaleDateString("en", { month: "long", day: "numeric", year: "numeric" });
+}
+
+function renderLogs() {
+  const logs = Array.isArray(data.casparelLogs) ? data.casparelLogs : [];
+  const commitTotal = logs.reduce((sum, entry) => sum + Number(entry.commits || 0), 0);
+  const activeDays = logs.filter((entry) => entry.commits > 0).length;
+  const quietDays = logs.length - activeDays;
+  const entries = logs
+    .map((entry, index) => {
+      const commits = Number(entry.commits || 0);
+      const count = commits === 0 ? "Quiet day" : `${commits} ${commits === 1 ? "commit" : "commits"}`;
+      return `<article class="log-entry${commits === 0 ? " quiet" : ""}">
+        <span class="log-marker" aria-hidden="true"></span>
+        <header><div><span>Day ${String(index + 1).padStart(2, "0")}</span><time datetime="${safe(entry.date)}">${logDate(entry.date)}</time></div><strong>${count}</strong></header>
+        <h2>${safe(entry.title)}</h2>
+        <p>${safe(entry.summary)}</p>
+        ${entry.tags?.length ? `<div class="log-tags">${tags(entry.tags)}</div>` : ""}
+      </article>`;
+    })
+    .join("");
+
+  root.innerHTML = `${hero(
+    "Build log",
+    "Casparel, day by day.",
+    "A chronological record from the first commit, reconstructed from the repository's Git history in Istanbul time.",
+    '<a class="button" href="https://github.com/springdev28/casparel/commits/main" target="_blank" rel="noopener noreferrer">Source history<span>↗</span></a>'
+  )}
+    <section class="log-summary" aria-label="Casparel log summary">
+      <article><strong>${logs.length}</strong><span>calendar days</span></article>
+      <article><strong>${commitTotal}</strong><span>commits recorded</span></article>
+      <article><strong>${activeDays}</strong><span>active days</span></article>
+      <article><strong>${quietDays}</strong><span>quiet days</span></article>
+    </section>
+    <section class="log-timeline" aria-label="Casparel development timeline">${entries}</section>`;
+}
+
 function renderAbout() {
   const story = (data.person.story || []).map((para) => `<p>${safe(para)}</p>`).join("");
   const skillGroups = (data.skillGroups || [])
@@ -376,7 +414,7 @@ function renderContact() {
 }
 
 function renderPage() {
-  ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, about: renderAbout, contact: renderContact }[page] || renderHome)();
+  ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, logs: renderLogs, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
   animateIn();
 }
@@ -384,7 +422,7 @@ function renderPage() {
 // Reveal elements as they scroll into view (staggered by position in their row/grid).
 // Note: elements centered via CSS transform (.intro-copy, .intro-portrait) are
 // excluded, a transform-based reveal would fight their positioning.
-const REVEAL_SELECTOR = ".hero, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
+const REVEAL_SELECTOR = ".hero, .section-block, .project-card, .research-card, .art-card, .album-card, .discipline-card, .post-card, .log-summary article, .log-entry, .story-card, .side-panel, .skill-group, .approach-item, .back-link";
 function animateIn() {
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const els = $$(REVEAL_SELECTOR);
@@ -519,6 +557,7 @@ function searchable() {
     ...data.research.map((r) => ({ title: r.title, meta: r.area, text: r.question, href: "research.html" })),
     ...getAlbums().flatMap((al) => al.pieces).map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: "art.html" })),
     ...data.posts.map((p) => ({ title: p.title, meta: p.category, text: p.excerpt, href: "writing.html" })),
+    ...(data.casparelLogs || []).map((entry) => ({ title: entry.title, meta: `Casparel / ${entry.date}`, text: entry.summary, href: "logs.html" })),
   ];
 }
 
