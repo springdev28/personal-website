@@ -2,7 +2,7 @@
 
 - Input: owner-supplied `Untitled_Artwork 34.png` (provided November 17, 2026).
 - First graphic version: `bahar-three-quarter.png`, 1254 × 1254 RGBA, transparent.
-- Active output: `bahar-three-quarter-clean.png`, 1254 × 1254 RGBA, transparent.
+- Active output: `bahar-three-quarter-ear-scaled.png`, 1254 × 1254 RGBA, transparent.
 - Method: built-in image generation tool, editing the supplied illustration.
 - Preserved: three-quarter angle, head-only framing, face proportions, short dark hair, cyan/purple lighting.
 - The earlier `portrait.png` is preserved in the project root.
@@ -12,9 +12,19 @@
 Use case: identity-preserve / style-transfer. EDIT TARGET: this exact attached three-quarter head portrait artwork, and no other character. Refine it for a bold punk-comic game-menu website inspired by Persona 5 graphic cutout art. Preserve this exact three-quarter angle facing RIGHT (both eyes visible, far eye smaller), exact facial proportions and recognizable likeness, gaze, understated expression, short black hair silhouette, little loose wavy strand at right, face/head-only framing with a small neck. No shoulders, no body. Keep the shape of her nose, eyes, brows, lips, jaw and hairline faithful to this image. Refine the artist's existing portrait, do not invent a prettier anime face. Convert the soft shading into deliberate angular flat-color shadow planes, crisp dark ink outlines around eyes/nose/lips, deep purple/near-black hair with carefully placed cyan and violet highlight shapes, natural muted peach skin. Strong graphic design detail, subtly rough ink edges and sparse halftone patches in shadows. The cyan light on the left cheek and purple light on the right cheek should become flat graphic color planes, with no glow. Keep it close to the supplied drawing, with much bolder ink and clearer cel-shaded structure. Remove the entire textured backdrop and replace it with actual transparency. Keep the entire hair and head silhouette in frame. No gradient, no background, no aura, no text, no logo, no signature, no white stroke outline.
 
 
+## Ear proportions — 2026-11-17
+
+Active file: `bahar-three-quarter-ear-scaled.png`. Mode: built-in image editing with transparent output. The visible ear is larger and taller, with its inner linework scaled to match. The upper bangs and cleared skin in front of the ear remain. The previous PNGs are retained.
+
+Final edit prompt:
+
+```text
+Use case: precise-object-edit. Edit this exact existing portfolio portrait. Make ONLY the visible ear on the viewer's LEFT larger and better proportioned to the face: about 25 percent larger overall, with more vertical height and a modestly wider outer rim. The current ear occupies approximately x340–438,y620–785 in the 1254x1254 image; aim for roughly x318–440,y600–810. Keep its attachment at the side of the head near the existing cyan cheek edge, widening primarily outward to the left, with the upper rim sitting naturally under the existing swept hair. Preserve the same rounded ear shape, angle, peach fill and black/plum inner-ear linework, scaled coherently with the ear. It must look naturally attached, not pasted on or exaggerated. Keep the clean peach skin bridge in front of the ear: DO NOT restore any sideburn, black triangular wedge, or hair growing out of the ear. Preserve ALL UPPER BANGS and the exposed peach openings through them exactly; the ear can tuck behind the fringe, but do not alter that fringe. Make only the minimal local adjustments to the adjacent hair/skin needed for the larger ear. Preserve every other feature exactly: facial likeness and proportions, eyebrows, eyes, nose, mouth, jaw, expression, head position, hair silhouette, cyan/violet streaks, cyan cheek plane, halftone dots, graphic color planes, texture and lighting. No extra details, earrings, outlines, strands, or style change. Same 1254x1254 canvas, framing and genuine transparent background.
+```
+
 ## Sideburn removal — 2026-11-17
 
-Active file: `bahar-three-quarter-clean.png`. Mode: built-in image editing with transparent output. The black triangular wedge between the visible ear and cyan cheek is removed. The upper bangs and the existing ear drawing remain. The previous refined PNG is retained, and the revised VFX skin contours follow the new boundary.
+Sideburn-removal output: `bahar-three-quarter-clean.png`. Mode: built-in image editing with transparent output. The black triangular wedge between the visible ear and cyan cheek is removed. The upper bangs and the existing ear drawing remain. The previous refined PNG is retained, and the revised VFX skin contours follow the new boundary.
 
 Final edit prompt:
 
@@ -24,7 +34,7 @@ Use case: precise-object-edit. Edit the supplied portrait with one VERY LOCAL co
 
 ## Graphic VFX outlines
 
-`shape-vfx.json` contains 35 outlines aligned to the active PNG. The 8 skin contours were retraced after the hair-gap, eyebrow, and sideburn cleanup; the remaining colored-shape contours retain their existing positions. `portrait.js` uses these as clips for brief, flat cyan/violet edge echoes and graphic cuts. The source image remains stationary and unchanged. Cursor-motion code, movement settings, underpainting, and the movement extraction utility have been removed.
+`shape-vfx.json` contains 33 outlines aligned to the active PNG. The 6 skin contours were retraced after the hair-gap, eyebrow, sideburn, and ear-size corrections; the remaining colored-shape contours retain their existing positions. `portrait.js` uses these as clips for brief, flat cyan/violet edge echoes and graphic cuts. The source image remains stationary and unchanged. Cursor-motion code, movement settings, underpainting, and the movement extraction utility have been removed.
 
 ## Hair and eyebrow contour cleanup — 2026-11-17
 
