@@ -37,8 +37,7 @@
       portrait.append(svg);
       const reduced = matchMedia("(prefers-reduced-motion: reduce)");
       let inView = true;
-      const sync = () => svg.classList.toggle("vfx-paused", !inView || document.hidden || reduced.matches || document.documentElement.classList.contains("motion-paused"));
-      document.addEventListener("portfolio-motion-change", sync);
+      const sync = () => svg.classList.toggle("vfx-paused", !inView || document.hidden || reduced.matches);
       document.addEventListener("visibilitychange", sync);
       reduced.addEventListener("change", sync);
       const observer = new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); });

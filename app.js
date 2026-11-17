@@ -25,7 +25,7 @@ function renderShell() {
     <a class="skip-link" href="#pageRoot">Skip to content</a>
     <a class="brand" href="index.html">${identitySymbol("white", "brand-mark")}<span>Bahar Yüksel</span></a>
     <nav class="nav" id="mainNav" aria-label="Portfolio navigation">${nav}</nav>
-    <div class="nav-tools"><button class="motion-toggle" type="button" aria-pressed="false" aria-label="Pause animations"><span aria-hidden="true">Ⅱ</span> Motion</button><button id="openSearch" class="search-btn" type="button" aria-label="Search portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button><button class="menu-toggle" type="button" aria-controls="mainNav" aria-expanded="false">Menu <span>＋</span></button></div>`;
+    <div class="nav-tools"><button id="openSearch" class="search-btn" type="button" aria-label="Search portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button><button class="menu-toggle" type="button" aria-controls="mainNav" aria-expanded="false">Menu <span>＋</span></button></div>`;
   const toggle = $(".menu-toggle");
   const closeMenu = () => { toggle.setAttribute("aria-expanded", "false"); $(".topbar").classList.remove("menu-open"); };
   toggle.addEventListener("click", () => {
@@ -34,23 +34,6 @@ function renderShell() {
     $(".topbar").classList.toggle("menu-open", open);
   });
   document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
-  const motion = $(".motion-toggle");
-  let paused = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  try { const setting = localStorage.getItem("portfolio-motion"); if (setting) paused = setting === "paused"; } catch {}
-  const setMotion = () => {
-    document.documentElement.classList.toggle("motion-paused", paused);
-    motion.setAttribute("aria-pressed", String(paused));
-    motion.setAttribute("aria-label", paused ? "Resume animations" : "Pause animations");
-    motion.innerHTML = `<span aria-hidden="true">${paused ? "▷" : "Ⅱ"}</span> Motion`;
-    if (paused) $$("[data-type-code]").forEach(el => { el.textContent = el.dataset.typeCode; });
-    document.dispatchEvent(new Event("portfolio-motion-change"));
-  };
-  setMotion();
-  motion.addEventListener("click", () => {
-    paused = !paused;
-    try { localStorage.setItem("portfolio-motion", paused ? "paused" : "on"); } catch {}
-    setMotion();
-  });
 }
 
 function codePanel(extraClass = "") {
@@ -161,15 +144,6 @@ function albumCard(album, index) {
   </article>`;
 }
 
-function workspaceMarkup(extraClass = "") {
-  return `<div class="sculpture-stage ${extraClass}" data-sculpture>
-    <div class="sculpture-fallback" aria-hidden="true"><span class="sculpture-fallback-mark"></span></div>
-    <canvas data-sculpture-canvas tabindex="0" role="img" aria-label="Interactive 3D creative workspace. Drag or use arrow keys to rotate."></canvas>
-    <div class="sculpture-toolbar"><div class="sculpture-models" role="group" aria-label="Creative workspace"><button type="button" data-sculpture-model="code" aria-pressed="true">Code</button><button type="button" data-sculpture-model="design" aria-pressed="false">Design</button><button type="button" data-sculpture-model="art" aria-pressed="false">Art</button></div><button type="button" data-sculpture-motion aria-pressed="false" aria-label="Pause workspace motion">Pause</button></div>
-    <p class="sr-only" data-sculpture-status aria-live="polite">Code scene selected.</p>
-  </div>`;
-}
-
 function renderHome() {
   const home = data.home || {};
   const menu = (id, label, href, className = "") => `<a href="${href}" class="launch-link ${className}" data-launch="${id}"><strong>${label}</strong><span aria-hidden="true">↗</span></a>`;
@@ -189,7 +163,7 @@ function renderHome() {
         ${menu("contact","Contact","contact.html")}
       </nav>
       ${codePanel("launch-code")}
-      <div class="launch-bottom"><a href="logs.html"><span class="status-dot"></span> Build logs <span>↗</span></a><button type="button" class="studio-trigger" data-open-workspace>3D studio <span>⤢</span></button><span class="launch-key-hint">↑ ↓ TO EXPLORE · ENTER TO OPEN</span></div>
+      <div class="launch-bottom"><a href="logs.html"><span class="status-dot"></span> Build logs <span>↗</span></a><span class="launch-key-hint">↑ ↓ TO EXPLORE · ENTER TO OPEN</span></div>
     </section>`;
   const menuLinks = $$("[data-launch]");
   let selected = 0;
@@ -206,16 +180,6 @@ function renderHome() {
     }
   });
   window.initPortraitVFX?.($(".launch-portrait"));
-}
-
-function openWorkspace() {
-  const dialog = $("#featureDialog");
-  dialog.classList.remove("art-dialog");
-  dialog.innerHTML = `<form method="dialog"><button aria-label="Close 3D studio">×</button></form><article class="workspace-modal"><p class="kicker">Playground</p><h2>3D studio</h2>${workspaceMarkup("workspace-expanded")}</article>`;
-  dialog.showModal();
-  const stage = dialog.querySelector("[data-sculpture]");
-  Promise.resolve(window.initSculpture?.(stage)).then(destroy => { if (!dialog.open) destroy?.(); });
-  dialog.addEventListener("close", () => stage.sculpture?.destroy(), { once: true });
 }
 
 function renderWork() {
@@ -338,7 +302,10 @@ function renderAbout() {
 function renderContact() {
   root.innerHTML = `${hero("", "Contact", safe(data.person.available))}
     <section class="contact-grid">
-      <article class="link-panel">${data.links.map((link) => `<a href="${link.href}" target="_blank" rel="noopener noreferrer"><strong>${link.label}<b aria-hidden="true">↗</b></strong></a>`).join("")}</article>
+      <article class="link-panel" aria-label="Contact details">${data.links.map((link) => {
+        const address = link.href.replace(/^(?:mailto:|https?:\/\/)/, "").replace(/^www\./, "").replace(/\/$/, "");
+        return `<a href="${safe(link.href)}" target="_blank" rel="noopener noreferrer"><span class="contact-logo" style="--contact-icon:url('${safe(link.icon)}')" aria-hidden="true"></span><span class="contact-detail"><strong>${safe(link.label)}</strong><span class="contact-address">${safe(address)}</span></span><b aria-hidden="true">↗</b></a>`;
+      }).join("")}</article>
       <form class="contact-form" id="contactForm"><div class="letter-address"><strong>${safe(data.person.name)}</strong><a href="mailto:${safe(data.person.email)}">${safe(data.person.email)}</a>${identitySymbol("ink", "letter-stamp")}</div><label><span>Email</span><input type="email" required placeholder="name@example.com" autocomplete="email"></label><label><span>Message</span><textarea required rows="7"></textarea></label><div class="letter-actions"><button class="button" type="submit">Email<span>↗</span></button></div></form>
     </section>`;
 }
@@ -387,7 +354,7 @@ const codeTimers = new Set();
 function bindMotion() {
   codeTimers.forEach(clearTimeout); codeTimers.clear();
   motionObserver?.disconnect();
-  const reduced = () => document.documentElement.classList.contains("motion-paused") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reduced = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
   const type = el => {
     if (el._typeTimer) { clearTimeout(el._typeTimer); codeTimers.delete(el._typeTimer); }
     const full = el.dataset.typeCode;
@@ -423,7 +390,6 @@ function renderFooter() {
 }
 
 function bindPage() {
-  $$("[data-open-workspace]").forEach(button => button.addEventListener("click", openWorkspace));
   const featureDialog = $("#featureDialog");
   featureDialog.onkeydown = (event) => {
     const viewer = featureDialog.querySelector("[data-art-album][data-art-piece]");

@@ -12,4 +12,4 @@ The SVG files are unmodified. Intrinsic dimensions: 283.162 × 245.226. Each is 
 
 Identity colors: paper #F4F3ED, white #FFFFFF, ink #171915, iris #433AF2, muted #75776E. Typography: Space Grotesk and Manrope.
 
-The root `favicon.svg` reuses the three original path geometries with a cyan fill (#51e4db), the original master offset, and proportional padding on a dark-purple (#160d23) square. `favicon.png`, `favicon.ico`, and `apple-touch-icon.png` are raster exports of that logo for browser and search compatibility.
+The browser favicon remains the original iris SVG. The root `favicon.svg` reuses its three original path geometries in iris (#433AF2), centered without distortion in a transparent square. `favicon.png` and `favicon.ico` are raster exports for search and fallback support; `apple-touch-icon.png` uses the same purple logo on paper (#F4F3ED).

@@ -245,13 +245,12 @@ function renderAbout(data) {
 
 function renderContact(data) {
   const person = data.person || {};
-  const links = list(data.links)
-    .map((l) => `<li>${link(l.href, l.label)}</li>`)
-    .join("");
-
+  const links = list(data.links).map((item) => {
+    const address = item.href.replace(/^(?:mailto:|https?:\/\/)/, "").replace(/^www\./, "").replace(/\/$/, "");
+    return `<a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer"><span class="contact-logo" style="--contact-icon:url('${esc(item.icon)}')" aria-hidden="true"></span><span class="contact-detail"><strong>${esc(item.label)}</strong><span class="contact-address">${esc(address)}</span></span><b aria-hidden="true">↗</b></a>`;
+  }).join("");
   return `${heading("", "Contact", person.available)}
-    ${person.email ? `<p>${link("mailto:" + person.email, person.email)}</p>` : ""}
-    ${links ? `<ul>${links}</ul>` : ""}`;
+    <article class="link-panel" aria-label="Contact details">${links}</article>`;
 }
 
 const PAGES = {

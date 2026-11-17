@@ -13,8 +13,8 @@ All content lives in one file: **`content.js`**. Everything below is a reference
 | `content.js` | All text and content (the only file most edits touch) | Often |
 | `styles.css` | Colors, spacing, fonts | Occasionally, for design tweaks |
 | `app.js` | Rendering and behavior | Rarely |
-| `sculpture.js` | Interactive 3D studio models and motion controls | Rarely |
-| `vendor/three*.js` + `vendor/THREE-LICENSE.txt` | Local Three.js 0.180.0 runtime and MIT license | Only when upgrading the 3D renderer |
+| `sculpture.js` | Archived scene code; not loaded by the website | Rarely |
+| `vendor/three*.js` + `vendor/THREE-LICENSE.txt` | Archived Three.js runtime and MIT license; not loaded | Rarely |
 | `assets/identity/` | Original ink, iris, and white asterisk SVGs exported from Figma | When updating the personal identity |
 | `assets/graphics/` | MIT-licensed Iconoir SVG linework retained for interface fallbacks | Rarely |
 | `assets/editorial/` | Retained Pexels photographs from an abandoned direction; no longer rendered | Rarely |
@@ -49,14 +49,12 @@ The homepage is a full-screen illustrated menu inspired by [Rayyan Burondkar's p
 
 - `home.intro` sets the short introduction beside the portrait. The name comes from `person.name`.
 - `home.eyebrow`, `home.headline`, `home.note`, and `home.desk` remain as legacy content fields; the illustrated menu does not render them.
-- The six main links open Work, Art, Research, About, Writing, and Contact. Build logs and the 3D studio sit along the bottom.
+- The six main links open Work, Art, Research, About, Writing, and Contact. Build logs sit along the bottom.
 - Hover or focus highlights a menu item; Up/Down changes the focused item, and Enter opens it. Ordinary links and Tab navigation also work.
 - The top-bar Menu exposes all pages. Search is available from the magnifying glass or Cmd/Ctrl+K.
 - On phones the portrait, menu links, and bottom controls flow vertically, without dragging or a canvas requirement.
 
 The interior pages use the same condensed headings, solid color plates, and sharply edged cards. Art opens closed collection folders, then local artwork in the on-site viewer. Work keeps its category filters and project details; Writing opens full articles; Logs retain their commit links; Contact opens an addressed email draft.
-
-The **3D studio** opens the existing interactive Code, Design, and Art scenes in a dialog. Drag or use the arrow keys on the focused canvas to rotate; its own motion control or Space pauses automatic rotation. The top-bar Motion control also pauses the scene. Models use local Three.js modules and original artwork. The renderer pauses offscreen and when the tab is hidden, respects reduced motion, and releases its resources when closed. If WebGL is unavailable, a local vector fallback remains visible.
 
 ### `person`
 
@@ -183,9 +181,9 @@ and right arrow keys also move between works. Figma is not used as the visitor-f
 
 ## Page motion
 
-Home and Work type the `bahar.js` snippet when its panel enters the viewport; the replay button runs it again. Writing reveals the handwritten phrase and draws its underline. Menu selection, card movement, portrait entrance, and scroll reveals use short transitions.
+Home and Work type the `bahar.js` snippet when its panel enters the viewport; the replay button runs it again. Writing reveals the handwritten phrase and draws its underline. Menu selection, card movement, and scroll reveals use short transitions.
 
-The **Motion** button in the header pauses animations and the 3D studio, reveals complete text, and stores the preference in localStorage. System `prefers-reduced-motion` also provides complete static content. Typing stops while the tab is hidden. Decorative animation is hidden from screen readers; content and navigation do not depend on animation.
+System `prefers-reduced-motion` provides complete static content. There is no global play/pause control; the former saved toggle preference is no longer read. Typing stops while the tab is hidden. Decorative animation is hidden from screen readers; content and navigation do not depend on animation.
 
 ### `posts`
 
@@ -224,11 +222,13 @@ approach:    [ { title: "...", text: "..." }, ... ]
 
 ### `links`
 
-The Contact page and footer links (GitHub / LinkedIn are detected by their label).
+Personal contact channels only: Email, Website, LinkedIn, GitHub, Twitter/X, Reddit, and YouTube. The footer detects GitHub and LinkedIn by their labels. Project websites belong in `projects`, not in this list.
 
 ```js
-links: [ { label: "GitHub", href: "https://...", note: "Short note" }, ... ]
+links: [ { label: "GitHub", href: "https://github.com/username", icon: "assets/social/github.svg", note: "Short note" }, ... ]
 ```
+
+Each contact shows its logo, label, and address. The visible address comes from `href`, omitting only the protocol, leading `www.`, and trailing slash; the same information is prerendered for crawlers. `icon` is a local SVG path. Platform marks are original Font Awesome SVGs, with sources and licenses in `assets/social/`. The Website row uses the personal identity logo.
 
 ---
 
@@ -325,12 +325,12 @@ for that:
 
 | File | What it does |
 | --- | --- |
-| `favicon.svg` | Favicon master using the original identity paths, cyan on the site’s dark purple. |
+| `favicon.svg` | Favicon master using the original identity paths, iris purple on transparency. |
 | `favicon.png` / `favicon.ico` / `apple-touch-icon.png` | Logo exports for search results and browser tabs (192×192 PNG and multi-size ICO), and phone home screens (180×180 PNG). |
 | `og-card.png` | The preview image shown when the site is shared on LinkedIn, Messages, etc. (1200×630). Replace the file to change it. |
 | `sitemap.xml` / `robots.txt` | Help search engines find every page. |
 
-All nine page heads point to the PNG logo favicon and the Apple touch icon. The root `/favicon.ico` also serves the logo for browsers that discover it automatically. Regenerate these exports from `favicon.svg` when the logo changes, and update both icon cache versions in every HTML shell. Keep icon URLs stable between logo changes; Google Search refreshes its cached favicon after recrawling.
+All nine page heads retain the original iris SVG for browser tabs and provide a square PNG of the same purple logo for search engines, plus the Apple touch icon. The root `/favicon.ico` also serves the logo for browsers that discover it automatically. Regenerate these exports from `favicon.svg` when the logo changes, and update both icon cache versions in every HTML shell. Keep icon URLs stable between logo changes; Google Search refreshes its cached favicon after recrawling.
 
 Each `.html` file also has social/SEO tags in its `<head>` (title, description,
 and `og:`/`twitter:` tags) pointing at `https://baharyuksel.dev`.
@@ -448,7 +448,7 @@ A blank page after an edit almost always means a missing comma, quote, or bracke
 
 ### Visual system and page layouts
 
-The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the favicon uses those same paths in cyan on dark purple. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
+The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the browser favicon is the original iris SVG, and raster search icons use the same purple logo. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
 
 - **Home:** an illustrated menu. All six panels share the same angle in every state. Hover, focus, and arrow keys select links. The small terminal types its code and has a replay button.
 - **Work:** three project panels, category filters, and a details reader. An empty `href` removes the external launch link.
@@ -457,20 +457,18 @@ The header, homepage accents, and Art title plate use the original six-arm ident
 - **Writing:** article cards, a handwriting reveal, and a full-text reader.
 - **Logs:** project history panels and the existing Casparel timeline with source links.
 - **About:** portrait, biography, current work, toolkit, and principles.
-- **Contact:** social links and an addressed email form. Both fields are required; submission opens an email draft without sending it.
+- **Contact:** personal addresses with platform logos and an addressed email form. Both fields are required; submission opens an email draft without sending it.
 
 Decorative sequence numbers are omitted from navigation, page titles, writing cards, log panels, and artwork tabs. Actual dates, work counts, and the viewer’s current position remain.
 
-The header’s Motion control pauses the portrait VFX, code, writing, and 3D animations.
-
-The home portrait remains stationary. Brief cyan/violet edge echoes and narrow graphic cuts appear over the original colored shapes. These are opacity-only VFX: there is no cursor tracking, parallax, shape movement, shine, glow, or light sweep. Effects respect reduced-motion preferences and pause offscreen, in hidden tabs, or when the header’s Motion control is paused.
+The home portrait remains stationary. Brief cyan/violet edge echoes and narrow graphic cuts appear over the original colored shapes. These are opacity-only VFX: there is no cursor tracking, parallax, shape movement, shine, glow, or light sweep. Effects respect reduced-motion preferences and pause offscreen or in hidden tabs.
 
 `portrait.js` builds the overlays from the traced outlines in `assets/portrait/shape-vfx.json`. The original PNG is always visible beneath them. If replacing the portrait with a different image path, the old effects are automatically skipped. Timing and opacity are set by `portrait-print-glitch` in `styles.css`; the JSON contains outlines only, with no movement settings. Bump the JSON version in `portrait.js` when changing outlines, and refresh the HTML cache stamps after script or style changes.
 
 The mobile menu opens from the header on every page. The homepage stacks its introduction, portrait, and two groups of links; interior grids reduce their columns. Dialogs retain visible close controls and keyboard support.
 
-Click an artwork image to open the full-screen zoom viewer. Its close, zoom, and reset controls stay above the image; Escape closes it. Artwork without an image receives a title cover, and project covers without logos use the project's initial. The 3D studio is optional; it has a local SVG fallback.
+Click an artwork image to open the full-screen zoom viewer. Its close, zoom, and reset controls stay above the image; Escape closes it. Artwork without an image receives a title cover, and project covers without logos use the project's initial.
 
 ### Validation after visual changes
 
-Run `node --check content.js`, `node --check app.js`, `node --check sculpture.js`, `node --check portrait.js`, and `node --check prerender.js`. Verify the desktop and phone layouts, open a folder and artwork, use Left/Right in the viewer, test project filters and search, and confirm the mobile Menu works on an interior page. Bump the cache stamp in all nine HTML shells.
+Run `node --check content.js`, `node --check app.js`, `node --check portrait.js`, and `node --check prerender.js`. Verify the desktop and phone layouts, open a folder and artwork, use Left/Right in the viewer, test project filters and search, and confirm the mobile Menu works on an interior page. Bump the cache stamp in all nine HTML shells.
