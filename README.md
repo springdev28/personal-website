@@ -325,9 +325,12 @@ for that:
 
 | File | What it does |
 | --- | --- |
-| `favicon.png` / `apple-touch-icon.png` | The little icon in the browser tab and on phone home screens. Replace the files (keep the names) to change it. |
+| `favicon.svg` | Favicon master using the original identity paths, cyan on the site’s dark purple. |
+| `favicon.png` / `favicon.ico` / `apple-touch-icon.png` | Logo exports for search results and browser tabs (192×192 PNG and multi-size ICO), and phone home screens (180×180 PNG). |
 | `og-card.png` | The preview image shown when the site is shared on LinkedIn, Messages, etc. (1200×630). Replace the file to change it. |
 | `sitemap.xml` / `robots.txt` | Help search engines find every page. |
+
+All nine page heads point to the PNG logo favicon and the Apple touch icon. The root `/favicon.ico` also serves the logo for browsers that discover it automatically. Regenerate these exports from `favicon.svg` when the logo changes, and update both icon cache versions in every HTML shell. Keep icon URLs stable between logo changes; Google Search refreshes its cached favicon after recrawling.
 
 Each `.html` file also has social/SEO tags in its `<head>` (title, description,
 and `og:`/`twitter:` tags) pointing at `https://baharyuksel.dev`.
@@ -445,7 +448,7 @@ A blank page after an edit almost always means a missing comma, quote, or bracke
 
 ### Visual system and page layouts
 
-The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the iris version remains the favicon. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
+The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the favicon uses those same paths in cyan on dark purple. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
 
 - **Home:** an illustrated menu. All six panels share the same angle in every state. Hover, focus, and arrow keys select links. The small terminal types its code and has a replay button.
 - **Work:** three project panels, category filters, and a details reader. An empty `href` removes the external launch link.
