@@ -1,4 +1,14 @@
 window.portfolio = {
+  home: {
+    desk: {
+      label: "An ordinary day at my desk",
+      note: "Pick something up. There's a project behind almost everything.",
+    },
+    eyebrow: "Code, design & a curious mind",
+    headline: ["Curiosity,", "made", "tangible."],
+    intro: "I'm Bahar, a student in Istanbul making software, identities, and art.",
+    note: "A small corner of the internet for ideas, experiments, and happy accidents.",
+  },
   person: {
     name: "Bahar Yüksel",
     initials: "BY",
@@ -26,7 +36,7 @@ window.portfolio = {
     ["work", "Work", "work.html"],
     ["research", "Research", "research.html"],
     ["art", "Art", "art.html"],
-    ["writing", "Blog", "writing.html"],
+    ["writing", "Writing", "writing.html"],
     ["logs", "Logs", "logs.html"],
     ["about", "About", "about.html"],
     ["contact", "Contact", "contact.html"],
@@ -63,8 +73,8 @@ window.portfolio = {
   // styled frame; set src to a photo file (a cut-out / transparent-background
   // photo looks best) to show your picture instead.
   focusPhoto: {
-    src: "portrait.png?v=5",
-    alt: "Bahar Yüksel",
+    src: "assets/portrait/bahar-three-quarter.png",
+    alt: "Three-quarter illustrated portrait of Bahar Yüksel",
   },
   research: [
     {
@@ -118,7 +128,7 @@ window.portfolio = {
       type: "Academic intelligence agent",
       category: "AI",
       year: "2026",
-      href: "../iter-agent/public/index.html",
+      href: "https://greenyellow-eagle-758815.hostingersite.com/",
       color: "#966dff",
       summary: "An academic intelligence prototype for route planning, review, evidence, and memory.",
       why: "Planning your studies usually lives in your head or a messy note. I wanted to make it visible and inspectable.",
@@ -134,7 +144,7 @@ window.portfolio = {
       type: "Mobile prototype",
       category: "Mobile",
       year: "2026",
-      href: "../web/index.html",
+      href: "",
       color: "#64a8ff",
       summary: "Technovation Girls 2026 Quarterfinalist. A Flutter prototype connecting student needs, donors, activities, and matching.",
       why: "A lot of students and institutions need support that never reaches them. This explores how to match needs with people who can help.",
@@ -599,7 +609,106 @@ window.portfolio = {
   // description, and a list of pieces. Add an album by copying one block.
   artAlbums: [
     {
+      name: "2026–27 Visual Design",
+      folderCover: "design",
+      description: "Recent posters, identities, and visual experiments, from club culture to new technology.",
+      pieces: [
+        {
+          title: "Graphic Novel Club",
+          medium: "Illustrated poster",
+          year: "2026–27",
+          palette: ["#eeb63d", "#172448", "#f4e9c7"],
+          text: "I brought comic-book panels, speech bubbles, and a flying feline character together for the Graphic Novel Club's 2026–27 poster.",
+          tags: ["Illustration", "Poster", "Figma"],
+          image: "assets/works/graphic-novel.webp",
+          imageBg: "#eee9df",
+          imageScale: "90%",
+          featured: true,
+          href: "https://www.figma.com/design/oOWEZ58uePcpBmBQNoJhVQ/2026-27-Graphic-Novel-Poster?node-id=0-1",
+        },
+        {
+          title: "EOAI Lab",
+          medium: "Logo & banner design",
+          year: "2026",
+          palette: ["#2e7bff", "#070d25", "#c5e3ff"],
+          text: "I designed an orbital blue identity for EOAI Lab, pairing a geometric mark with a wordmark and a banner for the lab's online presence.",
+          tags: ["Identity", "Logo", "Banner", "Figma"],
+          images: ["assets/works/eoai-wordmark.webp", "assets/works/eoai-logo.webp", "assets/works/eoai-banner.webp"],
+          imageBg: "#070d25",
+          imageScale: "90%",
+          featured: true,
+          href: "https://www.figma.com/design/paII6KJ2vew000aw9lzYaB/EOAI-Lab-Logo-and-Banner-Design?node-id=48-230",
+        },
+        {
+          title: "CIP",
+          medium: "Logo design",
+          year: "2026",
+          palette: ["#ff007d", "#ff8a00", "#00aff0"],
+          text: "I built the CIP mark around a tree of colorful handprints, with the trunk becoming the central letter of the identity.",
+          tags: ["Identity", "Logo", "Figma"],
+          image: "assets/works/cip-logo.webp",
+          imageBg: "#f3eee5",
+          imageScale: "76%",
+          featured: true,
+          href: "https://www.figma.com/design/wA52oUOYXG5rizGvgGS1U3/CIP-Logo?node-id=0-1",
+        },
+        {
+          title: "RC-Ponics",
+          medium: "Poster design",
+          year: "2026–27",
+          palette: ["#380568", "#a8cc18", "#00b5d8"],
+          text: "I used rows of illustrated plants and a winding hydroponic pipe to frame this poster for RC-Ponics and its sustainable farming activities.",
+          tags: ["Poster", "Sustainability", "Figma"],
+          image: "assets/works/rc-ponics.webp",
+          imageBg: "#e8e2f2",
+          imageScale: "90%",
+          featured: true,
+          href: "https://www.figma.com/design/XEtLDxgLSJ3O62GQnFBYSM/2026-27-RC-Ponics-Poster?node-id=0-1",
+        },
+        {
+          title: "RC Wear",
+          medium: "Illustrated poster",
+          year: "2026–27",
+          palette: ["#d7920a", "#1e65d5", "#4b130f"],
+          text: "I paired an expressive spotted character with oversized lettering for RC Wear, a poster about making wearable art together.",
+          tags: ["Illustration", "Poster", "Figma"],
+          image: "assets/works/rc-wear.webp",
+          imageBg: "#eadac2",
+          imageScale: "90%",
+          featured: true,
+          href: "https://www.figma.com/design/JCq0rtkjh4pKZs0wDWDjB4/2026-27-RC-Wear-Poster?node-id=0-1",
+        },
+        {
+          title: "Social Entrepreneurship Club",
+          medium: "Poster design",
+          year: "2026–27",
+          palette: ["#112641", "#1bb0a3", "#ff9948"],
+          text: "I combined a hummingbird illustration, feather motifs, and club photographs around the idea of growing ideas and taking flight.",
+          tags: ["Poster", "Illustration", "Figma"],
+          image: "assets/works/sec.webp",
+          imageBg: "#dce9e5",
+          imageScale: "90%",
+          featured: true,
+          href: "https://www.figma.com/design/Uv8UtwJnKEmq3owNbDLpf6/2026-27-SEC-Poster?node-id=0-1",
+        },
+        {
+          title: "Facimus Infinitum",
+          medium: "Visual identity",
+          year: "2026",
+          palette: ["#030b16", "#2a76ad", "#b9ffff"],
+          text: "I combined a rocket and an infinity symbol into a single mark, then placed it against an Earth-and-stars composition for Facimus Infinitum.",
+          tags: ["Identity", "Logo", "Figma"],
+          images: ["assets/works/facimus.webp", "assets/works/facimus-logo.webp"],
+          imageBg: "#0a1422",
+          imageScale: "90%",
+          featured: true,
+          href: "https://www.figma.com/design/dnJo2xOewn5leTGcxb5zz1/Facimus-Infinitum?node-id=0-1",
+        },
+      ],
+    },
+    {
       name: "RC Makers MateROV Team",
+      folderCover: "robotics",
       description: "Designs made for Robert College's robotics team.",
       pieces: [
         {
@@ -672,6 +781,7 @@ window.portfolio = {
     },
     {
       name: "Graphic Novels",
+      folderCover: "comics",
       description: "Short comics based on various stories.",
       pieces: [
         {
@@ -696,6 +806,7 @@ window.portfolio = {
     },
     {
       name: "Magazine Illustrations",
+      folderCover: "editorial",
       description: "Illustrations of stories and poems for various school magazines.",
       pieces: [
         {
@@ -720,6 +831,7 @@ window.portfolio = {
     },
     {
       name: "Character Concept Art",
+      folderCover: "characters",
       description: "Some characters I designed to be used later in stories and games.",
       pieces: [
         {
@@ -735,6 +847,7 @@ window.portfolio = {
     },
     {
       name: "Other Artwork",
+      folderCover: "misc",
       description: "Works mainly related to school clubs and organizations.",
       pieces: [
         {

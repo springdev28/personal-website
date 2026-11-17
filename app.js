@@ -8,20 +8,66 @@ function safe(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[char]);
 }
 
+function identitySymbol(tone = "ink", extraClass = "") {
+  return `<span class="identity-symbol identity-${tone} ${extraClass}" aria-hidden="true"><span class="identity-shape"></span></span>`;
+}
+
 function tags(items) {
   return items.map((item) => `<span class="tag">${safe(item)}</span>`).join("");
 }
 
 function renderShell() {
-  const nav = data.pages.map(([id, label, href]) => `<a class="${id === page || (id === "logs" && page.endsWith("-logs")) ? "active" : ""}" href="${href}">${label}</a>`).join("");
+  const nav = data.pages.map(([id, label, href]) => {
+    const active = id === page || (id === "logs" && page.endsWith("-logs"));
+    return `<a class="${active ? "active" : ""}" ${active ? 'aria-current="page"' : ""} href="${href}">${label}</a>`;
+  }).join("");
   document.querySelector("[data-shell]").innerHTML = `
-    <a class="brand" href="index.html"><span>${data.person.initials}</span><b>${data.person.name}</b></a>
-    <nav class="nav" aria-label="Portfolio navigation">${nav}</nav>
-    <button id="openSearch" class="search-btn" type="button" aria-label="Search portfolio">Search</button>`;
+    <a class="skip-link" href="#pageRoot">Skip to content</a>
+    <a class="brand" href="index.html">${identitySymbol("white", "brand-mark")}<span>Bahar Yüksel</span></a>
+    <nav class="nav" id="mainNav" aria-label="Portfolio navigation">${nav}</nav>
+    <div class="nav-tools"><button class="motion-toggle" type="button" aria-pressed="false" aria-label="Pause animations"><span aria-hidden="true">Ⅱ</span> Motion</button><button id="openSearch" class="search-btn" type="button" aria-label="Search portfolio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button><button class="menu-toggle" type="button" aria-controls="mainNav" aria-expanded="false">Menu <span>＋</span></button></div>`;
+  const toggle = $(".menu-toggle");
+  const closeMenu = () => { toggle.setAttribute("aria-expanded", "false"); $(".topbar").classList.remove("menu-open"); };
+  toggle.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") !== "true";
+    toggle.setAttribute("aria-expanded", String(open));
+    $(".topbar").classList.toggle("menu-open", open);
+  });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeMenu(); });
+  const motion = $(".motion-toggle");
+  let paused = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  try { const setting = localStorage.getItem("portfolio-motion"); if (setting) paused = setting === "paused"; } catch {}
+  const setMotion = () => {
+    document.documentElement.classList.toggle("motion-paused", paused);
+    motion.setAttribute("aria-pressed", String(paused));
+    motion.setAttribute("aria-label", paused ? "Resume animations" : "Pause animations");
+    motion.innerHTML = `<span aria-hidden="true">${paused ? "▷" : "Ⅱ"}</span> Motion`;
+    if (paused) $$("[data-type-code]").forEach(el => { el.textContent = el.dataset.typeCode; });
+    document.dispatchEvent(new Event("portfolio-motion-change"));
+  };
+  setMotion();
+  motion.addEventListener("click", () => {
+    paused = !paused;
+    try { localStorage.setItem("portfolio-motion", paused ? "paused" : "on"); } catch {}
+    setMotion();
+  });
+}
+
+function codePanel(extraClass = "") {
+  const code = 'const bahar = {\n  code: "build",\n  design: "explore",\n  art: "express"\n};';
+  return `<div class="code-panel ${extraClass}"><div class="code-panel-bar"><span>bahar.js</span><button type="button" data-replay-code aria-label="Replay code animation">↻</button></div><pre aria-hidden="true"><code data-type-code="${safe(code)}">${safe(code)}</code><span class="code-caret"></span></pre><span class="sr-only">Code, design, and art.</span></div>`;
+}
+
+function pageMotion(scene = page) {
+  if (scene === "work") return codePanel("hero-code");
+  if (scene === "writing") return `<div class="writing-motion" aria-hidden="true"><span>one more idea.</span><svg viewBox="0 0 320 35"><path d="M8 24C83 2 200 3 306 18M185 26l116-2"/></svg><i>✎</i></div>`;
+  if (scene === "about") return "";
+  const symbol = ({research:"?",logs:"↗","casparel-logs":"↗",contact:"↗"})[scene];
+  return `<div class="hero-emblem emblem-${safe(scene)}" aria-hidden="true">${symbol ? `${identitySymbol("white", "hero-watermark")}<span class="hero-symbol">${symbol}</span>` : identitySymbol("cyan", "hero-identity")}</div>`;
 }
 
 function hero(kicker, title, body = "", action = "") {
-  return `<header class="hero"><div><p class="kicker">${kicker}</p><h1>${title}</h1>${body ? `<p>${body}</p>` : ""}</div>${action}</header>`;
+  return `<header class="hero${action ? " has-action" : ""}"><div class="hero-copy"><a class="page-trail" href="index.html"><span>↖</span> Menu</a><div class="hero-heading"><h1>${title}</h1></div>${body ? `<p class="hero-description">${body}</p>` : ""}</div>${action ? `<aside class="hero-aside">${action}</aside>` : pageMotion()}</header>`;
 }
 
 function button(label, href) {
@@ -32,26 +78,26 @@ function projectCard(project, index) {
   const m = mediaAttrs(project);
   const art = project.image
     ? `<div class="project-art has-media${m.cls}"${m.style}><img src="${project.image}" alt="${safe(project.title)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
-    : `<div class="project-art"><span></span><i></i></div>`;
-  return `<article class="project-card interactive-card" data-index="${index}" data-category="${project.category}" style="--accent:${project.color}">
-    ${art}
+    : `<div class="project-art project-initial" aria-hidden="true">${safe(project.title.slice(0, 1))}</div>`;
+  return `<article class="project-card" data-index="${index}" data-category="${project.category}">
+    <div class="project-cover">${art}<span class="project-cover-title">${safe(project.title)}</span></div>
     <div class="project-copy">
-      <small>${project.type} / ${project.year}</small>
+      <small>${project.type} · ${project.year}</small>
       <h2>${project.title}</h2>
       <p>${project.summary}</p>
       <div>${tags(project.tags)}</div>
-      <footer><button type="button" data-open-project="${index}">Details</button><a href="${project.href}">Open</a></footer>
+      <footer><button type="button" data-open-project="${index}">Details <span>↗</span></button>${project.href ? `<a href="${safe(project.href)}" target="_blank" rel="noopener noreferrer">Visit ↗</a>` : ""}</footer>
     </div>
   </article>`;
 }
 
-function researchCard(item) {
-  return `<article class="research-card interactive-card" style="--accent:${item.color}">
-    <small>${item.area} / ${item.year}</small>
+function researchCard(item, index) {
+  return `<article class="research-card">
+    <div class="research-note-top"><span>${safe(item.area)}</span><small>${item.year}</small></div>
     <h2>${item.title}</h2>
-    <p>${item.question}</p>
+    <p class="research-question">${item.question}</p>
     <div>${tags(item.notes)}</div>
-    <footer>${item.status}</footer>
+    <footer><strong>${item.status}</strong></footer>
   </article>`;
 }
 
@@ -86,235 +132,101 @@ function canvasArt(item, extraClass = "") {
   const m = mediaAttrs(item);
   return cover
     ? `<div class="canvas-art has-media ${extraClass}${m.cls}"${m.style}><img src="${cover}" alt="${safe(item.title || "")}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"></div>`
-    : `<div class="canvas-art ${extraClass}"><i></i><b></b><span></span></div>`;
+    : `<div class="canvas-art type-cover ${extraClass}"><strong>${safe(item.title || "Untitled")}</strong><small>${safe(item.medium || "")}</small></div>`;
 }
 
 function artCard(item, pieceIndex, albumIndex) {
-  return `<button class="art-card interactive-card" data-album="${albumIndex}" data-piece="${pieceIndex}" style="--a:${item.palette[0]};--b:${item.palette[1]};--c:${item.palette[2]}">
+  return `<button type="button" class="art-card interactive-card" data-album="${albumIndex}" data-piece="${pieceIndex}" style="--a:${item.palette[0]};--b:${item.palette[1]};--c:${item.palette[2]}">
     ${canvasArt(item)}
     <strong>${safe(item.title)}</strong>
     <p>${safe(item.medium)} / ${safe(item.year)}</p>
   </button>`;
 }
 
+function folderCover(title, count, href, cover = "design", extraClass = "") {
+  const coverImages = { design: "assets/works/graphic-novel.webp", robotics: "Carcharodon-cutout.png", comics: "Sayfa_1.png", editorial: "MS1.png", characters: "Nihilunus.png", misc: "Macbeth 3.png" };
+  const shortNames = { design: "VISUAL\nDESIGN", robotics: "RC\nMAKERS", comics: "GRAPHIC\nNOVELS", editorial: "EDITORIAL", characters: "CHARACTER\nART", misc: "OTHER\nWORLDS" };
+  return `<a class="graphic-folder folder-${safe(cover)} ${extraClass}" href="${safe(href)}" aria-label="Open ${safe(title)} folder">
+    <span class="folder-tab" aria-hidden="true">${count} WORKS</span>
+    <span class="folder-front"><span class="folder-edge" aria-hidden="true"></span>
+      <span class="folder-cover-art" aria-hidden="true">${coverImages[cover] ? `<img src="${coverImages[cover]}" alt="" loading="lazy">` : ""}</span>
+      <span class="folder-cover-type" aria-hidden="true">${safe(shortNames[cover] || title).replace(/\n/g,"<br>")}</span>
+      <span class="folder-label"><strong>${safe(title)}</strong><b aria-hidden="true">↗</b></span>
+    </span></a>`;
+}
+
 function albumCard(album, index) {
-  const first = album.pieces[0] || {};
-  const cover = first.palette || ["#4de2d0", "#17204a", "#966dff"];
-  const count = album.pieces.length;
-  const coverImg = firstImage(first);
-  const m = mediaAttrs(first);
-  const coverArt = coverImg
-    ? `<div class="canvas-art album-cover has-media${m.cls}"${m.style}><img src="${coverImg}" alt="${safe(album.name)}" loading="lazy" onerror="this.parentElement.classList.add('img-failed');this.remove()"><em>${count} piece${count === 1 ? "" : "s"}</em></div>`
-    : `<div class="canvas-art album-cover"><i></i><b></b><span></span><em>${count} piece${count === 1 ? "" : "s"}</em></div>`;
-  return `<a class="album-card interactive-card" href="#a=${index}" style="--a:${cover[0]};--b:${cover[1]};--c:${cover[2]}">
-    ${coverArt}
-    <strong>${safe(album.name)}</strong>
-    <p>${album.description ? safe(album.description) : "&nbsp;"}</p>
-  </a>`;
+  return `<article class="album-folder-card">
+    ${folderCover(album.name, album.pieces.length, `#a=${index}`, album.folderCover)}
+  </article>`;
 }
 
-const SOCIAL_ICONS = {
-  email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>',
-  github: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.85 9.73.5.1.68-.22.68-.49l-.01-1.9c-2.79.62-3.38-1.22-3.38-1.22-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05a9.34 9.34 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z"/></svg>',
-  linkedin: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.1c0-1.22-.02-2.8-1.9-2.8-1.9 0-2.2 1.35-2.2 2.7V21H9z"/></svg>',
-  link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>',
-};
-
-function socialIcon(label) {
-  const key = String(label).toLowerCase();
-  if (key.includes("mail")) return SOCIAL_ICONS.email;
-  if (key.includes("github")) return SOCIAL_ICONS.github;
-  if (key.includes("linkedin")) return SOCIAL_ICONS.linkedin;
-  return SOCIAL_ICONS.link;
-}
-
-// Animated binary "matrix rain" background for the Code card.
-function matrixRain() {
-  const cols = 16, colW = 200 / cols, rows = 15, rowH = 132 / rows, cyan = "#4de2d0";
-  let groups = "";
-  for (let c = 0; c < cols; c++) {
-    const x = ((c + 0.5) * colW).toFixed(1);
-    const head = Math.floor(Math.random() * rows);
-    const trail = 5 + Math.floor(Math.random() * 5);
-    const tile = [];
-    for (let r = 0; r < rows; r++) {
-      const d = head - r;
-      let fill = cyan, op;
-      if (d === 0) { fill = "#e9fffb"; op = 0.95; }
-      else if (d > 0 && d <= trail) { op = 0.5 * (1 - d / trail) + 0.14; }
-      else { op = 0.08 + (r % 3) * 0.02; }
-      tile.push({ bit: Math.random() < 0.5 ? "0" : "1", fill, op: op.toFixed(2) });
-    }
-    let digits = "";
-    for (let copy = 0; copy < 2; copy++) {
-      const yOff = copy * 132;
-      tile.forEach((t, r) => {
-        digits += `<text x="${x}" y="${(yOff + r * rowH + rowH).toFixed(1)}" fill="${t.fill}" fill-opacity="${t.op}">${t.bit}</text>`;
-      });
-    }
-    const dur = (3 + Math.random() * 4).toFixed(1);
-    const delay = (-Math.random() * 6).toFixed(1);
-    groups += `<g class="mcol" style="animation-duration:${dur}s;animation-delay:${delay}s">${digits}</g>`;
-  }
-  return `<svg class="role-svg matrix" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="mbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1a34"/><stop offset="1" stop-color="#081428"/></linearGradient></defs><rect width="200" height="132" fill="url(#mbg)"/><g font-family="'DM Mono', ui-monospace, monospace" font-size="8" text-anchor="middle">${groups}</g></svg>`;
-}
-
-// Small stylized "preview" mockups for the homepage role cards.
-const ROLE_THUMBS = {
-  design: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-    <defs>
-      <pattern id="dgrid" width="15" height="15" patternUnits="userSpaceOnUse">
-        <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,.055)"/>
-      </pattern>
-    </defs>
-    <rect width="200" height="132" fill="#0c1226"/>
-    <rect y="18" width="200" height="114" fill="url(#dgrid)"/>
-    <rect width="200" height="18" fill="rgba(255,255,255,.06)"/>
-    <circle cx="13" cy="9" r="2.6" fill="var(--accent)"/>
-    <circle cx="22" cy="9" r="2.6" fill="rgba(255,255,255,.26)"/>
-    <circle cx="31" cy="9" r="2.6" fill="rgba(255,255,255,.18)"/>
-    <rect x="150" y="6" width="16" height="7" rx="3.5" fill="rgba(255,255,255,.14)"/>
-    <rect x="170" y="6" width="22" height="7" rx="3.5" fill="var(--accent)" opacity=".7"/>
-    <line class="d-guide" x1="108" y1="34" x2="108" y2="114" stroke="#4de2d0" stroke-width="1" stroke-dasharray="3 3"/>
-    <rect x="120" y="82" width="42" height="30" rx="6" fill="#966dff" opacity=".62"/>
-    <g class="d-select">
-      <rect x="40" y="48" width="58" height="38" rx="7" fill="var(--accent)"/>
-      <g fill="#fff" stroke="#0c1226" stroke-width=".8">
-        <rect x="37.5" y="45.5" width="5" height="5" rx="1"/>
-        <rect x="95.5" y="45.5" width="5" height="5" rx="1"/>
-        <rect x="37.5" y="83.5" width="5" height="5" rx="1"/>
-        <rect x="95.5" y="83.5" width="5" height="5" rx="1"/>
-      </g>
-    </g>
-    <g transform="translate(104 84)"><path class="d-cursor" d="M0 0 L0 13 L3.4 9.7 L5.6 14 L7.7 13 L5.5 8.8 L10 8.8 Z" fill="#fff" stroke="#0c1226" stroke-width=".8"/></g>
-  </svg>`,
-  art: `<svg class="role-svg" viewBox="0 0 200 132" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs>
-      <radialGradient id="ablob" cx="38%" cy="34%" r="72%"><stop offset="0" stop-color="#a97bff"/><stop offset="1" stop-color="#5a3fb8"/></radialGradient>
-      <radialGradient id="ablob2" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#ff8fd6"/><stop offset="1" stop-color="#ff5db4"/></radialGradient>
-    </defs>
-    <rect width="200" height="132" fill="#0b1026"/>
-    <circle class="a-blob1" cx="78" cy="60" r="48" fill="url(#ablob)" opacity=".92"/>
-    <circle class="a-blob2" cx="128" cy="84" r="36" fill="url(#ablob2)" opacity=".62"/>
-    <path d="M18 106 q 34 -22 70 -8 t 80 -12" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="3.2" stroke-linecap="round"/>
-    <rect class="a-square" x="98" y="24" width="42" height="42" rx="9" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
-    <circle cx="30" cy="28" r="5" fill="#4de2d0"/><circle cx="46" cy="24" r="5" fill="#ffd166"/><circle cx="62" cy="26" r="4" fill="var(--accent)"/>
-  </svg>`,
-};
-
-function roleThumb(key) {
-  const k = String(key).toLowerCase();
-  if (k.includes("code")) return matrixRain();
-  if (k.includes("design")) return ROLE_THUMBS.design;
-  return ROLE_THUMBS.art;
+function workspaceMarkup(extraClass = "") {
+  return `<div class="sculpture-stage ${extraClass}" data-sculpture>
+    <div class="sculpture-fallback" aria-hidden="true"><span class="sculpture-fallback-mark"></span></div>
+    <canvas data-sculpture-canvas tabindex="0" role="img" aria-label="Interactive 3D creative workspace. Drag or use arrow keys to rotate."></canvas>
+    <div class="sculpture-toolbar"><div class="sculpture-models" role="group" aria-label="Creative workspace"><button type="button" data-sculpture-model="code" aria-pressed="true">Code</button><button type="button" data-sculpture-model="design" aria-pressed="false">Design</button><button type="button" data-sculpture-model="art" aria-pressed="false">Art</button></div><button type="button" data-sculpture-motion aria-pressed="false" aria-label="Pause workspace motion">Pause</button></div>
+    <p class="sr-only" data-sculpture-status aria-live="polite">Code scene selected.</p>
+  </div>`;
 }
 
 function renderHome() {
-  const portrait = data.focusPhoto?.src
-    ? `<img src="${data.focusPhoto.src}" alt="${safe(data.focusPhoto.alt || data.person.name)}" fetchpriority="high" decoding="async">`
-    : `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
-
-  const roleCards = (data.disciplines || [])
-    .slice(0, 3)
-    .map((d) => `<div class="role-card" style="--accent:${d.color}">
-        <div class="role-thumb">${roleThumb(d.key)}</div>
-        <span class="role-pill">${safe(d.key)}</span>
-      </div>`)
-    .join("");
-
-  const socialLinks = data.links.filter((l) => /email|github|linkedin/i.test(l.label));
-  const socials = socialLinks
-    .map((l) => {
-      const external = /^https?:/i.test(l.href);
-      return `<a class="social" href="${l.href}" aria-label="${safe(l.label)}"${external ? ' target="_blank" rel="noopener"' : ""}>${socialIcon(l.label)}</a>`;
-    })
-    .join("");
-
-  const disciplines = (data.disciplines || [])
-    .map((d) => `<article class="discipline-card" style="--accent:${d.color}"><span class="discipline-dot"></span><strong>${safe(d.key)}</strong><p>${safe(d.text)}</p></article>`)
-    .join("");
-
+  const home = data.home || {};
+  const menu = (id, label, href, className = "") => `<a href="${href}" class="launch-link ${className}" data-launch="${id}"><strong>${label}</strong><span aria-hidden="true">↗</span></a>`;
   root.innerHTML = `
-    <header class="intro-hero">
-      <div class="intro-copy">
-        <p class="hello">Hello, I'm</p>
-        <h1 class="intro-name">${safe(data.person.name)}</h1>
-        <p class="intro-bio">${safe(data.person.intro)}</p>
-        ${data.person.available ? `<span class="status-pill"><i></i>${safe(data.person.available)}</span>` : ""}
-        <div class="intro-actions">
-          <a class="email-pill" href="mailto:${data.person.email}">${safe(data.person.email)}</a>
-          <div class="socials">${socials}</div>
-        </div>
-      </div>
-      <div class="intro-portrait">
-        <span class="portrait-glow" aria-hidden="true"></span>
-        <div class="portrait-frame">${portrait}</div>
-      </div>
-      <div class="intro-roles">${roleCards}</div>
-    </header>
-    ${disciplines ? `<section class="section-block disciplines-block">
-      <div class="section-head"><div><p class="kicker">What I do</p><h2>Three things, one person</h2></div><a href="about.html">More about me</a></div>
-      <div class="disciplines-grid">${disciplines}</div>
-    </section>` : ""}
-    <section class="section-block">
-      <div class="section-head"><div><p class="kicker">Featured work</p><h2>Selected projects</h2></div><a href="work.html">All work</a></div>
-      <div class="project-grid">${data.projects.filter((p) => p.featured).map(projectCard).join("")}</div>
+    <section class="launch-screen" aria-label="Bahar Yüksel portfolio">
+      <div class="launch-backdrop" aria-hidden="true"><div class="backdrop-purple"></div><div class="backdrop-cyan"></div><div class="backdrop-hatch"></div><span class="backdrop-word">CREATE.</span>${identitySymbol("pink", "burst burst-one")}${identitySymbol("lime", "burst burst-two")}<div class="speed-lines"><i></i><i></i><i></i></div></div>
+      <div class="launch-heading"><p class="launch-kicker">Code / Design / Art</p><h1><span>${safe(data.person.name.split(" ")[0])}</span><span>${safe(data.person.name.split(" ").slice(1).join(" "))}${identitySymbol("lime", "name-logo")}</span></h1><p class="launch-intro">${safe(home.intro || data.person.intro)}</p></div>
+      <figure class="launch-portrait"><div class="portrait-frame" aria-hidden="true"></div><div class="portrait-halftone" aria-hidden="true"></div>${data.focusPhoto?.src ? `<img src="${safe(data.focusPhoto.src)}" alt="${safe(data.focusPhoto.alt)}" fetchpriority="high" decoding="async">` : `<span class="portrait-initials">${safe(data.person.initials)}</span>`}<figcaption><span>Istanbul, Türkiye</span><b>Always making.</b></figcaption></figure>
+      <nav class="launch-menu launch-menu-left" aria-label="Explore my work">
+        ${menu("work","Work","work.html","selected")}
+        ${menu("art","Art","art.html")}
+        ${menu("research","Research","research.html")}
+      </nav>
+      <nav class="launch-menu launch-menu-right" aria-label="More about me">
+        ${menu("about","About","about.html")}
+        ${menu("writing","Writing","writing.html")}
+        ${menu("contact","Contact","contact.html")}
+      </nav>
+      ${codePanel("launch-code")}
+      <div class="launch-bottom"><a href="logs.html"><span class="status-dot"></span> Build logs <span>↗</span></a><button type="button" class="studio-trigger" data-open-workspace>3D studio <span>⤢</span></button><span class="launch-key-hint">↑ ↓ TO EXPLORE · ENTER TO OPEN</span></div>
     </section>`;
-
-  // Slide the portrait up the instant the image is ready to paint (no fixed
-  // delay), and fall back to the initials if it is missing or fails to load.
-  const portraitImg = root.querySelector(".portrait-frame img");
-  if (portraitImg) {
-    const frame = portraitImg.parentElement;
-    frame.classList.add("portrait-pending");
-    const rise = () => requestAnimationFrame(() => frame.classList.add("portrait-in"));
-    if (portraitImg.complete && portraitImg.naturalWidth) rise();
-    else portraitImg.addEventListener("load", rise, { once: true });
-    portraitImg.addEventListener("error", () => {
-      frame.classList.remove("portrait-pending", "portrait-in");
-      frame.innerHTML = `<span class="portrait-initials">${safe(data.person.initials)}</span>`;
-    });
-  }
-
-  // The Code/Design/Art cards slide in from the left, staggered, starting once
-  // the portrait has finished rising. A timeout is a safety net in case the
-  // portrait never animates (missing image, reduced motion handled separately).
-  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const roleEls = Array.from(root.querySelectorAll(".role-card"));
-  if (roleEls.length && !reduceMotion) {
-    roleEls.forEach((card, i) => {
-      card.classList.add("slide-left");
-      card.style.animationDelay = `${i * 140}ms`;
-      card.addEventListener("animationend", () => {
-        card.classList.remove("slide-left", "in");
-        card.style.animationDelay = "";
-      }, { once: true });
-    });
-    let shown = false;
-    const showRoles = () => {
-      if (shown) return;
-      shown = true;
-      roleEls.forEach((card) => card.classList.add("in"));
-    };
-    const frame = root.querySelector(".portrait-frame");
-    if (frame) {
-      frame.addEventListener("animationend", (event) => {
-        if (event.animationName === "portraitRise") showRoles();
-      }, { once: true });
+  const menuLinks = $$("[data-launch]");
+  let selected = 0;
+  const select = (index) => { selected = index; menuLinks.forEach((el, i) => el.classList.toggle("selected", i === index)); };
+  menuLinks.forEach((el,i) => { el.addEventListener("pointerenter", () => select(i)); el.addEventListener("focus", () => select(i)); });
+  document.addEventListener("keydown", event => {
+    if (page !== "home" || $("dialog[open]") || $(".topbar").classList.contains("menu-open") || /INPUT|TEXTAREA|BUTTON/.test(event.target.tagName)) return;
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      select((selected + (event.key === "ArrowDown" ? 1 : -1) + menuLinks.length) % menuLinks.length);
+      menuLinks[selected].focus({preventScroll:true});
+    } else if (event.key === "Enter" && event.target === document.body) {
+      menuLinks[selected].click();
     }
-    setTimeout(showRoles, 2600);
-  }
+  });
+  window.initPortraitVFX?.($(".launch-portrait"));
+}
+
+function openWorkspace() {
+  const dialog = $("#featureDialog");
+  dialog.classList.remove("art-dialog");
+  dialog.innerHTML = `<form method="dialog"><button aria-label="Close 3D studio">×</button></form><article class="workspace-modal"><p class="kicker">Playground</p><h2>3D studio</h2>${workspaceMarkup("workspace-expanded")}</article>`;
+  dialog.showModal();
+  const stage = dialog.querySelector("[data-sculpture]");
+  Promise.resolve(window.initSculpture?.(stage)).then(destroy => { if (!dialog.open) destroy?.(); });
+  dialog.addEventListener("close", () => stage.sculpture?.destroy(), { once: true });
 }
 
 function renderWork() {
   const cats = ["All", ...new Set(data.projects.map((p) => p.category))];
-  root.innerHTML = `${hero("Work", "Things I've built.", "A mix of shipped products, prototypes, and experiments. Open any card to see why I made it.")}
-    <div class="filters">${cats.map((cat, index) => `<button class="filter ${index === 0 ? "active" : ""}" data-filter="${cat}">${cat}</button>`).join("")}</div>
+  root.innerHTML = `${hero("", "Work", "Selected software, products, and prototypes.")}
+    <div class="filters">${cats.map((cat, index) => `<button class="filter ${index === 0 ? "active" : ""}" aria-pressed="${index === 0}" data-filter="${cat}">${cat}</button>`).join("")}</div>
     <div class="project-grid wide">${data.projects.map(projectCard).join("")}</div>`;
 }
 
 function renderResearch() {
-  root.innerHTML = `${hero("Research", "Questions, notes, directions.", "")}
+  root.innerHTML = `${hero("", "Research", "Questions I am exploring across learning, technology, and design.")}
     <section class="research-grid">${data.research.map(researchCard).join("")}</section>`;
 }
 
@@ -325,22 +237,20 @@ function renderArt() {
   const active = albums[activeIndex];
 
   if (active) {
-    root.innerHTML = `<a class="back-link" href="#">← All albums</a>
-      ${hero("Album", safe(active.name), active.description ? safe(active.description) : "")}
+    root.innerHTML = `<a class="back-link" href="#">← All folders</a>
+      ${hero("", safe(active.name), active.description ? safe(active.description) : "")}
       <div class="art-grid">${active.pieces.map((piece, i) => artCard(piece, i, activeIndex)).join("")}</div>`;
     return;
   }
 
-  root.innerHTML = `${hero("Art & visuals", "Albums of studies and experiments.", "Browse by album, visual studies, posters, and creative-coding sketches. Click an album to open it.")}
-    <div class="album-grid">${albums.map(albumCard).join("")}</div>
-    <section class="section-block mixer"><div class="section-head"><div><p class="kicker">Interactive study</p><h2>Color field mixer</h2></div><span>Drag</span></div><input id="colorRange" type="range" min="0" max="100" value="46"><div id="colorField"></div></section>`;
+  root.innerHTML = `${hero("", "Art", "Posters, identities, comics, and illustrations.")}
+    <div class="album-grid">${albums.map(albumCard).join("")}</div>`;
 }
 
 function renderWriting() {
-  root.innerHTML = `${hero("Writing", "An innovator's journal.", "")}
+  root.innerHTML = `${hero("", "Writing", "Notes on building, learning, and design.")}
     <section class="writing-layout">
-      <div class="post-grid">${data.posts.map((post, index) => `<article class="post-card" data-post="${index}" tabindex="0" role="button"><small>${post.category} / ${post.read}</small><h2>${post.title}</h2><p>${safe(post.excerpt)}</p><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time><span class="post-read">Read<span aria-hidden="true"> →</span></span></article>`).join("")}</div>
-      <aside class="idea-card writing-note"><p class="kicker">Themes</p><div>${tags(["AI", "Education", "Design", "Building"])}</div></aside>
+      <div class="post-grid">${data.posts.map((post, index) => `<article class="post-card" data-post="${index}" tabindex="0" role="button" aria-label="Read ${safe(post.title)}"><div class="post-topline"><small>${post.category} · ${post.read}</small></div><h2>${post.title}</h2><p>${safe(post.excerpt)}</p><footer><time>${new Date(post.date).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })}</time><span class="post-read">Read <span aria-hidden="true">↗</span></span></footer></article>`).join("")}</div>
     </section>`;
 }
 
@@ -350,23 +260,8 @@ function logDate(date) {
 
 function renderLogs() {
   const projects = Array.isArray(data.logProjects) ? data.logProjects : [];
-  const folders = projects.map((project) => {
-    const external = project.external ? ' target="_blank" rel="noopener noreferrer"' : "";
-    return `<a class="log-folder interactive-card" href="${safe(project.href)}"${external} style="--accent:${safe(project.color)}">
-      <span class="folder-shape" aria-hidden="true"><i></i></span>
-      <small>${safe(project.type)}</small>
-      <h2>${safe(project.title)}</h2>
-      <p>${safe(project.description)}</p>
-      <footer><span>${safe(project.status)}</span><strong>Open folder ${project.external ? "↗" : "→"}</strong></footer>
-    </a>`;
-  }).join("");
-
-  root.innerHTML = `${hero(
-    "Project archive",
-    "Logs, organized by project.",
-    "Open a folder for its build history, source record, and project links. Casparel contains the full day-by-day journal from its first commit."
-  )}
-    <section class="log-folders" aria-label="Project log folders">${folders}</section>`;
+  root.innerHTML = `${hero("", "Logs", "Build histories and source records.")}
+    <section class="log-folders" aria-label="Project log folders">${projects.map((project) => `<a class="log-folder" href="${safe(project.href)}"${project.external ? ' target="_blank" rel="noopener noreferrer"' : ""}><small>${safe(project.status)}</small><h2>${safe(project.title)}</h2><p>${safe(project.description)}</p><span class="log-folder-arrow" aria-hidden="true">↗</span></a>`).join("")}</section>`;
 }
 
 function casparelDayHistory(date) {
@@ -383,7 +278,7 @@ function renderCasparelLogs() {
   const activeDays = logs.filter((entry) => entry.commits > 0).length;
   const quietDays = logs.length - activeDays;
   const entries = logs
-    .map((entry, index) => {
+    .map((entry) => {
       const commits = Number(entry.commits || 0);
       const count = commits === 0 ? "Quiet day" : `${commits} ${commits === 1 ? "commit" : "commits"}`;
       const work = Array.isArray(highlights[entry.date]) ? highlights[entry.date] : [];
@@ -391,7 +286,7 @@ function renderCasparelLogs() {
       const allCommits = commits > 0 ? `<a class="log-day-link" href="${safe(casparelDayHistory(entry.date))}" target="_blank" rel="noopener noreferrer">View all ${commits} ${commits === 1 ? "commit" : "commits"} from this day <span>↗</span></a>` : "";
       return `<article class="log-entry${commits === 0 ? " quiet" : ""}">
         <span class="log-marker" aria-hidden="true"></span>
-        <header><div><span>Day ${String(index + 1).padStart(2, "0")}</span><time datetime="${safe(entry.date)}">${logDate(entry.date)}</time></div><strong>${count}</strong></header>
+        <header><div><time datetime="${safe(entry.date)}">${logDate(entry.date)}</time></div><strong>${count}</strong></header>
         <h2>${safe(entry.title)}</h2>
         <p>${safe(entry.summary)}</p>
         ${linkedWork}
@@ -401,11 +296,11 @@ function renderCasparelLogs() {
     })
     .join("");
 
-  root.innerHTML = `<a class="back-link" href="logs.html">← All project folders</a>${hero(
-    "Build log",
-    "Casparel, day by day.",
-    "Every calendar day from the first commit, with concrete work items and direct links to the repository history. Dates use Istanbul time.",
-    '<a class="button" href="https://github.com/springdev28/casparel/commits/main" target="_blank" rel="noopener noreferrer">Source history<span>↗</span></a>'
+  root.innerHTML = `<a class="back-link" href="logs.html">← Logs</a>${hero(
+    "",
+    "Casparel",
+    "Daily development notes from the first commit.",
+    '<a class="button" href="https://github.com/springdev28/casparel/commits/main" target="_blank" rel="noopener noreferrer">GitHub<span>↗</span></a>'
   )}
     <section class="log-summary" aria-label="Casparel log summary">
       <article><strong>${logs.length}</strong><span>calendar days</span></article>
@@ -426,7 +321,8 @@ function renderAbout() {
     .map((item) => `<div class="approach-item"><strong>${safe(item.title)}</strong><p>${safe(item.text)}</p></div>`)
     .join("");
 
-  root.innerHTML = `${hero("About", data.person.name, data.person.role)}
+  const portrait = data.focusPhoto?.src ? `<figure class="about-portrait"><img src="${safe(data.focusPhoto.src)}" alt="${safe(data.focusPhoto.alt)}"><figcaption>${safe(data.person.name)}<span>${safe(data.person.location)}</span></figcaption></figure>` : '';
+  root.innerHTML = `${hero("", "About", `${safe(data.person.name)} · ${safe(data.person.role)}`, portrait)}
     <section class="story-layout">
       <article class="story-card">${story || `<p>${safe(data.person.about || "")}</p>`}</article>
       <aside class="story-side">
@@ -440,10 +336,10 @@ function renderAbout() {
 }
 
 function renderContact() {
-  root.innerHTML = `${hero("Contact", "Send the signal.", "")}
+  root.innerHTML = `${hero("", "Contact", safe(data.person.available))}
     <section class="contact-grid">
-      <article class="link-panel"><p class="kicker">Links</p>${data.links.map((link) => `<a href="${link.href}" target="_blank" rel="noopener noreferrer"><span>${link.note}</span><strong>${link.label}</strong></a>`).join("")}</article>
-      <form class="contact-form" id="contactForm"><label><span>Your email</span><input type="email" placeholder="name@example.com"></label><label><span>Message</span><textarea rows="7" placeholder="What should I know?"></textarea></label><button class="button" type="submit">Prepare email<span>→</span></button></form>
+      <article class="link-panel">${data.links.map((link) => `<a href="${link.href}" target="_blank" rel="noopener noreferrer"><strong>${link.label}<b aria-hidden="true">↗</b></strong></a>`).join("")}</article>
+      <form class="contact-form" id="contactForm"><div class="letter-address"><strong>${safe(data.person.name)}</strong><a href="mailto:${safe(data.person.email)}">${safe(data.person.email)}</a>${identitySymbol("ink", "letter-stamp")}</div><label><span>Email</span><input type="email" required placeholder="name@example.com" autocomplete="email"></label><label><span>Message</span><textarea required rows="7"></textarea></label><div class="letter-actions"><button class="button" type="submit">Email<span>↗</span></button></div></form>
     </section>`;
 }
 
@@ -451,6 +347,7 @@ function renderPage() {
   ({ home: renderHome, work: renderWork, research: renderResearch, art: renderArt, writing: renderWriting, logs: renderLogs, "casparel-logs": renderCasparelLogs, about: renderAbout, contact: renderContact }[page] || renderHome)();
   bindPage();
   animateIn();
+  bindMotion();
 }
 
 // Reveal elements as they scroll into view (staggered by position in their row/grid).
@@ -484,30 +381,59 @@ function animateIn() {
   els.forEach((el) => io.observe(el));
 }
 
+
+let motionObserver;
+const codeTimers = new Set();
+function bindMotion() {
+  codeTimers.forEach(clearTimeout); codeTimers.clear();
+  motionObserver?.disconnect();
+  const reduced = () => document.documentElement.classList.contains("motion-paused") || matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const type = el => {
+    if (el._typeTimer) { clearTimeout(el._typeTimer); codeTimers.delete(el._typeTimer); }
+    const full = el.dataset.typeCode;
+    if (reduced()) { el.textContent = full; return; }
+    el.textContent = "";
+    let i = 0;
+    const tick = () => {
+      if (!el.isConnected || reduced()) { el.textContent = full; return; }
+      if (document.hidden) { el._typeTimer = setTimeout(tick,250); codeTimers.add(el._typeTimer); return; }
+      el.textContent = full.slice(0, ++i);
+      if (i < full.length) {
+        el._typeTimer = setTimeout(() => { codeTimers.delete(el._typeTimer); tick(); }, full[i-1] === "\n" ? 150 : 32);
+        codeTimers.add(el._typeTimer);
+      }
+    };
+    tick();
+  };
+  motionObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+    if (entry.isIntersecting) { type(entry.target); motionObserver.unobserve(entry.target); }
+  }), {threshold: .35});
+  $$("[data-type-code]").forEach(el => motionObserver.observe(el));
+  $$("[data-replay-code]").forEach(button => button.addEventListener("click", () => type(button.closest(".code-panel").querySelector("[data-type-code]"))));
+}
+
 function renderFooter() {
   const shell = document.querySelector(".shell");
-  if (!shell || shell.querySelector(".sitefoot")) return;
-  const year = new Date().getFullYear();
-  const nav = data.pages
-    .filter(([id]) => id !== page)
-    .map(([, label, href]) => `<a href="${href}">${label}</a>`)
-    .join("");
+  if (!shell) return;
+  shell.querySelector(".sitefoot")?.remove();
   const footer = document.createElement("footer");
   footer.className = "sitefoot";
-  footer.innerHTML = `
-    <div class="sitefoot-brand">
-      <strong>${safe(data.person.name)}</strong>
-      <span>${safe(data.person.role)}</span>
-    </div>
-    <nav class="sitefoot-nav" aria-label="Footer navigation">${nav}</nav>
-    <div class="sitefoot-meta">
-      <a href="mailto:${data.person.email}">${data.person.email}</a>
-      <small>© ${year} · Designed &amp; built by ${safe(data.person.name)}</small>
-    </div>`;
+  footer.innerHTML = `<div class="footer-bottom"><a href="mailto:${data.person.email}">${safe(data.person.email)}</a><div class="footer-socials">${data.links.filter(l => /github|linkedin/i.test(l.label)).map(l => `<a href="${l.href}" target="_blank" rel="noopener noreferrer">${safe(l.label)} ↗</a>`).join('')}</div><small>© ${new Date().getFullYear()} ${safe(data.person.name)}</small></div>`;
   shell.appendChild(footer);
 }
 
 function bindPage() {
+  $$("[data-open-workspace]").forEach(button => button.addEventListener("click", openWorkspace));
+  const featureDialog = $("#featureDialog");
+  featureDialog.onkeydown = (event) => {
+    const viewer = featureDialog.querySelector("[data-art-album][data-art-piece]");
+    if (!viewer || !["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    event.preventDefault();
+    const albumIndex = Number(viewer.dataset.artAlbum);
+    const pieceIndex = Number(viewer.dataset.artPiece);
+    const length = getAlbums()[albumIndex]?.pieces.length || 1;
+    openArt(albumIndex, event.key === "ArrowRight" ? (pieceIndex + 1) % length : (pieceIndex - 1 + length) % length);
+  };
   $$(".interactive-card").forEach((card) => {
     card.addEventListener("pointermove", (event) => {
       const box = card.getBoundingClientRect();
@@ -517,8 +443,9 @@ function bindPage() {
   });
   $$(".filter").forEach((filter) => {
     filter.addEventListener("click", () => {
-      $$(".filter").forEach((item) => item.classList.remove("active"));
+      $$(".filter").forEach((item) => { item.classList.remove("active"); item.setAttribute("aria-pressed", "false"); });
       filter.classList.add("active");
+      filter.setAttribute("aria-pressed", "true");
       $$(".project-card").forEach((card) => {
         card.hidden = filter.dataset.filter !== "All" && filter.dataset.filter !== card.dataset.category;
       });
@@ -557,21 +484,36 @@ function mediaBlock(item, title) {
 
 function openProject(index) {
   const p = data.projects[index];
-  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--accent:${p.color}">${mediaBlock(p, p.title)}<p class="kicker">${p.type} / ${p.year}</p><h2>${p.title}</h2><p>${p.summary}</p>${p.why ? `<p class="modal-why"><span>Why I built it</span>${safe(p.why)}</p>` : ""}<dl><div><dt>Role</dt><dd>${p.role}</dd></div><div><dt>Result</dt><dd>${p.result}</dd></div></dl><div>${tags(p.tags)}</div><a class="button" href="${p.href}">Open project<span>→</span></a></article>`;
+  $("#featureDialog").classList.remove("art-dialog");
+  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--accent:${p.color}">${mediaBlock(p, p.title)}<p class="kicker">${p.type} / ${p.year}</p><h2>${p.title}</h2><p>${p.summary}</p>${p.why ? `<p class="modal-why"><span>Why I built it</span>${safe(p.why)}</p>` : ""}<dl><div><dt>Role</dt><dd>${p.role}</dd></div><div><dt>Result</dt><dd>${p.result}</dd></div></dl><div>${tags(p.tags)}</div>${p.href ? `<a class="button" href="${safe(p.href)}" target="_blank" rel="noopener noreferrer">Open project<span>↗</span></a>` : ""}</article>`;
   $("#featureDialog").showModal();
 }
 
 function openArt(albumIndex, pieceIndex) {
-  const a = getAlbums()[albumIndex]?.pieces[pieceIndex];
+  const album = getAlbums()[albumIndex];
+  const a = album?.pieces[pieceIndex];
   if (!a) return;
-  const visual = a.embed || imageList(a).length ? mediaBlock(a, a.title) : `<div class="canvas-art large"><i></i><b></b><span></span></div>`;
-  $("#featureDialog").innerHTML = `<form method="dialog"><button aria-label="Close">×</button></form><article class="modal-card" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}">${visual}<p class="kicker">${safe(a.medium)} / ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags(a.tags)}</div></article>`;
-  $("#featureDialog").showModal();
+  const pieces = album.pieces;
+  const previous = (pieceIndex - 1 + pieces.length) % pieces.length;
+  const next = (pieceIndex + 1) % pieces.length;
+  const visual = a.embed || imageList(a).length ? mediaBlock(a, a.title) : canvasArt(a, "large");
+  const dialog = $("#featureDialog");
+  dialog.classList.add("art-dialog");
+  dialog.setAttribute("aria-label", `${a.title} — artwork viewer`);
+  dialog.innerHTML = `<form method="dialog" class="art-viewer-close"><button aria-label="Close artwork viewer">×</button></form><article class="art-viewer" data-art-album="${albumIndex}" data-art-piece="${pieceIndex}" style="--a:${a.palette[0]};--b:${a.palette[1]};--c:${a.palette[2]}">
+    <div class="art-viewer-stage">${visual}<div class="art-viewer-count">${pieceIndex + 1} / ${pieces.length}</div></div>
+    <aside class="art-viewer-copy"><p class="kicker">${safe(album.name)} · ${safe(a.medium)} · ${safe(a.year)}</p><h2>${safe(a.title)}</h2><p>${safe(a.text)}</p><div>${tags((a.tags || []).filter((tag) => !/^figma$/i.test(tag)))}</div><div class="art-viewer-nav"><button type="button" data-art-piece-target="${previous}" aria-label="Previous artwork">←</button><button type="button" data-art-piece-target="${next}" aria-label="Next artwork">→</button></div></aside>
+    <nav class="art-viewer-strip" aria-label="Works in ${safe(album.name)}">${pieces.map((piece, index) => `<button type="button" data-art-piece-target="${index}" class="${index === pieceIndex ? "active" : ""}" aria-label="View ${safe(piece.title)}"><strong>${safe(piece.title)}</strong></button>`).join("")}</nav>
+  </article>`;
+  dialog.querySelectorAll("[data-art-piece-target]").forEach((control) => control.addEventListener("click", () => openArt(albumIndex, Number(control.dataset.artPieceTarget))));
+  if (!dialog.open) dialog.showModal();
+  dialog.querySelector(".art-viewer-close button").focus({ preventScroll: true });
 }
 
 function openPost(index) {
   const post = data.posts[index];
   if (!post) return;
+  $("#featureDialog").classList.remove("art-dialog");
   const body = Array.isArray(post.body) && post.body.length
     ? post.body.map((para) => `<p>${safe(para)}</p>`).join("")
     : `<p>${safe(post.excerpt || "")}</p>`;
@@ -589,7 +531,7 @@ function searchable() {
     ...data.pages.map(([id, label, href]) => ({ title: label, meta: "Page", text: id, href })),
     ...data.projects.map((p) => ({ title: p.title, meta: p.type, text: p.summary, href: "work.html" })),
     ...data.research.map((r) => ({ title: r.title, meta: r.area, text: r.question, href: "research.html" })),
-    ...getAlbums().flatMap((al) => al.pieces).map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: "art.html" })),
+    ...getAlbums().flatMap((al, albumIndex) => al.pieces.map((a) => ({ title: a.title, meta: a.medium, text: a.text, href: `art.html#a=${albumIndex}` }))),
     ...data.posts.map((p) => ({ title: p.title, meta: p.category, text: p.excerpt, href: "writing.html" })),
     ...(data.logProjects || []).map((project) => ({ title: project.title, meta: project.type, text: project.description, href: project.href })),
     ...(data.casparelLogs || []).map((entry) => ({ title: entry.title, meta: `Casparel / ${entry.date}`, text: entry.summary, href: "casparel-logs.html" })),
@@ -627,47 +569,6 @@ function bindSearch() {
       $("#searchInput").focus();
     }
   });
-}
-
-function startMotion() {
-  const canvas = $("#motionCanvas");
-  const ctx = canvas.getContext("2d");
-  const points = Array.from({ length: 46 }, () => ({ x: Math.random(), y: Math.random(), r: Math.random() * 2 + 0.6, vx: (Math.random() - 0.5) * 0.00045, vy: (Math.random() - 0.5) * 0.00045 }));
-  function resize() {
-    canvas.width = innerWidth * devicePixelRatio;
-    canvas.height = innerHeight * devicePixelRatio;
-  }
-  function frame() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    points.forEach((p, index) => {
-      p.x = (p.x + p.vx + 1) % 1;
-      p.y = (p.y + p.vy + 1) % 1;
-      const x = p.x * canvas.width;
-      const y = p.y * canvas.height;
-      ctx.globalAlpha = 0.48;
-      ctx.fillStyle = index % 3 === 0 ? "#4de2d0" : index % 3 === 1 ? "#64a8ff" : "#966dff";
-      ctx.beginPath();
-      ctx.arc(x, y, p.r * devicePixelRatio, 0, Math.PI * 2);
-      ctx.fill();
-      points.slice(index + 1).forEach((q) => {
-        const dx = x - q.x * canvas.width;
-        const dy = y - q.y * canvas.height;
-        const distance = Math.hypot(dx, dy);
-        if (distance < 126 * devicePixelRatio) {
-          ctx.globalAlpha = 0.09 * (1 - distance / (126 * devicePixelRatio));
-          ctx.strokeStyle = "#64a8ff";
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          ctx.lineTo(q.x * canvas.width, q.y * canvas.height);
-          ctx.stroke();
-        }
-      });
-    });
-    requestAnimationFrame(frame);
-  }
-  resize();
-  addEventListener("resize", resize);
-  frame();
 }
 
 // --- Image preview lightbox (click any .zoomable image to open; scroll or the
@@ -747,7 +648,6 @@ renderShell();
 renderPage();
 renderFooter();
 bindSearch();
-startMotion();
 
 if (page === "art") {
   addEventListener("hashchange", () => {

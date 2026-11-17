@@ -73,7 +73,7 @@ const meta = (parts) => {
 };
 
 function heading(kicker, title, intro) {
-  return `<p>${esc(kicker)}</p><h1>${esc(title)}</h1>${intro ? `<p>${esc(intro)}</p>` : ""}`;
+  return `${kicker ? `<p>${esc(kicker)}</p>` : ""}<h1>${esc(title)}</h1>${intro ? `<p>${esc(intro)}</p>` : ""}`;
 }
 
 // A link is external when it points somewhere off the site (http, mailto).
@@ -86,22 +86,11 @@ function link(href, label) {
 
 function renderHome(data) {
   const person = data.person || {};
-  const disciplines = list(data.disciplines)
-    .map((d) => `<section><h2>${esc(d.key)}</h2><p>${esc(d.text)}</p></section>`)
-    .join("");
-  const featured = list(data.projects)
-    .filter((p) => p.featured)
-    .map((p) => `<li><h3>${esc(p.title)}</h3>${meta([p.type, p.year])}<p>${esc(p.summary)}</p></li>`)
-    .join("");
-  const links = list(data.links).map((l) => `<li>${link(l.href, l.label)} &middot; ${esc(l.note)}</li>`).join("");
-
-  return `<h1>${esc(person.headline || person.name)}</h1>
-    <p>${esc(person.name)} &middot; ${esc(person.role)} &middot; ${esc(person.location)}</p>
-    <p>${esc(person.intro)}</p>
-    ${disciplines}
-    ${featured ? `<section><h2>Featured work</h2><ul>${featured}</ul></section>` : ""}
-    <section><h2>Now</h2><p>${esc(person.now)}</p></section>
-    ${links ? `<section><h2>Elsewhere</h2><ul>${links}</ul></section>` : ""}`;
+  const home = data.home || {};
+  const menu = list(data.pages).filter(([id]) => id !== "home").map(([,title,href]) => `<li>${link(href,title)}</li>`).join("");
+  const portrait = data.focusPhoto?.src ? `<figure><img src="${esc(data.focusPhoto.src)}" alt="${esc(data.focusPhoto.alt || person.name)}" width="400" height="400"><figcaption>${esc(person.location)}</figcaption></figure>` : "";
+  return `<header><p>Code / Design / Art</p><h1>${esc(person.name)}</h1><p>${esc(home.intro || person.intro)}</p></header>
+    ${portrait}<nav aria-label="Portfolio menu"><ul>${menu}</ul></nav>`;
 }
 
 function renderWork(data) {
@@ -120,7 +109,7 @@ function renderWork(data) {
     })
     .join("");
 
-  return `${heading("Work", "Things I've built.", "A mix of shipped products, prototypes, and experiments.")}${projects}`;
+  return `${heading("", "Work", "Selected software, products, and prototypes.")}${projects}`;
 }
 
 function renderResearch(data) {
@@ -135,21 +124,24 @@ function renderResearch(data) {
     )
     .join("");
 
-  return `${heading("Research", "Questions, notes, directions.", "")}${items}`;
+  return `${heading("", "Research", "Questions across learning, technology, and visual thinking.")}${items}`;
 }
 
 function renderArt(data) {
   const albums = list(data.artAlbums)
     .map((album) => {
       const pieces = list(album.pieces)
-        .map(
-          (piece) => `<article>
+        .map((piece) => {
+          const images = list(piece.images).length ? list(piece.images) : piece.image ? [piece.image] : [];
+          const gallery = images.length ? `<figure>${images.map((src) => `<img src="${esc(src)}" alt="${esc(piece.title)}" loading="lazy">`).join("")}<figcaption>${esc(piece.title)}</figcaption></figure>` : "";
+          return `<article>
             <h3>${esc(piece.title)}</h3>
             ${meta([piece.medium, piece.year])}
+            ${gallery}
             ${piece.text ? `<p>${esc(piece.text)}</p>` : ""}
-            ${bullets(piece.tags)}
-          </article>`
-        )
+            ${bullets(list(piece.tags).filter((tag) => !/^figma$/i.test(tag)))}
+          </article>`;
+        })
         .join("");
       return `<section>
         <h2>${esc(album.name)}</h2>
@@ -159,7 +151,7 @@ function renderArt(data) {
     })
     .join("");
 
-  return `${heading("Art & visuals", "Albums of studies and experiments.", "Visual studies, posters, and creative-coding sketches.")}${albums}`;
+  return `${heading("", "Art", "Posters, identities, comics, and illustrations.")}${albums}`;
 }
 
 function renderWriting(data) {
@@ -178,21 +170,20 @@ function renderWriting(data) {
     )
     .join("");
 
-  return `${heading("Writing", "An innovator's journal.", "")}${posts}`;
+  return `${heading("", "Writing", "Notes on building, learning, and design.")}${posts}`;
 }
 
 function renderLogs(data) {
   const folders = list(data.logProjects)
     .map((project) => `<article>
-      <p>${esc(project.type)} &middot; ${esc(project.status)}</p>
+      <p>${esc(project.status)}</p>
       <h2>${link(project.href, project.title)}</h2>
       <p>${esc(project.description)}</p>
-      <p>${link(project.href, "Open folder")}</p>
+      <p>${link(project.href, "Open")}</p>
     </article>`)
     .join("");
 
-  return `${heading("Project archive", "Logs, organized by project.", "Open a folder for its build history, source record, and project links. Casparel contains the full day-by-day journal from its first commit.")}
-    ${folders ? `<section><h2>Project folders</h2>${folders}</section>` : ""}`;
+  return `${heading("", "Logs", "Build histories and source records.")}${folders}`;
 }
 
 function casparelDayHistory(date) {
@@ -208,14 +199,14 @@ function renderCasparelLogs(data) {
   const commits = logs.reduce((sum, entry) => sum + Number(entry.commits || 0), 0);
   const activeDays = logs.filter((entry) => Number(entry.commits || 0) > 0).length;
   const entries = logs
-    .map((entry, index) => {
+    .map((entry) => {
       const count = Number(entry.commits || 0);
       const work = list(highlights[entry.date])
         .map(([sha, label]) => `<li>${link(`https://github.com/springdev28/casparel/commit/${sha}`, `${sha} — ${label}`)}</li>`)
         .join("");
       return `<li>
         <article>
-          <p>Day ${index + 1} &middot; <time datetime="${esc(entry.date)}">${esc(entry.date)}</time> &middot; ${count} ${count === 1 ? "commit" : "commits"}</p>
+          <p><time datetime="${esc(entry.date)}">${esc(entry.date)}</time> &middot; ${count} ${count === 1 ? "commit" : "commits"}</p>
           <h2>${esc(entry.title)}</h2>
           <p>${esc(entry.summary)}</p>
           ${work ? `<h3>Selected work</h3><ul>${work}</ul>` : ""}
@@ -226,8 +217,8 @@ function renderCasparelLogs(data) {
     })
     .join("");
 
-  return `<p>${link("logs.html", "Back to all project folders")}</p>
-    ${heading("Build log", "Casparel, day by day.", "Every calendar day from the first commit, with concrete work items and direct links to the repository history. Dates use Istanbul time.")}
+  return `<p>${link("logs.html", "Back to logs")}</p>
+    ${heading("", "Casparel", "Daily development notes from the first commit.")}
     <p>${logs.length} calendar days &middot; ${commits} commits &middot; ${activeDays} active days &middot; ${logs.length - activeDays} quiet days</p>
     <p>${link("https://github.com/springdev28/casparel/commits/main", "View the source history")}</p>
     ${entries ? `<section><h2>Timeline</h2><ol>${entries}</ol></section>` : ""}`;
@@ -243,7 +234,7 @@ function renderAbout(data) {
     .join("");
   const story = paras(person.story) || (person.about ? `<p>${esc(person.about)}</p>` : "");
 
-  return `${heading("About", person.name, person.role)}
+  return `${heading("", "About", `${person.name} · ${person.role}`)}
     ${story}
     ${person.now ? `<section><h2>Now</h2><p>${esc(person.now)}</p></section>` : ""}
     ${list(person.lookingFor).length ? `<section><h2>What I'm looking for</h2>${bullets(person.lookingFor)}</section>` : ""}
@@ -255,10 +246,10 @@ function renderAbout(data) {
 function renderContact(data) {
   const person = data.person || {};
   const links = list(data.links)
-    .map((l) => `<li>${link(l.href, l.label)} &middot; ${esc(l.note)}</li>`)
+    .map((l) => `<li>${link(l.href, l.label)}</li>`)
     .join("");
 
-  return `${heading("Contact", "Send the signal.", "")}
+  return `${heading("", "Contact", person.available)}
     ${person.email ? `<p>${link("mailto:" + person.email, person.email)}</p>` : ""}
     ${links ? `<ul>${links}</ul>` : ""}`;
 }
@@ -285,32 +276,28 @@ function renderShell(data, page) {
   const nav = list(data.pages)
     .map(([id, label, href]) => `<a class="${id === page || (id === "logs" && page.endsWith("-logs")) ? "active" : ""}" href="${esc(href)}">${esc(label)}</a>`)
     .join("");
-  return `<a class="brand" href="index.html"><span>${esc(person.initials)}</span><b>${esc(person.name)}</b></a>
-    <nav class="nav" aria-label="Portfolio navigation">${nav}</nav>`;
+  return `<a class="brand" href="index.html"><span class="identity-symbol brand-mark" aria-hidden="true"><img src="assets/identity/asterisk-${page === "home" ? "ink" : "white"}.svg" alt=""></span><b>${esc(person.name)}<small>Code · Design · Art</small></b></a>
+    <nav class="nav prerender-nav" aria-label="Portfolio navigation">${nav}</nav>`;
 }
 
-// Mirrors the footer app.js builds. It has to be the complete thing, because
-// app.js leaves an existing .sitefoot alone rather than rendering a second one.
+// Mirrors the contact invitation app.js builds, including its no-JS links.
 function renderFooter(data, page) {
   const person = data.person || {};
-  const nav = list(data.pages)
-    .filter(([id]) => id !== page)
-    .map(([, label, href]) => `<a href="${esc(href)}">${esc(label)}</a>`)
+  const socials = list(data.links)
+    .filter((item) => /github|linkedin/i.test(item.label))
+    .map((item) => `<a href="${esc(item.href)}" target="_blank" rel="noopener noreferrer">${esc(item.label)} ↗</a>`)
     .join("");
   const year = new Date().getFullYear();
-  return `<footer class="sitefoot">
-    <div class="sitefoot-brand"><strong>${esc(person.name)}</strong><span>${esc(person.role)}</span></div>
-    <nav class="sitefoot-nav" aria-label="Footer navigation">${nav}</nav>
-    <div class="sitefoot-meta">
+  return `<footer class="sitefoot"><div class="footer-bottom">
       <a href="mailto:${esc(person.email)}">${esc(person.email)}</a>
-      <small>&copy; ${year} &middot; Designed &amp; built by ${esc(person.name)}</small>
-    </div>
-  </footer>`;
+      <div class="footer-socials">${socials}</div>
+      <small>&copy; ${year} ${esc(person.name)}</small>
+    </div></footer>`;
 }
 
 // The empty placeholders every page shell ships with.
 const SHELL_SLOT = '<header class="topbar" data-shell></header>';
-const PAGE_SLOT = '<section class="page" id="pageRoot"></section>';
+const PAGE_SLOT = /(<section class="page" id="pageRoot"(?: tabindex="-1")?>)\s*<\/section>/;
 const MAIN_CLOSE = "</main>";
 
 // Replace without letting `$&`, `$'` and friends in the content be treated as
@@ -331,7 +318,7 @@ function prerender(html) {
   const data = loadContent();
   if (!data || !data.person) return html;
 
-  let out = fill(html, PAGE_SLOT, `<section class="page" id="pageRoot">${render(data)}</section>`);
+  let out = html.replace(PAGE_SLOT, (_, openingTag) => `${openingTag}${render(data)}</section>`);
   out = fill(out, SHELL_SLOT, `<header class="topbar" data-shell>${renderShell(data, page)}</header>`);
   out = fill(out, MAIN_CLOSE, `${renderFooter(data, page)}</main>`);
   return out;

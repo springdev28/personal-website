@@ -1,6 +1,6 @@
 # Personal Website
 
-A plain HTML / CSS / JavaScript portfolio site. **No build step, no dependencies**, edit a text file, refresh the browser, publish.
+A plain HTML / CSS / JavaScript portfolio site. **No build step or server dependencies**, edit a text file, refresh the browser, publish.
 
 All content lives in one file: **`content.js`**. Everything below is a reference for the fields in that file and how the site uses them.
 
@@ -13,6 +13,14 @@ All content lives in one file: **`content.js`**. Everything below is a reference
 | `content.js` | All text and content (the only file most edits touch) | Often |
 | `styles.css` | Colors, spacing, fonts | Occasionally, for design tweaks |
 | `app.js` | Rendering and behavior | Rarely |
+| `sculpture.js` | Interactive 3D studio models and motion controls | Rarely |
+| `vendor/three*.js` + `vendor/THREE-LICENSE.txt` | Local Three.js 0.180.0 runtime and MIT license | Only when upgrading the 3D renderer |
+| `assets/identity/` | Original ink, iris, and white asterisk SVGs exported from Figma | When updating the personal identity |
+| `assets/graphics/` | MIT-licensed Iconoir SVG linework retained for interface fallbacks | Rarely |
+| `assets/editorial/` | Retained Pexels photographs from an abandoned direction; no longer rendered | Rarely |
+| `assets/internet/` | Retained legacy 3Dicons cutouts; no longer rendered | Rarely |
+| `assets/desk/*.svg` + `assets/folders/*.svg` | Retained legacy vector props and folder drawings; no longer rendered by the current interface | Rarely |
+| `assets/portrait/` | Refined three-quarter portrait, source and edit notes | When updating the portrait |\n| `assets/works/` | Exported portfolio artwork from Figma | When adding or replacing artwork |
 | `*.html` | One near-identical shell per page (`index`, `work`, `research`, `art`, `writing`, `logs`, project-log pages, `about`, `contact`) | Rarely (see [caching](#publishing)) |
 | `server.js` + `package.json` | Tiny static server used by the host, **do not delete** | Never |
 | `prerender.js` | Puts a plain-text copy of each page into the HTML for search engines, **do not delete** | Never |
@@ -35,27 +43,42 @@ Open `content.js`. It is a single JavaScript object. The rules:
 
 ## Field reference
 
+### `home`
+
+The homepage is a full-screen illustrated menu inspired by [Rayyan Burondkar's portfolio](https://rayyan.theloopboard.com/). Its graphic system uses cut-paper silhouettes, heavy condensed typography, halftone print texture, and flat midnight purple, cyan, lilac, pink, and lime. The original asterisk identity stays in the header.
+
+- `home.intro` sets the short introduction beside the portrait. The name comes from `person.name`.
+- `home.eyebrow`, `home.headline`, `home.note`, and `home.desk` remain as legacy content fields; the illustrated menu does not render them.
+- The six main links open Work, Art, Research, About, Writing, and Contact. Build logs and the 3D studio sit along the bottom.
+- Hover or focus highlights a menu item; Up/Down changes the focused item, and Enter opens it. Ordinary links and Tab navigation also work.
+- The top-bar Menu exposes all pages. Search is available from the magnifying glass or Cmd/Ctrl+K.
+- On phones the portrait, menu links, and bottom controls flow vertically, without dragging or a canvas requirement.
+
+The interior pages use the same condensed headings, solid color plates, and sharply edged cards. Art opens closed collection folders, then local artwork in the on-site viewer. Work keeps its category filters and project details; Writing opens full articles; Logs retain their commit links; Contact opens an addressed email draft.
+
+The **3D studio** opens the existing interactive Code, Design, and Art scenes in a dialog. Drag or use the arrow keys on the focused canvas to rotate; its own motion control or Space pauses automatic rotation. The top-bar Motion control also pauses the scene. Models use local Three.js modules and original artwork. The renderer pauses offscreen and when the tab is hidden, respects reduced motion, and releases its resources when closed. If WebGL is unavailable, a local vector fallback remains visible.
+
 ### `person`
 
-Controls the homepage hero, the About page, and the footer.
+Controls the personal introduction, the About page, and the footer.
 
 | Field | What it sets |
 | --- | --- |
-| `name` | Name shown in the header, hero, and footer |
-| `initials` | Two letters shown in the logo circle (and as a fallback if no portrait) |
-| `role` | One-line tagline (homepage kicker, About subtitle, footer) |
+| `name` | Name shown in the header, personal introduction, and footer |
+| `initials` | Two letters used as a fallback if no portrait |
+| `role` | One-line tagline (About subtitle) |
 | `location` | Location string |
-| `email` | Used by the contact form, the hero email button, and the footer |
-| `headline` | The large headline text on the homepage |
-| `intro` | The short sentence under the headline |
+| `email` | Used by the contact form and the footer |
+| `headline` | Fallback homepage headline when `home.headline` is absent |
+| `intro` | Personal introduction; also the fallback when `home.intro` is absent |
 | `now` | The "Now" line on the About page |
-| `available` | Text of the green status pill on the homepage. Set to `""` to hide the pill |
+| `available` | Availability text in the footer |
 | `story` | A list of paragraphs for the About page (one quoted string per paragraph) |
 | `lookingFor` | A list of bullet points under "What I'm looking for" on About |
 
 ### `disciplines`
 
-The "What I do" cards, and the three role cards beside the homepage portrait.
+Discipline descriptions retained as editable portfolio data.
 
 ```js
 disciplines: [
@@ -65,22 +88,12 @@ disciplines: [
 ```
 
 - `key`, the card title
-- `color`, accent color (hex)
+- `color`, accent color (hex; retained for content compatibility)
 - `text`, the description
-
-The three role cards beside the homepage portrait show an **animated preview**
-chosen automatically from the `key`: a card named "Code" shows a binary "matrix
-rain", "Design" shows a moving design-tool mockup, and anything else (e.g.
-"Art") shows floating gradient shapes. These previews are drawn in code, there
-is nothing to edit, and they hold still for anyone who has "reduce motion" turned
-on. Renaming a discipline changes which preview it gets.
-
-The big homepage name (`person.name`) is set in a handwriting font and draws
-itself in with a left-to-right "pen stroke" reveal on load.
 
 ### `focusPhoto`
 
-The homepage portrait. It floats without a frame, so a **transparent PNG** looks best.
+The three-quarter head portrait on Home and About. The active file is `assets/portrait/bahar-three-quarter.png`, refined from the owner-supplied `Untitled_Artwork 34.png`. The original `portrait.png` remains untouched. See `assets/portrait/SOURCES.md` for the edit prompt and provenance. Use a **transparent PNG** with the whole head inside the image.
 
 ```js
 focusPhoto: { src: "portrait.png", alt: "Name" }
@@ -91,7 +104,7 @@ focusPhoto: { src: "portrait.png", alt: "Name" }
 
 ### `projects`
 
-The Work page, and the featured cards on the homepage.
+The Work page and its project-detail dialogs.
 
 ```js
 {
@@ -106,13 +119,13 @@ The Work page, and the featured cards on the homepage.
   role: "What you did.",
   result: "The outcome.",
   tags: ["Tag", "Tag"],
-  featured: true,              // true = also show on the homepage
+  featured: true,              // retained for future curation
   image: "project1.png",       // OPTIONAL, see Adding images
   embed: "https://example.com" // OPTIONAL, see Adding an iframe
 }
 ```
 
-- `featured: true` promotes a project to the homepage (keep it to the strongest three).
+- `featured` is retained as a content flag for future curation.
 - `category` values automatically become filter buttons on the Work page.
 - `image` and `embed` are optional, see the sections below.
 
@@ -133,14 +146,17 @@ artAlbums: [
   {
     name: "Album name",
     description: "One short line.",
+    folderCover: "design", // choose a constructed graphic composition
     pieces: [
       {
         title: "Piece title",
         medium: "Medium",
         year: "2026",
-        palette: ["#64a8ff", "#4de2d0", "#966dff"], // 3 colors for the generated visual
+        palette: ["#64a8ff", "#4de2d0", "#966dff"], // palette retained with the artwork
         text: "A sentence about it.",
         tags: ["Tag"],
+        featured: true,         // marks a featured work
+        href: "https://www.figma.com/design/...", // original Figma file
         image: "artwork1.jpg",   // OPTIONAL, see Adding images
         embed: "https://..."     // OPTIONAL, see Adding an iframe
       }
@@ -150,7 +166,26 @@ artAlbums: [
 ```
 
 - Copy a whole album block to add a new album; copy a piece block inside `pieces` to add a piece.
-- The album cover uses the first piece's `image` if it has one, otherwise a generated visual from its `palette`.
+- `folderCover` selects a cover color, oversized title, and cropped fragment of your original artwork: `design`, `robotics`, `comics`, `editorial`, `characters`, or `misc`. The folder name and item count update automatically. Cover mappings live in `folderCover()` in `app.js`.
+- The Art page shows collection folders, with the original works inside each folder. `featured` remains available as a content flag.
+- `href` retains the original Figma source URL as owner metadata. It is not shown
+  in the public artwork viewer: visitors browse the locally stored artwork on the website.
+- The **2026–27 Visual Design** album includes the seven new poster and identity
+  projects. Their exported images are stored locally in `assets/works/`, so
+  visitors can view the artwork without loading Figma. The EOAI piece has a
+  gallery of its logo and banner. To update an artwork, export its new image,
+  replace the matching local file, and retain or update its original `href`.
+
+Clicking an artwork opens the full on-site archive viewer. It displays the local
+image or gallery at large size, keeps the title, medium, year, description, and
+tags beside it, and provides previous/next buttons plus an album strip. The left
+and right arrow keys also move between works. Figma is not used as the visitor-facing viewer.
+
+## Page motion
+
+Home and Work type the `bahar.js` snippet when its panel enters the viewport; the replay button runs it again. Writing reveals the handwritten phrase and draws its underline. Menu selection, card movement, portrait entrance, and scroll reveals use short transitions.
+
+The **Motion** button in the header pauses animations and the 3D studio, reveals complete text, and stores the preference in localStorage. System `prefers-reduced-motion` also provides complete static content. Typing stops while the tab is hidden. Decorative animation is hidden from screen readers; content and navigation do not depend on animation.
 
 ### `posts`
 
@@ -189,7 +224,7 @@ approach:    [ { title: "...", text: "..." }, ... ]
 
 ### `links`
 
-The Contact page, and the homepage social icons (Email / GitHub / LinkedIn are detected by their label).
+The Contact page and footer links (GitHub / LinkedIn are detected by their label).
 
 ```js
 links: [ { label: "GitHub", href: "https://...", note: "Short note" }, ... ]
@@ -208,7 +243,7 @@ Any field named `image` (and `focusPhoto.src`) accepts an image.
 // a project image (replaces the generated art panel)
 image: "project1.png"
 
-// an art piece image (replaces the generated visual; also used as the album cover)
+// an art piece image (shown after opening its collection folder)
 image: "artwork1.jpg"
 
 // the homepage portrait
@@ -232,7 +267,7 @@ Notes:
   The first image becomes the cover; opening the piece shows them all in order.
   Note the **square brackets** and the **comma between each name in quotes**,
   writing `image: "a.png","b.png"` is invalid and blanks the whole site.
-- If an `image` isn't set, the site falls back to its generated gradient visual, so nothing breaks.
+- If an `image` isn't set, the site falls back to a solid typographic cover, so nothing breaks.
 
 ### Photos vs. logos (`imageBg`)
 
@@ -407,3 +442,32 @@ A blank page after an edit almost always means a missing comma, quote, or bracke
 
 - Open the browser console (`F12` → Console) to see the error and the line number.
 - Undo the last edit, or restore the file: `git checkout content.js`.
+
+### Visual system and page layouts
+
+The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the iris version remains the favicon. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
+
+- **Home:** an illustrated menu. All six panels share the same angle in every state. Hover, focus, and arrow keys select links. The small terminal types its code and has a replay button.
+- **Work:** three project panels, category filters, and a details reader. An empty `href` removes the external launch link.
+- **Research:** large question cards using existing areas, notes, and statuses.
+- **Art:** closed graphic folders with cropped fragments of original artwork, then an artwork grid and on-site reader. Left/Right moves between pieces, and focus stays in the reader. Multi-image pieces keep all pages in a horizontally scrollable gallery.
+- **Writing:** article cards, a handwriting reveal, and a full-text reader.
+- **Logs:** project history panels and the existing Casparel timeline with source links.
+- **About:** portrait, biography, current work, toolkit, and principles.
+- **Contact:** social links and an addressed email form. Both fields are required; submission opens an email draft without sending it.
+
+Decorative sequence numbers are omitted from navigation, page titles, writing cards, log panels, and artwork tabs. Actual dates, work counts, and the viewer’s current position remain.
+
+The header’s Motion control pauses the portrait VFX, code, writing, and 3D animations.
+
+The home portrait remains stationary. Brief cyan/violet edge echoes and narrow graphic cuts appear over the original colored shapes. These are opacity-only VFX: there is no cursor tracking, parallax, shape movement, shine, glow, or light sweep. Effects respect reduced-motion preferences and pause offscreen, in hidden tabs, or when the header’s Motion control is paused.
+
+`portrait.js` builds the overlays from the traced outlines in `assets/portrait/shape-vfx.json`. The original PNG is always visible beneath them. If replacing the portrait with a different image path, the old effects are automatically skipped. Timing and opacity are set by `portrait-print-glitch` in `styles.css`; the JSON contains outlines only, with no movement settings. Bump the JSON version in `portrait.js` when changing outlines, and refresh the HTML cache stamps after script or style changes.
+
+The mobile menu opens from the header on every page. The homepage stacks its introduction, portrait, and two groups of links; interior grids reduce their columns. Dialogs retain visible close controls and keyboard support.
+
+Click an artwork image to open the full-screen zoom viewer. Its close, zoom, and reset controls stay above the image; Escape closes it. Artwork without an image receives a title cover, and project covers without logos use the project's initial. The 3D studio is optional; it has a local SVG fallback.
+
+### Validation after visual changes
+
+Run `node --check content.js`, `node --check app.js`, `node --check sculpture.js`, `node --check portrait.js`, and `node --check prerender.js`. Verify the desktop and phone layouts, open a folder and artwork, use Left/Right in the viewer, test project filters and search, and confirm the mobile Menu works on an interior page. Bump the cache stamp in all nine HTML shells.
