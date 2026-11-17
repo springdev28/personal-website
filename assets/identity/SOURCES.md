@@ -12,4 +12,4 @@ The SVG files are unmodified. Intrinsic dimensions: 283.162 × 245.226. Each is 
 
 Identity colors: paper #F4F3ED, white #FFFFFF, ink #171915, iris #433AF2, muted #75776E. Typography: Space Grotesk and Manrope.
 
-The browser favicon remains the original iris SVG. The root `favicon.svg` reuses its three original path geometries in iris (#433AF2), centered without distortion in a transparent square. `favicon.png` and `favicon.ico` are raster exports for search and fallback support; `apple-touch-icon.png` uses the same purple logo on paper (#F4F3ED).
+The browser favicon uses the root `favicon.svg`, which reuses the three original iris path geometries (#433AF2), centered without distortion in a transparent square. Its explicit `preserveAspectRatio="xMidYMid meet"` preserves the logo's proportions at square favicon sizes. The raw identity exports above retain Figma's `preserveAspectRatio="none"` and are not used directly as favicons. `favicon.png` and `favicon.ico` are matching raster exports for search and fallback support; `apple-touch-icon.png` uses the same purple logo on paper (#F4F3ED).

@@ -330,7 +330,7 @@ for that:
 | `og-card.png` | The preview image shown when the site is shared on LinkedIn, Messages, etc. (1200×630). Replace the file to change it. |
 | `sitemap.xml` / `robots.txt` | Help search engines find every page. |
 
-All nine page heads retain the original iris SVG for browser tabs and provide a square PNG of the same purple logo for search engines, plus the Apple touch icon. The root `/favicon.ico` also serves the logo for browsers that discover it automatically. Regenerate these exports from `favicon.svg` when the logo changes, and update both icon cache versions in every HTML shell. Keep icon URLs stable between logo changes; Google Search refreshes its cached favicon after recrawling.
+All nine page heads use the square `favicon.svg` for browser tabs, with `preserveAspectRatio="xMidYMid meet"` to keep the purple logo's proportions. Do not point favicon links at the raw, non-square identity export: its `preserveAspectRatio="none"` compresses the logo horizontally when fitted to a square tab icon. The square PNG provides the same purple logo for search engines, and the Apple touch icon supports phone home screens. The root `/favicon.ico` also serves the logo for browsers that discover it automatically. Regenerate these exports from `favicon.svg` when the logo changes, and update the affected icon cache versions in every HTML shell. Keep icon URLs stable between logo changes; Google Search refreshes its cached favicon after recrawling.
 
 Each `.html` file also has social/SEO tags in its `<head>` (title, description,
 and `og:`/`twitter:` tags) pointing at `https://baharyuksel.dev`.
@@ -448,7 +448,7 @@ A blank page after an edit almost always means a missing comma, quote, or bracke
 
 ### Visual system and page layouts
 
-The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the browser favicon is the original iris SVG, and raster search icons use the same purple logo. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
+The header, homepage accents, and Art title plate use the original six-arm identity logo. The original SVG is a CSS mask, so the exact exported geometry can use the site’s cyan, lime, pink, or white without substituting a font glyph. Its source nodes and export notes are in `assets/identity/SOURCES.md`; the browser favicon uses its original iris paths inside the square `favicon.svg`, and raster search icons use the same purple logo. The palette lives at the top of `styles.css`, with Barlow Condensed for display type, Space Grotesk for body copy, DM Mono for small metadata, and Caveat for the writing animation.
 
 - **Home:** an illustrated menu. All six panels share the same angle in every state. Hover, focus, and arrow keys select links. The small terminal types its code and has a replay button.
 - **Work:** three project panels, category filters, and a details reader. An empty `href` removes the external launch link.
