@@ -2,7 +2,7 @@
 
 - Input: owner-supplied `Untitled_Artwork 34.png` (provided November 17, 2026).
 - First graphic version: `bahar-three-quarter.png`, 1254 × 1254 RGBA, transparent.
-- Active output: `bahar-three-quarter-ear-scaled.png`, 1254 × 1254 RGBA, transparent.
+- Active output: `bahar-three-quarter-earring.png`, 1254 × 1254 RGBA, transparent.
 - Method: built-in image generation tool, editing the supplied illustration.
 - Preserved: three-quarter angle, head-only framing, face proportions, short dark hair, cyan/purple lighting.
 - The earlier `portrait.png` is preserved in the project root.
@@ -12,9 +12,19 @@
 Use case: identity-preserve / style-transfer. EDIT TARGET: this exact attached three-quarter head portrait artwork, and no other character. Refine it for a bold punk-comic game-menu website inspired by Persona 5 graphic cutout art. Preserve this exact three-quarter angle facing RIGHT (both eyes visible, far eye smaller), exact facial proportions and recognizable likeness, gaze, understated expression, short black hair silhouette, little loose wavy strand at right, face/head-only framing with a small neck. No shoulders, no body. Keep the shape of her nose, eyes, brows, lips, jaw and hairline faithful to this image. Refine the artist's existing portrait, do not invent a prettier anime face. Convert the soft shading into deliberate angular flat-color shadow planes, crisp dark ink outlines around eyes/nose/lips, deep purple/near-black hair with carefully placed cyan and violet highlight shapes, natural muted peach skin. Strong graphic design detail, subtly rough ink edges and sparse halftone patches in shadows. The cyan light on the left cheek and purple light on the right cheek should become flat graphic color planes, with no glow. Keep it close to the supplied drawing, with much bolder ink and clearer cel-shaded structure. Remove the entire textured backdrop and replace it with actual transparency. Keep the entire hair and head silhouette in frame. No gradient, no background, no aura, no text, no logo, no signature, no white stroke outline.
 
 
+## Dark circular earring — 2026-11-17
+
+Active file: `bahar-three-quarter-earring.png`. Mode: built-in image editing with transparent output. Added one small dark circular stud to the visible earlobe. The enlarged ear, cleared sideburn area, upper bangs, and existing portrait are retained. The existing 33 stationary VFX outlines are reused; the stud has no separate effect.
+
+Final edit prompt:
+
+```text
+Use case: precise-object-edit. Edit this exact supplied portrait by adding ONE small dark circular stud earring to the visible ear on the viewer's left. Place a simple solid round circle on the fleshy lower earlobe, approximately centered at (403,783) with a radius of 11 pixels in the 1254x1254 image. Use near-black dark plum, matching the portrait's existing ink (#160d23). It should read as a plain flat dark stud: no metal shine, no sparkle, no glossy highlight, no rim, no dangling part, no hoop, no additional piercings. Keep the whole circle clearly inside the peach earlobe. Change nothing else. Preserve the enlarged ear's size, silhouette and inner linework exactly; preserve the missing sideburn and clean skin in front of the ear; preserve the upper bangs, brows, facial likeness, eyes, nose, lips, all graphic color planes, halftone textures, cyan and violet accents, hair silhouette and every other detail. Keep original 1254x1254 square framing, scale, position, colors and genuinely transparent background.
+```
+
 ## Ear proportions — 2026-11-17
 
-Active file: `bahar-three-quarter-ear-scaled.png`. Mode: built-in image editing with transparent output. The visible ear is larger and taller, with its inner linework scaled to match. The upper bangs and cleared skin in front of the ear remain. The previous PNGs are retained.
+Ear-size correction: `bahar-three-quarter-ear-scaled.png`. Mode: built-in image editing with transparent output. The visible ear is larger and taller, with its inner linework scaled to match. The upper bangs and cleared skin in front of the ear remain. The previous PNGs are retained.
 
 Final edit prompt:
 

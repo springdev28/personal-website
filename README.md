@@ -91,7 +91,7 @@ disciplines: [
 
 ### `focusPhoto`
 
-The three-quarter head portrait on Home and About. The active file is `assets/portrait/bahar-three-quarter-ear-scaled.png`, refined from the owner-supplied `Untitled_Artwork 34.png`. The earlier `portrait.png` and `assets/portrait/bahar-three-quarter.png` remain untouched. The active portrait keeps the exposed skin openings between the bangs, smooths their jagged contours, and cleans the original eyebrow outlines while preserving their angle and thickness. The sideburn wedge in front of the visible ear is removed, leaving continuous skin between the ear and cheek; the upper bangs remain intact. The visible ear is enlarged with its inner details scaled to fit the face. See `assets/portrait/SOURCES.md` for the edit prompt and provenance. Use a **transparent PNG** with the whole head inside the image.
+The three-quarter head portrait on Home and About. The active file is `assets/portrait/bahar-three-quarter-earring.png`, refined from the owner-supplied `Untitled_Artwork 34.png`. The earlier `portrait.png` and `assets/portrait/bahar-three-quarter.png` remain untouched. The active portrait keeps the exposed skin openings between the bangs, smooths their jagged contours, and cleans the original eyebrow outlines while preserving their angle and thickness. The sideburn wedge in front of the visible ear is removed, leaving continuous skin between the ear and cheek; the upper bangs remain intact. The visible ear is enlarged with its inner details scaled to fit the face, and has a small dark circular stud on the earlobe. See `assets/portrait/SOURCES.md` for the edit prompt and provenance. Use a **transparent PNG** with the whole head inside the image.
 
 ```js
 focusPhoto: { src: "portrait.png", alt: "Name" }
