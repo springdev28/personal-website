@@ -11,7 +11,7 @@
     const image = portrait?.querySelector(":scope > img");
     if (!image) return;
     try {
-      const response = await fetch("assets/portrait/shape-vfx.json?v=20261117-vfx1");
+      const response = await fetch("assets/portrait/shape-vfx.json?v=20261117-vfx3");
       if (!response.ok) return;
       const shapes = await response.json();
       if (image.getAttribute("src").split("?")[0] !== shapes.source) return;
